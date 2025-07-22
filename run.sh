@@ -59,6 +59,28 @@ check_python() {
             if [[ $version =~ Python\ 3\.[89]|Python\ 3\.1[0-9] ]]; then
                 PYTHON_CMD="$cmd"
                 print_success "Found compatible Python: $version ($cmd)"
+                
+                # Check if venv module is available
+                if ! $PYTHON_CMD -m venv --help >/dev/null 2>&1; then
+                    print_warning "Python venv module not available"
+                    
+                    # Try to install python3-venv on Debian/Ubuntu systems
+                    if command -v apt-get >/dev/null 2>&1; then
+                        print_status "Installing python3-venv package..."
+                        if sudo -n apt-get update >/dev/null 2>&1 && sudo -n apt-get install -y python3-venv >/dev/null 2>&1; then
+                            print_success "python3-venv package installed"
+                        else
+                            print_error "Could not install python3-venv automatically"
+                            print_error "Please run: sudo apt install python3-venv"
+                            exit 1
+                        fi
+                    else
+                        print_error "Python venv module not available"
+                        print_error "Please install python3-venv package for your system"
+                        exit 1
+                    fi
+                fi
+                
                 return 0
             fi
         fi
@@ -97,20 +119,68 @@ setup_virtualenv() {
     
     if [ ! -d "$VENV_DIR" ]; then
         print_status "Creating virtual environment..."
-        $PYTHON_CMD -m venv "$VENV_DIR"
-        print_success "Virtual environment created at $VENV_DIR"
+        
+        # Try creating venv with different approaches
+        if $PYTHON_CMD -m venv "$VENV_DIR" --without-pip 2>/dev/null; then
+            print_success "Virtual environment created (without pip)"
+        elif $PYTHON_CMD -m venv "$VENV_DIR" --system-site-packages 2>/dev/null; then
+            print_success "Virtual environment created (with system site packages)"
+        else
+            print_error "Failed to create virtual environment"
+            exit 1
+        fi
     else
         print_status "Virtual environment already exists"
+    fi
+    
+    # Check if activate script exists
+    if [ ! -f "$VENV_DIR/bin/activate" ]; then
+        print_warning "Virtual environment activation script missing, recreating..."
+        rm -rf "$VENV_DIR"
+        $PYTHON_CMD -m venv "$VENV_DIR" --upgrade-deps
+        if [ ! -f "$VENV_DIR/bin/activate" ]; then
+            print_error "Failed to create proper virtual environment"
+            print_error "Trying alternative approach..."
+            
+            # Try with system site packages as fallback
+            rm -rf "$VENV_DIR"
+            $PYTHON_CMD -m venv "$VENV_DIR" --system-site-packages
+            
+            if [ ! -f "$VENV_DIR/bin/activate" ]; then
+                print_error "Cannot create virtual environment. Please check Python installation."
+                exit 1
+            fi
+        fi
     fi
     
     # Activate virtual environment
     source "$VENV_DIR/bin/activate"
     
-    # Upgrade pip in virtual environment
-    print_status "Upgrading pip in virtual environment..."
-    pip install --upgrade pip
+    # Verify activation worked
+    if [ -z "$VIRTUAL_ENV" ]; then
+        print_error "Virtual environment activation failed"
+        exit 1
+    fi
     
-    print_success "Virtual environment activated"
+    # Install/upgrade pip in virtual environment if needed
+    if ! python -m pip --version >/dev/null 2>&1; then
+        print_status "Installing pip in virtual environment..."
+        
+        # Try to install pip using get-pip.py if needed
+        if command -v curl >/dev/null 2>&1; then
+            curl -s https://bootstrap.pypa.io/get-pip.py | python
+        elif command -v wget >/dev/null 2>&1; then
+            wget -qO- https://bootstrap.pypa.io/get-pip.py | python
+        else
+            print_warning "pip not available and cannot install automatically"
+            print_warning "Using system pip with --user flag"
+        fi
+    else
+        print_status "Upgrading pip in virtual environment..."
+        python -m pip install --upgrade pip
+    fi
+    
+    print_success "Virtual environment activated successfully"
 }
 
 # Install dependencies
@@ -122,10 +192,21 @@ install_dependencies() {
         exit 1
     fi
     
-    # Install dependencies
-    pip install -r "$SCRIPT_DIR/requirements.txt"
+    # Install dependencies with fallback approaches
+    if python -m pip install -r "$SCRIPT_DIR/requirements.txt" 2>/dev/null; then
+        print_success "Dependencies installed via pip"
+    elif pip install -r "$SCRIPT_DIR/requirements.txt" 2>/dev/null; then
+        print_success "Dependencies installed via system pip"
+    elif python3 -m pip install --user -r "$SCRIPT_DIR/requirements.txt" 2>/dev/null; then
+        print_success "Dependencies installed via user pip"
+        print_warning "Installed to user directory, may need PYTHONPATH adjustments"
+    else
+        print_error "Failed to install dependencies"
+        print_error "Please install manually: pip install -r requirements.txt"
+        exit 1
+    fi
     
-    print_success "Dependencies installed successfully"
+    print_success "Dependencies installation completed"
 }
 
 # Check environment configuration
