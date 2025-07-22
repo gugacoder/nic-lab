@@ -13,6 +13,8 @@ Implement a task using the DTF task file and its assembled context following the
 
 ## Execution Process
 
+If provided to the `$ARGUMENTS` the pattern `task-{number}`, treat `$ARGUMENTS` as the reference to a task in `PRPs/Tasks/Task {number} - {description}.md`
+
 ### 1. Context Assembly
 
 - Read the specified task file and extract frontmatter links
