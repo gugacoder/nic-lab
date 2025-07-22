@@ -5,8 +5,8 @@
 type: task
 tags: [semantic-relationships, relationship-taxonomy, hierarchical-lateral]
 created: 2025-01-22
-updated: 2025-01-22
-status: todo
+updated: 2025-07-22
+status: done
 severity: critical
 up: "[[Semantic Relationships.md]]"
 feature: "[[Semantic Linking Enhancement.md]]"

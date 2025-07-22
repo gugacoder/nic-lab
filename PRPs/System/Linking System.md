@@ -16,10 +16,29 @@ related: "[[Methodology.md]], [[File Structure.md]]"
 
 ### Core Link Types
 
+#### Traditional Link Types
 - **`up`**: Parent-child hierarchical relationship
 - **`related`**: Lateral connections between similar content
 - **`dependencies`**: Required prerequisites for implementation
 - **`feature`**: Parent feature that task implements
+
+#### Semantic Hierarchical Relationship Types
+- **`inherits`**: Child concepts inherit properties and behaviors from parent domains
+- **`inherited-by`**: Reverse inheritance relationship (parent to child)
+- **`composed-of`**: Parent contains child as essential structural component
+- **`composes`**: Child is integral component of parent (reverse composition)
+- **`specializes`**: Child is specific implementation of general parent concept
+- **`generalized-by`**: Parent is general concept of specific child (reverse specialization)
+- **`aggregates`**: Parent coordinates collection of independent child elements
+- **`part-of`**: Child is independent element within parent collection (reverse aggregation)
+
+#### Semantic Lateral Relationship Types
+- **`similar-to`**: Concepts share common characteristics and approaches (symmetric)
+- **`complements`**: Concepts work synergistically together for enhanced functionality
+- **`complemented-by`**: Reverse complementarity relationship
+- **`alternative-to`**: Different approaches to solving same fundamental problem (symmetric)
+- **`precedes`**: Concept must be completed before target concept (temporal/logical ordering)
+- **`follows`**: Concept comes after prerequisite concept (reverse sequence)
 
 ## Frontmatter Linking Rules
 
@@ -50,18 +69,45 @@ related: "[[Related Domain.md]]"      # Cross-cutting concerns
 
 ### Depth Limits by Link Type
 
+#### Traditional Link Types
 - **`dependencies`**: Follow to depth 3 maximum
-- **`up`**: Follow complete chain to root (no depth limit)
+- **`up`**: Follow complete chain to root (no depth limit)  
 - **`related`**: Follow to depth 1 only
 - **`feature`**: Always include complete content (depth 1)
 
+#### Semantic Hierarchical Relationship Depth Limits
+- **`inherits`/`inherited-by`**: Follow to depth 5 maximum (conceptual inheritance chains)
+- **`composed-of`/`composes`**: Follow to depth 4 maximum (structural composition)
+- **`specializes`/`generalized-by`**: Follow to depth 3 maximum (implementation specialization)
+- **`aggregates`/`part-of`**: Follow to depth 2 maximum (organizational collections)
+
+#### Semantic Lateral Relationship Depth Limits
+- **`similar-to`**: Follow to depth 1 only (avoid similarity networks)
+- **`complements`/`complemented-by`**: Follow to depth 2 maximum (synergy chains)
+- **`alternative-to`**: Follow to depth 1 only (direct alternatives)
+- **`precedes`/`follows`**: Follow to depth 3 maximum (sequential chains)
+
 ### Traversal Priority Order
 
-1. **Dependencies first** - Load deepest dependencies
-2. **Up chain** - Load implementation patterns and architecture
-3. **Related content** - Load lateral connections
-4. **Feature context** - Load parent feature
-5. **Target file** - Load original task/target
+#### Enhanced Priority Order with Semantic Relationships
+1. **Dependencies first** - Load deepest traditional dependencies and semantic prerequisites
+   - Traditional `dependencies` 
+   - Semantic `precedes` relationships (prerequisite sequence)
+2. **Hierarchical inheritance chain** - Load conceptual and behavioral inheritance
+   - `inherits` relationships (conceptual inheritance patterns) 
+   - Traditional `up` chain (structural hierarchy)
+3. **Compositional structure** - Load essential structural components
+   - `composed-of` relationships (integral components)
+   - `specializes` relationships (implementation patterns)
+4. **Organizational context** - Load collections and groupings
+   - `aggregates` relationships (coordinated collections)
+   - Traditional `feature` context (parent feature)  
+5. **Lateral connections** - Load peer-level relationships
+   - `complements` relationships (synergistic concepts)
+   - Traditional `related` content (similar content)
+   - `similar-to` relationships (parallel approaches)
+   - `alternative-to` relationships (different approaches)
+6. **Target file** - Load original task/target
 
 ## Linking Strategies
 
@@ -354,24 +400,53 @@ pattern_traversal_rules:
 
 ### Pre-Assembly Validation
 
+#### Traditional Link Validation
 - [ ] All linked files exist in filesystem
 - [ ] Link format follows `[[Filename.md]]` pattern
 - [ ] No circular dependencies detected
 - [ ] Required frontmatter fields present
 - [ ] Link depth limits respected
+
+#### Semantic Relationship Type Validation
 - [ ] Hierarchical relationship types are valid and consistent
-- [ ] Inheritance chains maintain logical progression
+- [ ] Inheritance chains maintain logical progression (no circular inheritance)
 - [ ] Compositional relationships reflect actual structural dependencies
+- [ ] Specialization relationships maintain behavioral substitutability
+- [ ] Aggregation relationships preserve child independence
 - [ ] Cross-hierarchical connections preserve hierarchical integrity
+
+#### Semantic Relationship Conflict Detection
+- [ ] No conflicting relationship types between same concept pairs
+- [ ] Inheritance vs aggregation conflicts prevented
+- [ ] Composition vs independence conflicts detected
+- [ ] Similarity vs alternative conflicts identified
+- [ ] Circular sequence dependencies prevented (A precedes B precedes A)
+- [ ] Bidirectional semantic consistency maintained
+- [ ] Relationship strength compatibility verified
 
 ### Post-Assembly Validation
 
+#### Traditional Assembly Validation
 - [ ] Context includes all reachable files
 - [ ] No duplicate content in assembly
 - [ ] Dependency order maintained
 - [ ] All required knowledge present
 - [ ] Link warnings documented
+
+#### Semantic Relationship Assembly Validation  
 - [ ] Hierarchical patterns correctly assembled
-- [ ] Inheritance chains properly resolved
+- [ ] Inheritance chains properly resolved with appropriate depth
+- [ ] Compositional structures maintain structural integrity
+- [ ] Specialization relationships preserve conceptual coherence
+- [ ] Aggregation collections maintain element independence
 - [ ] Cross-hierarchical relationships appropriately integrated
-- [ ] Depth management principles respected
+- [ ] Depth management principles respected per relationship type
+
+#### Semantic Context Assembly Quality
+- [ ] Semantic relationship types enable precise knowledge representation
+- [ ] Relationship traversal provides comprehensive but focused context
+- [ ] Sequential dependencies respected in assembly order
+- [ ] Complementary relationships enhance context synergy
+- [ ] Similar concepts provide appropriate alternative perspectives
+- [ ] Alternative approaches support informed decision-making
+- [ ] Overall semantic network supports effective AI comprehension
