@@ -11,6 +11,7 @@ import sys
 import traceback
 from pathlib import Path
 from datetime import datetime
+import atexit
 
 # Add src to path for imports
 sys.path.append(str(Path(__file__).parent))
@@ -24,6 +25,7 @@ from utils.session import (
     UIStateManager,
     get_session_debug_info
 )
+from health_endpoint import start_health_server, stop_health_server
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -31,6 +33,15 @@ logger = logging.getLogger(__name__)
 
 # Load application settings
 settings = get_settings()
+
+# Start health check server
+try:
+    health_server = start_health_server()
+    # Register cleanup function
+    atexit.register(stop_health_server)
+    logger.info("Health check server started successfully")
+except Exception as e:
+    logger.warning(f"Could not start health check server: {e}")
 
 
 def configure_page():
