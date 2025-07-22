@@ -11,9 +11,15 @@ Implement a task using the DTF task file and its assembled context following the
 
 ## Task File: $ARGUMENTS
 
+<<<<<<< HEAD
 ## Execution Process
 
 If provided to the `$ARGUMENTS` the pattern `task-{number}`, treat `$ARGUMENTS` as the reference to a task in `PRPs/Tasks/Task {number} - {description}.md`
+=======
+If the pattern "task {number}" is provided as $ARGUMENTS, treat $ARGUMENTS as a reference to the corresponding task file located at PRPs/Tasks/Task {number} - {description}.md.
+
+## Execution Process
+>>>>>>> b7b8c36256179d4c310e1684da23819f4967b005
 
 ### 1. Context Assembly
 
