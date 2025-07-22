@@ -10,7 +10,8 @@ import logging
 from typing import Optional, List, Dict, Any
 from pathlib import Path
 
-from pydantic import BaseSettings, validator, Field
+from pydantic import validator, Field
+from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -69,9 +70,9 @@ class GitLabSettings(BaseSettings):
     # Search configuration
     max_search_results: int = Field(default=50, description="Maximum search results")
     search_timeout: int = Field(default=10, description="Search timeout in seconds")
-    search_file_extensions: List[str] = Field(
-        default=["md", "txt", "py", "js", "ts", "json", "yaml", "yml"],
-        description="Default file extensions to search"
+    search_file_extensions: str = Field(
+        default="md,txt,py,js,ts,json,yaml,yml",
+        description="Default file extensions to search (comma-separated)"
     )
     
     # API settings
@@ -99,8 +100,15 @@ class GitLabSettings(BaseSettings):
     
     @validator('search_file_extensions')
     def validate_file_extensions(cls, v):
-        # Remove dots from extensions if present
-        return [ext.lstrip('.').lower() for ext in v]
+        if isinstance(v, str):
+            # Parse comma-separated string
+            extensions = [ext.strip().lstrip('.').lower() for ext in v.split(',') if ext.strip()]
+        elif isinstance(v, list):
+            # Handle list input
+            extensions = [ext.lstrip('.').lower() for ext in v]
+        else:
+            extensions = []
+        return extensions
     
     class Config:
         env_prefix = "GITLAB_"
