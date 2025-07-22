@@ -88,7 +88,46 @@ The methodology integrates contemporary knowledge organization theories to enhan
 4. **Continue** recursively to depth 3 maximum
 5. **Resolve** dependency order: dependencies first, then up chain, then related
 6. **Load** complete content of all linked files
-7. **Provide** assembled context to implementation AI
+7. **Apply AI context engineering optimization** to assembled context
+8. **Provide** AI-optimized context to implementation AI
+
+### AI Context Engineering Integration
+
+The context assembly process integrates AI optimization principles from [[AI Context Engineering.md]] to maximize AI comprehension and task execution effectiveness:
+
+#### Information Sequencing Optimization
+- **Dependency-First Ordering**: Context assembly automatically orders information with prerequisites first, supporting AI reasoning chains
+- **General-to-Specific Progression**: Domain overviews loaded before specific task details, providing conceptual scaffolding  
+- **Problem-Solution Pairing**: Related tasks and constraints loaded alongside solutions to enable causal reasoning
+- **Conceptual Building Blocks**: Information layered systematically building on previously established knowledge
+
+#### Cognitive Load Management
+- **Chunk Optimization**: Context broken into manageable sections with clear boundaries and transitions
+- **Context Window Efficiency**: Redundant information eliminated while preserving essential knowledge for task completion
+- **Attention Focus**: Critical information for current task highlighted through structural positioning and formatting
+- **Noise Reduction**: Task-specific filtering removes information not relevant to current implementation goals
+
+#### Pattern Recognition Enhancement
+- **Consistent Structural Patterns**: Assembled context follows predictable organizational structures AI can recognize and leverage
+- **Analogical Frameworks**: New concepts connected to familiar patterns and established knowledge from linked domains
+- **Meta-Pattern Documentation**: Explicit pattern identification helps AI recognize and apply recurring structures
+
+#### Inference Support Mechanisms
+- **Explicit Relationship Documentation**: Semantic relationships from linked files provide clear connection reasoning
+- **Causal Chain Construction**: Dependencies and prerequisites create logical reasoning scaffolds for AI understanding
+- **Constraint Documentation**: Limitations and boundaries from domain files guide AI reasoning within appropriate scope
+- **Example Integration**: Concrete examples from linked content support abstract concept understanding
+
+### Enhanced Assembly Process
+
+The AI-optimized context assembly follows this enhanced process:
+
+1. **Context Collection**: Gather all linked content following traditional traversal rules
+2. **Dependency Optimization**: Order information using dependency-first principles from AI context engineering
+3. **Cognitive Load Assessment**: Evaluate information density and apply chunking strategies if needed
+4. **Pattern Recognition Preparation**: Structure content using consistent patterns and meta-pattern documentation
+5. **Inference Support Integration**: Ensure explicit relationships, causal chains, and reasoning scaffolds are present
+6. **Final Optimization**: Apply noise reduction and attention focus techniques for task-specific optimization
 
 ### Link Traversal Rules
 
