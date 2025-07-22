@@ -321,20 +321,28 @@ start_application() {
     # Set environment variables
     export PYTHONPATH="$SCRIPT_DIR/src:$PYTHONPATH"
     
-    # Check if port is available
-    local port=8501
+    # Get port from environment or default to 8000
+    local port=${STREAMLIT_SERVER_PORT:-8000}
+    local address=${STREAMLIT_SERVER_ADDRESS:-0.0.0.0}
+    
     if command -v lsof >/dev/null 2>&1 && lsof -i:$port >/dev/null 2>&1; then
         print_warning "Port $port is already in use. Streamlit will try to find an available port."
     fi
     
     print_success "Application starting..."
     print_status "Access the application at: http://localhost:$port"
+    echo
+    print_status "Health check endpoints:"
+    print_status "  Basic health: http://localhost:$((port + 1))/health"
+    print_status "  Quick check:  http://localhost:$((port + 1))/health/quick"
+    print_status "  Detailed:     http://localhost:$((port + 1))/health/detailed"
+    echo
     print_status "Press Ctrl+C to stop the application"
     echo
     
-    # Start Streamlit
+    # Start Streamlit with configured settings
     cd "$SCRIPT_DIR"
-    streamlit run src/app.py --server.address=0.0.0.0 --server.port=$port --server.headless=true
+    streamlit run src/app.py --server.address=$address --server.port=$port --server.headless=true
 }
 
 # Cleanup function
@@ -363,6 +371,7 @@ show_help() {
     echo "  --test              Run all connection tests (GitLab, Groq, etc.)"
     echo "  --test-gitlab       Test GitLab connection only"
     echo "  --test-groq         Test Groq API connection only"
+    echo "  --test-health       Test health check system"
     echo "  --clean             Clean virtual environment and reinstall"
     echo
     echo "Environment:"
@@ -374,6 +383,7 @@ show_help() {
     echo "  $0 --dev            # Start in development mode"
     echo "  $0 --test           # Test all connections"
     echo "  $0 --test-gitlab    # Test only GitLab"
+    echo "  $0 --test-health    # Test health check system"
     echo
 }
 
@@ -385,6 +395,7 @@ CHECK_ONLY=false
 TEST_ALL=false
 TEST_GITLAB=false
 TEST_GROQ=false
+TEST_HEALTH=false
 CLEAN_INSTALL=false
 
 while [[ $# -gt 0 ]]; do
@@ -419,6 +430,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --test-groq)
             TEST_GROQ=true
+            shift
+            ;;
+        --test-health)
+            TEST_HEALTH=true
             shift
             ;;
         --clean)
@@ -550,6 +565,73 @@ test_gitlab() {
         print_status "Configuration appears valid"
         return 0
     fi
+}
+
+# Test health check system function
+test_health() {
+    print_status "🏥 Testing health check system..."
+    
+    # Load environment variables
+    if [ ! -f "$ENV_FILE" ]; then
+        print_error ".env file not found"
+        return 1
+    fi
+    
+    # Parse .env file safely
+    while IFS='=' read -r key value || [[ -n "$key" ]]; do
+        [[ $key =~ ^[[:space:]]*# ]] && continue
+        [[ -z "$key" ]] && continue
+        key=$(echo "$key" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        export "$key"="$value"
+    done < "$ENV_FILE"
+    
+    # Test health check directly with Python
+    $PYTHON_CMD -c "
+import sys
+import asyncio
+sys.path.append('$SCRIPT_DIR/src')
+
+async def test_health_system():
+    try:
+        from health import get_health_checker, quick_health_check
+        
+        print('🔍 Testing quick health check...')
+        quick_result = await quick_health_check()
+        print(f'Quick health: {quick_result[\"status\"]}')
+        
+        print('🔍 Testing detailed health check...')
+        checker = get_health_checker()
+        detailed_result = await checker.check_application_health()
+        print(f'Overall status: {detailed_result[\"status\"]}')
+        print(f'Components checked: {len(detailed_result[\"components\"])}')
+        
+        for name, component in detailed_result['components'].items():
+            status = component.get('status', 'unknown')
+            print(f'  {name}: {status}')
+        
+        if detailed_result['status'] in ['healthy', 'warning']:
+            print('✅ Health check system working correctly')
+            return True
+        else:
+            print('⚠️  Health check detected issues')
+            return False
+            
+    except Exception as e:
+        print(f'❌ Health check system error: {e}')
+        return False
+
+if asyncio.run(test_health_system()):
+    exit(0)
+else:
+    exit(1)
+" || {
+        print_error "Health check system test failed"
+        return 1
+    }
+    
+    print_success "Health check system test completed successfully!"
+    return 0
 }
 
 # Test Groq API connection function  
@@ -692,6 +774,19 @@ test_groq() {
             exit 0
         else
             print_error "Groq API connection test failed"
+            exit 1
+        fi
+    fi
+    
+    # Health check test only
+    if [ "$TEST_HEALTH" = true ]; then
+        setup_virtualenv
+        install_dependencies
+        if test_health; then
+            print_success "Health check system test completed successfully"
+            exit 0
+        else
+            print_error "Health check system test failed"
             exit 1
         fi
     fi

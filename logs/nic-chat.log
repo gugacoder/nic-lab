@@ -1,0 +1,30 @@
+2025-07-22 03:28:55,354 - config.settings - INFO - Initialized NIC Chat settings for environment: development
+2025-07-22 03:29:57,849 - config.settings - INFO - Initialized NIC Chat settings for environment: development
+2025-07-22 03:30:44,187 - config.settings - INFO - Initialized NIC Chat settings for environment: development
+2025-07-22 03:32:11,470 - config.settings - INFO - Initialized NIC Chat settings for environment: development
+"2025-07-22 03:35:14,416 - config.settings - INFO - Initialized NIC Chat settings for environment: development"
+2025-07-22 03:35:21,555 - config.settings - INFO - Initialized NIC Chat settings for environment: development
+2025-07-22 03:38:18,514 - config.settings - INFO - Initialized NIC Chat settings for environment: development
+2025-07-22 03:40:52,935 - config.settings - INFO - Initialized NIC Chat settings for environment: development
+2025-07-22 03:47:49,750 - config.settings - INFO - Initialized NIC Chat settings for environment: development
+2025-07-22 03:48:02,062 - config.settings - INFO - Initialized NIC Chat settings for environment: development
+2025-07-22 03:48:02,072 - health_endpoint - INFO - Health check server started on 0.0.0.0:8001
+2025-07-22 03:48:02,072 - health_endpoint - INFO - Health endpoints available:
+2025-07-22 03:48:02,072 - health_endpoint - INFO -   - http://0.0.0.0:8001/health
+2025-07-22 03:48:02,072 - health_endpoint - INFO -   - http://0.0.0.0:8001/health/quick
+2025-07-22 03:48:02,072 - health_endpoint - INFO -   - http://0.0.0.0:8001/health/detailed
+2025-07-22 03:48:02,072 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:48:02,102 - utils.session - INFO - Initialized new session: 312f6a35-a71d-47f1-9ffa-a68d4c5674ab
+2025-07-22 03:48:31,431 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:48:31,459 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:48:35,242 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:48:35,262 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:48:37,663 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:48:37,684 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:48:39,799 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:48:39,819 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:49:35,753 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:49:35,774 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:49:38,836 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:49:39,861 - __main__ - INFO - Health check server started successfully
+2025-07-22 03:50:07,207 - health_endpoint - INFO - Health check server stopped

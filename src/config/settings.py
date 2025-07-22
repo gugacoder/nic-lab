@@ -33,6 +33,10 @@ class StreamlitSettings(BaseSettings):
     layout: str = Field(default="wide", description="Streamlit page layout")
     initial_sidebar_state: str = Field(default="expanded", description="Initial sidebar state")
     
+    # Server Configuration
+    server_port: int = Field(default=8000, description="Default server port")
+    server_address: str = Field(default="0.0.0.0", description="Server address")
+    
     # UI Configuration
     max_messages_display: int = Field(default=100, description="Maximum messages to display")
     message_chunk_size: int = Field(default=50, description="Messages loaded per chunk")
@@ -253,6 +257,7 @@ class AppSettings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # Allow extra environment variables
 
 
 # Global settings instance
