@@ -6,7 +6,7 @@ type: task
 tags: [langchain, rag, ai, integration, major]
 created: 2025-07-22
 updated: 2025-07-22
-status: done
+status: todo
 severity: major
 up: "[[AI Conversational System.md]]"
 feature: "[[AI Knowledge Base Query System.md]]"
