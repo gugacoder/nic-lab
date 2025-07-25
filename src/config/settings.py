@@ -122,7 +122,7 @@ class GroqSettings(BaseSettings):
     """Groq API configuration"""
     
     api_key: Optional[str] = Field(default=None, description="Groq API key")
-    model: str = Field(default="llama-3.1-70b-versatile", description="Default model")
+    model: str = Field(default="llama-3.1-8b-instant", description="Default model")
     max_tokens: int = Field(default=4096, description="Maximum tokens per response")
     temperature: float = Field(default=0.7, description="Response creativity")
     timeout: int = Field(default=30, description="API timeout in seconds")

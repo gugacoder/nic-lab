@@ -157,7 +157,7 @@ GROQ_MODELS = {
             "Less reasoning capability than 405B",
             "May struggle with very complex tasks"
         ],
-        is_default=True,
+        is_default=False,
         release_date="2024-07"
     ),
     
@@ -201,6 +201,7 @@ GROQ_MODELS = {
             "Less nuanced responses",
             "May struggle with complex queries"
         ],
+        is_default=True,
         release_date="2024-07"
     ),
     
@@ -340,7 +341,7 @@ class ModelSelector:
             return models[0]
         else:
             # Balance performance and cost (default to 70B unless specific need)
-            preferred_models = [m for m in models if m.id == "llama-3.1-70b-versatile"]
+            preferred_models = [m for m in models if m.id == "llama-3.1-8b-instant"]
             if preferred_models:
                 return preferred_models[0]
             return models[0] if models else self.get_default_model()
@@ -483,7 +484,7 @@ if __name__ == "__main__":
     
     # Test recommendations
     print("\nRecommendations:")
-    print(f"  General use: {recommend_model('conversation').name}")
-    print(f"  Code tasks: {recommend_model('code').name}")
-    print(f"  Cost-sensitive: {recommend_model('conversation', cost_sensitive=True).name}")
-    print(f"  Speed priority: {recommend_model('conversation', speed_priority=True).name}")
+    print(f"  General use: {recommend_model(task_type='conversation').name}")
+    print(f"  Code tasks: {recommend_model(task_type='code').name}")
+    print(f"  Cost-sensitive: {recommend_model(task_type='conversation', cost_sensitive=True).name}")
+    print(f"  Speed priority: {recommend_model(task_type='conversation', speed_priority=True).name}")

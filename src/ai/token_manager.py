@@ -575,7 +575,7 @@ class TokenManager:
         self, 
         messages: List[Dict[str, str]], 
         max_tokens: Optional[int] = None,
-        model: str = "llama-3.1-70b-versatile"
+        model: str = "llama-3.1-8b-instant"
     ) -> Tuple[bool, str, TokenCount]:
         """
         Validate request against token limits
