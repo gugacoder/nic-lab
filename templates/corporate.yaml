@@ -1,0 +1,104 @@
+---
+id: "corporate"
+name: "Corporate Template"
+description: "Professional corporate document template with branding"
+format_type: "all"
+version: "1.0"
+author: "System"
+is_default: false
+created_date: "2025-07-25T00:00:00"
+
+layout:
+  page_size: "A4"
+  page_orientation: "portrait"
+  margins:
+    top: 3.0
+    bottom: 2.5
+    left: 2.5
+    right: 2.5
+  header_height: 2.0
+  footer_height: 1.5
+  column_count: 1
+  column_spacing: 1.27
+
+styles:
+  - name: "document_title"
+    applies_to: ["HEADING"]
+    conditions:
+      level: 1
+    style:
+      font_family: "Arial"
+      font_size: 20
+      weight: "BOLD"
+      emphasis: "NONE"
+      color: "#003366"
+      line_height: 1.1
+
+  - name: "section_heading"
+    applies_to: ["HEADING"]
+    conditions:
+      level: 2
+    style:
+      font_family: "Arial"
+      font_size: 16
+      weight: "BOLD"
+      emphasis: "NONE"
+      color: "#003366"
+      line_height: 1.2
+
+  - name: "subsection_heading"
+    applies_to: ["HEADING"]
+    conditions:
+      level: 3
+    style:
+      font_family: "Arial"
+      font_size: 14
+      weight: "BOLD"
+      emphasis: "NONE"
+      color: "#666666"
+      line_height: 1.2
+
+  - name: "body_text"
+    applies_to: ["PARAGRAPH", "TEXT"]
+    style:
+      font_family: "Arial"
+      font_size: 11
+      weight: "NORMAL"
+      emphasis: "NONE"
+      color: "#000000"
+      line_height: 1.3
+
+  - name: "code_block"
+    applies_to: ["CODE"]
+    style:
+      font_family: "Consolas"
+      font_size: 9
+      weight: "NORMAL"
+      emphasis: "NONE"
+      color: "#000000"
+      background_color: "#F8F8F8"
+      line_height: 1.2
+
+  - name: "important_quote"
+    applies_to: ["QUOTE"]
+    style:
+      font_family: "Arial"
+      font_size: 12
+      weight: "NORMAL"
+      emphasis: "ITALIC"
+      color: "#003366"
+      line_height: 1.4
+
+company_name: "NIC Corporation"
+brand_colors:
+  primary: "#003366"
+  secondary: "#0066CC"
+  accent: "#FF6600"
+  background: "#FFFFFF"
+  text: "#000000"
+  muted: "#666666"
+
+header_template: "{company_name} | {document_title}"
+footer_template: "Confidential | {company_name} | Page {page_number}"
+
+tags: ["corporate", "professional", "branded"]

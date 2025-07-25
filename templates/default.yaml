@@ -1,0 +1,102 @@
+---
+id: "default"
+name: "Default Template"
+description: "Standard corporate document template"
+format_type: "all"
+version: "1.0"
+author: "System"
+is_default: true
+created_date: "2025-07-25T00:00:00"
+
+layout:
+  page_size: "A4"
+  page_orientation: "portrait"
+  margins:
+    top: 2.54
+    bottom: 2.54
+    left: 2.54
+    right: 2.54
+  header_height: 1.27
+  footer_height: 1.27
+  column_count: 1
+  column_spacing: 1.27
+
+styles:
+  - name: "title"
+    applies_to: ["HEADING"]
+    conditions:
+      level: 1
+    style:
+      font_family: "Calibri"
+      font_size: 18
+      weight: "BOLD"
+      emphasis: "NONE"
+      color: "#000000"
+      line_height: 1.2
+
+  - name: "heading_2"
+    applies_to: ["HEADING"]
+    conditions:
+      level: 2
+    style:
+      font_family: "Calibri"
+      font_size: 16
+      weight: "BOLD"
+      emphasis: "NONE"
+      color: "#000000"
+      line_height: 1.2
+
+  - name: "heading_3"
+    applies_to: ["HEADING"]
+    conditions:
+      level: 3
+    style:
+      font_family: "Calibri"
+      font_size: 14
+      weight: "BOLD"
+      emphasis: "NONE"
+      color: "#000000"
+      line_height: 1.2
+
+  - name: "paragraph"
+    applies_to: ["PARAGRAPH", "TEXT"]
+    style:
+      font_family: "Calibri"
+      font_size: 11
+      weight: "NORMAL"
+      emphasis: "NONE"
+      color: "#000000"
+      line_height: 1.15
+
+  - name: "code"
+    applies_to: ["CODE"]
+    style:
+      font_family: "Courier New"
+      font_size: 10
+      weight: "NORMAL"
+      emphasis: "NONE"
+      color: "#000000"
+      background_color: "#F5F5F5"
+      line_height: 1.0
+
+  - name: "quote"
+    applies_to: ["QUOTE"]
+    style:
+      font_family: "Calibri"
+      font_size: 11
+      weight: "NORMAL"
+      emphasis: "ITALIC"
+      color: "#666666"
+      line_height: 1.15
+
+brand_colors:
+  primary: "#0066CC"
+  secondary: "#666666"
+  accent: "#FF6600"
+  background: "#FFFFFF"
+  text: "#000000"
+
+header_template: ""
+footer_template: "Page {page_number} of {total_pages}"
+
+tags: ["default", "corporate", "standard"]
