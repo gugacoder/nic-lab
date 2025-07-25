@@ -11,7 +11,8 @@ from typing import Optional, List, Dict, Any, Union
 from dataclasses import dataclass, field
 from enum import Enum
 
-from pydantic import BaseSettings, validator, Field
+from pydantic import validator, Field
+from pydantic_settings import BaseSettings
 
 from ..utils.secrets import SecureToken, get_env_token, validate_gitlab_token
 

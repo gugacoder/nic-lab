@@ -227,7 +227,7 @@ class GroqClient:
             limits=httpx.Limits(max_keepalive_connections=20, max_connections=100)
         )
         
-        logger.info(f"Initialized Groq client with model: {getattr(self.settings, 'model', 'llama-3.1-70b-versatile')}")
+        logger.info(f"Initialized Groq client with model: {getattr(self.settings, 'model', 'llama-3.1-8b-instant')}")
     
     def _init_fallback_settings(self, api_key: Optional[str] = None, **kwargs):
         """Initialize with fallback settings when main settings unavailable"""
@@ -236,7 +236,7 @@ class GroqClient:
         @dataclass
         class FallbackSettings:
             api_key: Optional[str] = None
-            model: str = "llama-3.1-70b-versatile"
+            model: str = "llama-3.1-8b-instant"
             max_tokens: int = 4096
             temperature: float = 0.7
             timeout: int = 30
@@ -317,7 +317,7 @@ class GroqClient:
         
         # Prepare request
         data = {
-            "model": model or getattr(self.settings, 'model', 'llama-3.1-70b-versatile'),
+            "model": model or getattr(self.settings, 'model', 'llama-3.1-8b-instant'),
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": max_tokens or getattr(self.settings, 'max_tokens', 4096),
             "temperature": temperature or getattr(self.settings, 'temperature', 0.7),
