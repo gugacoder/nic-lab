@@ -14,7 +14,6 @@ related: "[[File Structure.md]], [[Linking System.md]]"
 
 ## Context Engineering Framework
 
-<<<<<<< HEAD
 The PRP system implements a Context Engineering pipeline that transforms specifications into distributed documentation and reassembles context dynamically for implementation. This framework incorporates modern knowledge organization principles to optimize both human cognition and AI processing effectiveness.
 
 ### Modern Knowledge Organization Integration
@@ -44,15 +43,6 @@ The methodology integrates contemporary knowledge organization theories to enhan
 - **Domains**: Reusable knowledge and context patterns organized as atomic knowledge units
 - **Tasks**: Specific action items with severity tracking and semantic relationship preservation
 - **Features**: Development efforts grouping related tasks with hierarchical inheritance patterns
-=======
-The PRP system implements a Context Engineering pipeline that transforms specifications into distributed documentation and reassembles context dynamically for implementation.
-
-### DTF Framework
-
-- **Domains**: Reusable knowledge and context patterns
-- **Tasks**: Specific action items with severity tracking
-- **Features**: Development efforts grouping related tasks
->>>>>>> b7b8c36256179d4c310e1684da23819f4967b005
 
 ## generate-prp Command
 
@@ -98,7 +88,6 @@ The PRP system implements a Context Engineering pipeline that transforms specifi
 4. **Continue** recursively to depth 3 maximum
 5. **Resolve** dependency order: dependencies first, then up chain, then related
 6. **Load** complete content of all linked files
-<<<<<<< HEAD
 7. **Apply AI context engineering optimization** to assembled context
 8. **Provide** AI-optimized context to implementation AI
 
@@ -139,9 +128,6 @@ The AI-optimized context assembly follows this enhanced process:
 4. **Pattern Recognition Preparation**: Structure content using consistent patterns and meta-pattern documentation
 5. **Inference Support Integration**: Ensure explicit relationships, causal chains, and reasoning scaffolds are present
 6. **Final Optimization**: Apply noise reduction and attention focus techniques for task-specific optimization
-=======
-7. **Provide** assembled context to implementation AI
->>>>>>> b7b8c36256179d4c310e1684da23819f4967b005
 
 ### Link Traversal Rules
 

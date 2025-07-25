@@ -16,16 +16,12 @@ related: "[[Methodology.md]], [[File Structure.md]]"
 
 ### Core Link Types
 
-<<<<<<< HEAD
 #### Traditional Link Types
-=======
->>>>>>> b7b8c36256179d4c310e1684da23819f4967b005
 - **`up`**: Parent-child hierarchical relationship
 - **`related`**: Lateral connections between similar content
 - **`dependencies`**: Required prerequisites for implementation
 - **`feature`**: Parent feature that task implements
 
-<<<<<<< HEAD
 #### Semantic Hierarchical Relationship Types
 - **`inherits`**: Child concepts inherit properties and behaviors from parent domains
 - **`inherited-by`**: Reverse inheritance relationship (parent to child)
@@ -44,8 +40,6 @@ related: "[[Methodology.md]], [[File Structure.md]]"
 - **`precedes`**: Concept must be completed before target concept (temporal/logical ordering)
 - **`follows`**: Concept comes after prerequisite concept (reverse sequence)
 
-=======
->>>>>>> b7b8c36256179d4c310e1684da23819f4967b005
 ## Frontmatter Linking Rules
 
 ### Feature Files MUST Link To
@@ -75,7 +69,6 @@ related: "[[Related Domain.md]]"      # Cross-cutting concerns
 
 ### Depth Limits by Link Type
 
-<<<<<<< HEAD
 #### Traditional Link Types
 - **`dependencies`**: Follow to depth 3 maximum
 - **`up`**: Follow complete chain to root (no depth limit)  
@@ -115,20 +108,6 @@ related: "[[Related Domain.md]]"      # Cross-cutting concerns
    - `similar-to` relationships (parallel approaches)
    - `alternative-to` relationships (different approaches)
 6. **Target file** - Load original task/target
-=======
-- **`dependencies`**: Follow to depth 3 maximum
-- **`up`**: Follow complete chain to root (no depth limit)
-- **`related`**: Follow to depth 1 only
-- **`feature`**: Always include complete content (depth 1)
-
-### Traversal Priority Order
-
-1. **Dependencies first** - Load deepest dependencies
-2. **Up chain** - Load implementation patterns and architecture
-3. **Related content** - Load lateral connections
-4. **Feature context** - Load parent feature
-5. **Target file** - Load original task/target
->>>>>>> b7b8c36256179d4c310e1684da23819f4967b005
 
 ## Linking Strategies
 
@@ -290,7 +269,6 @@ related: [[Missing .md extension]]
 - Log formatting error
 - Continue with valid links
 
-<<<<<<< HEAD
 ## Hierarchical Relationship Patterns
 
 ### Hierarchical Link Types
@@ -418,23 +396,17 @@ pattern_traversal_rules:
       dynamic_inclusion: true
 ```
 
-=======
->>>>>>> b7b8c36256179d4c310e1684da23819f4967b005
 ## Link Validation Rules
 
 ### Pre-Assembly Validation
 
-<<<<<<< HEAD
 #### Traditional Link Validation
-=======
->>>>>>> b7b8c36256179d4c310e1684da23819f4967b005
 - [ ] All linked files exist in filesystem
 - [ ] Link format follows `[[Filename.md]]` pattern
 - [ ] No circular dependencies detected
 - [ ] Required frontmatter fields present
 - [ ] Link depth limits respected
 
-<<<<<<< HEAD
 #### Semantic Relationship Type Validation
 - [ ] Hierarchical relationship types are valid and consistent
 - [ ] Inheritance chains maintain logical progression (no circular inheritance)
@@ -455,16 +427,11 @@ pattern_traversal_rules:
 ### Post-Assembly Validation
 
 #### Traditional Assembly Validation
-=======
-### Post-Assembly Validation
-
->>>>>>> b7b8c36256179d4c310e1684da23819f4967b005
 - [ ] Context includes all reachable files
 - [ ] No duplicate content in assembly
 - [ ] Dependency order maintained
 - [ ] All required knowledge present
 - [ ] Link warnings documented
-<<<<<<< HEAD
 
 #### Semantic Relationship Assembly Validation  
 - [ ] Hierarchical patterns correctly assembled
@@ -483,5 +450,3 @@ pattern_traversal_rules:
 - [ ] Similar concepts provide appropriate alternative perspectives
 - [ ] Alternative approaches support informed decision-making
 - [ ] Overall semantic network supports effective AI comprehension
-=======
->>>>>>> b7b8c36256179d4c310e1684da23819f4967b005
