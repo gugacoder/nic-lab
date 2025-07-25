@@ -1,0 +1,73 @@
+{
+  "semantic_coherence": {
+    "passed": true,
+    "coherence_ratio": 1.0619047619047624,
+    "coherent_chunks": 44.60000000000002,
+    "total_chunks": 42,
+    "target": 0.95
+  },
+  "structure_preservation": {
+    "passed": true,
+    "has_headers": true,
+    "has_structure_metadata": true,
+    "valid_section_levels": true,
+    "max_section_level": 3,
+    "chunks_with_sections": 10
+  },
+  "code_block_integrity": {
+    "passed": true,
+    "integrity_ratio": 1.0,
+    "intact_blocks": 9,
+    "total_blocks": 9,
+    "code_chunks_found": 15
+  },
+  "overlap_continuity": {
+    "passed": false,
+    "overlap_coverage": 0.9,
+    "overlap_quality": 0.6666666666666666,
+    "overlapped_chunks": 9,
+    "total_chunks": 10,
+    "adequate_overlaps": 6
+  },
+  "size_compliance": {
+    "passed": false,
+    "oversized_ratio": 0.0,
+    "undersized_ratio": 0.13725490196078433,
+    "avg_size": 398.1372549019608,
+    "target_size": 1500,
+    "target_deviation": 0.7345751633986929,
+    "size_stats": {
+      "min": 101,
+      "max": 1679,
+      "median": 342
+    }
+  },
+  "performance": {
+    "passed": true,
+    "pages_per_minute": 58879.69269756586,
+    "chars_per_second": 1962656.4232521951,
+    "processing_time_ms": 6.435155868530273,
+    "content_size_chars": 12630,
+    "chunks_created": 12,
+    "target_pages_per_minute": 100
+  },
+  "markdown_preservation": {
+    "passed": true,
+    "preservation_ratio": 1.0,
+    "preserved_elements": {
+      "headers": true,
+      "subheaders": true,
+      "code_blocks": true,
+      "lists": true,
+      "tables": true,
+      "formatting": true
+    },
+    "total_elements": 6
+  },
+  "overall": {
+    "passed": false,
+    "success_rate": 0.7142857142857143,
+    "tests_passed": 5,
+    "total_tests": 7
+  }
+}
