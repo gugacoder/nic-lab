@@ -10,7 +10,7 @@ import time
 import json
 import hashlib
 import logging
-from typing import Dict, Any, Optional, AsyncGenerator, List, Union
+from typing import Dict, Any, Optional, AsyncGenerator, List, Union, Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from collections import defaultdict, deque
@@ -244,7 +244,7 @@ class GroqClient:
         
         self.settings = FallbackSettings(
             api_key=api_key,
-            model=kwargs.get('model', "llama-3.1-70b-versatile"),
+            model=kwargs.get('model', "llama-3.1-8b-instant"),
             max_tokens=kwargs.get('max_tokens', 4096),
             temperature=kwargs.get('temperature', 0.7),
             timeout=kwargs.get('timeout', 30),
@@ -296,6 +296,9 @@ class GroqClient:
         temperature: Optional[float] = None,
         stream: bool = False,
         cache: bool = True,
+        chunk_callback: Optional[Callable[[StreamChunk], None]] = None,
+        error_callback: Optional[Callable[[Exception], None]] = None,
+        completion_callback: Optional[Callable[[Dict[str, Any]], None]] = None,
         **kwargs
     ) -> Union[GroqResponse, AsyncGenerator[StreamChunk, None]]:
         """
@@ -308,6 +311,9 @@ class GroqClient:
             temperature: Response creativity (0.0 to 2.0)
             stream: Whether to stream response
             cache: Whether to use response caching
+            chunk_callback: Callback for streaming chunks (stream only)
+            error_callback: Callback for errors (stream only)
+            completion_callback: Callback when streaming completes (stream only)
             **kwargs: Additional API parameters
         
         Returns:
@@ -336,7 +342,13 @@ class GroqClient:
         
         # Make API request
         if stream:
-            return self._stream_completion(data, start_time)
+            return self._stream_completion(
+                data, 
+                start_time,
+                chunk_callback=chunk_callback,
+                error_callback=error_callback,
+                completion_callback=completion_callback
+            )
         else:
             return await self._complete_non_streaming(data, start_time, cache_key)
     
@@ -374,55 +386,108 @@ class GroqClient:
         logger.info(f"Completed request in {response_time:.2f}s, tokens: {usage.get('total_tokens', 0)}")
         return groq_response
     
-    async def _stream_completion(self, data: Dict[str, Any], start_time: float) -> AsyncGenerator[StreamChunk, None]:
-        """Handle streaming completion"""
-        response = await self._make_request("/chat/completions", data)
-        
-        content_buffer = ""
-        usage = None
-        first_token_time = None
-        
-        async for line in response.aiter_lines():
-            if not line or not line.startswith("data: "):
-                continue
+    async def _stream_completion(
+        self, 
+        data: Dict[str, Any], 
+        start_time: float,
+        chunk_callback: Optional[Callable[[StreamChunk], None]] = None,
+        error_callback: Optional[Callable[[Exception], None]] = None,
+        completion_callback: Optional[Callable[[Dict[str, Any]], None]] = None
+    ) -> AsyncGenerator[StreamChunk, None]:
+        """Handle streaming completion with callback support"""
+        try:
+            response = await self._make_request("/chat/completions", data)
             
-            line_data = line[6:]  # Remove "data: " prefix
-            if line_data == "[DONE]":
-                break
+            content_buffer = ""
+            usage = None
+            first_token_time = None
             
-            try:
-                chunk_data = json.loads(line_data)
-                choice = chunk_data["choices"][0]
-                delta = choice.get("delta", {})
+            async for line in response.aiter_lines():
+                if not line or not line.startswith("data: "):
+                    continue
                 
-                if "content" in delta:
-                    content = delta["content"]
-                    content_buffer += content
-                    
-                    if first_token_time is None:
-                        first_token_time = time.time()
-                        ttft = first_token_time - start_time
-                        logger.debug(f"Time to first token: {ttft:.3f}s")
-                    
-                    yield StreamChunk(content=content)
+                line_data = line[6:]  # Remove "data: " prefix
+                if line_data == "[DONE]":
+                    break
                 
-                if choice.get("finish_reason"):
-                    usage = chunk_data.get("usage", {})
-                    yield StreamChunk(
-                        content="",
-                        finish_reason=choice["finish_reason"],
-                        usage=usage
-                    )
+                try:
+                    chunk_data = json.loads(line_data)
+                    choice = chunk_data["choices"][0]
+                    delta = choice.get("delta", {})
+                    
+                    if "content" in delta:
+                        content = delta["content"]
+                        content_buffer += content
+                        
+                        if first_token_time is None:
+                            first_token_time = time.time()
+                            ttft = first_token_time - start_time
+                            logger.debug(f"Time to first token: {ttft:.3f}s")
+                        
+                        chunk = StreamChunk(content=content)
+                        
+                        # Call chunk callback if provided
+                        if chunk_callback:
+                            try:
+                                chunk_callback(chunk)
+                            except Exception as e:
+                                logger.error(f"Chunk callback error: {e}")
+                        
+                        yield chunk
+                    
+                    if choice.get("finish_reason"):
+                        usage = chunk_data.get("usage", {})
+                        final_chunk = StreamChunk(
+                            content="",
+                            finish_reason=choice["finish_reason"],
+                            usage=usage
+                        )
+                        
+                        # Call chunk callback for final chunk
+                        if chunk_callback:
+                            try:
+                                chunk_callback(final_chunk)
+                            except Exception as e:
+                                logger.error(f"Final chunk callback error: {e}")
+                        
+                        yield final_chunk
+                
+                except json.JSONDecodeError:
+                    continue
             
-            except json.JSONDecodeError:
-                continue
+            # Track usage
+            if usage:
+                await self.usage_tracker.record_usage(data["model"], usage)
+            
+            total_time = time.time() - start_time
+            logger.info(f"Streamed {len(content_buffer)} chars in {total_time:.2f}s")
+            
+            # Call completion callback if provided
+            if completion_callback:
+                try:
+                    completion_metrics = {
+                        "total_time": total_time,
+                        "content_length": len(content_buffer),
+                        "first_token_time": first_token_time - start_time if first_token_time else None,
+                        "usage": usage or {},
+                        "model": data["model"]
+                    }
+                    completion_callback(completion_metrics)
+                except Exception as e:
+                    logger.error(f"Completion callback error: {e}")
         
-        # Track usage
-        if usage:
-            await self.usage_tracker.record_usage(data["model"], usage)
-        
-        total_time = time.time() - start_time
-        logger.info(f"Streamed {len(content_buffer)} chars in {total_time:.2f}s")
+        except Exception as e:
+            logger.error(f"Streaming error: {e}")
+            
+            # Call error callback if provided
+            if error_callback:
+                try:
+                    error_callback(e)
+                except Exception as callback_error:
+                    logger.error(f"Error callback failed: {callback_error}")
+            
+            # Re-raise the original error
+            raise
     
     async def test_connection(self) -> bool:
         """Test API connection and authentication"""

@@ -10,7 +10,7 @@ from typing import Optional, Dict, Any
 from datetime import datetime
 from dataclasses import dataclass
 
-from utils.session import ChatStateManager
+from src.utils.session import ChatStateManager
 
 # Optional dependency for clipboard functionality
 try:
@@ -281,6 +281,110 @@ class StreamingMessageComponent:
         """
         with content_placeholder.container():
             MessageComponent.render_message(final_message, show_actions=True)
+
+
+# Enhanced streaming integration
+def create_enhanced_streaming_message(
+    message_id: str,
+    role: str = "assistant",
+    **kwargs
+):
+    """
+    Create enhanced streaming message using new streaming infrastructure
+    
+    This function provides backward compatibility while enabling enhanced features
+    """
+    try:
+        from src.components.chat.streaming_message import create_streaming_message
+        return create_streaming_message(message_id, role, **kwargs)
+    except ImportError:
+        # Fallback to basic streaming if enhanced version not available
+        return None
+
+
+def use_enhanced_streaming() -> bool:
+    """Check if enhanced streaming is available"""
+    try:
+        from src.components.chat.streaming_message import EnhancedStreamingMessage
+        return True
+    except ImportError:
+        return False
+
+
+class StreamingBridge:
+    """Bridge between old and new streaming systems"""
+    
+    def __init__(self, message_id: str, role: str = "assistant"):
+        self.message_id = message_id
+        self.role = role
+        self.enhanced_stream = None
+        self.placeholder = None
+        
+        # Try to use enhanced streaming
+        if use_enhanced_streaming():
+            self.enhanced_stream = create_enhanced_streaming_message(
+                message_id=message_id,
+                role=role,
+                show_progress=True,
+                show_metrics=False
+            )
+    
+    def initialize(self) -> st.empty:
+        """Initialize streaming display and return placeholder"""
+        if self.enhanced_stream:
+            # Enhanced streaming handles its own initialization
+            return None
+        else:
+            # Fallback to basic streaming
+            self.placeholder = st.empty()
+            return self.placeholder
+    
+    def add_content(self, content: str) -> None:
+        """Add content to the streaming display"""
+        if self.enhanced_stream:
+            # Use enhanced streaming
+            from src.ai.streaming import StreamChunk
+            chunk = StreamChunk(content=content)
+            self.enhanced_stream.add_chunk(chunk)
+        elif self.placeholder:
+            # Fallback to basic display
+            current_content = getattr(self, '_accumulated_content', '') + content
+            self._accumulated_content = current_content
+            StreamingMessageComponent.render_streaming_message(
+                self.role, 
+                self.placeholder, 
+                current_content
+            )
+    
+    def finalize(self, final_content: str = None) -> MessageData:
+        """Finalize the streaming message"""
+        if self.enhanced_stream:
+            # Enhanced streaming finalization
+            return self.enhanced_stream.finalize()
+        elif self.placeholder:
+            # Basic streaming finalization
+            final_content = final_content or getattr(self, '_accumulated_content', '')
+            final_message = create_message_data(
+                role=self.role,
+                content=final_content,
+                message_id=self.message_id
+            )
+            StreamingMessageComponent.finalize_streaming_message(
+                self.placeholder, 
+                final_message
+            )
+            return final_message
+        
+        return create_message_data(
+            role=self.role,
+            content=final_content or "",
+            message_id=self.message_id
+        )
+    
+    def interrupt(self) -> None:
+        """Interrupt the streaming"""
+        if self.enhanced_stream:
+            self.enhanced_stream.interrupt()
 
 
 # Utility functions for message handling

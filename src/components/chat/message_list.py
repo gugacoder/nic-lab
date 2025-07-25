@@ -10,9 +10,9 @@ from typing import List, Optional, Dict, Any, Callable
 from datetime import datetime, timedelta
 import math
 
-from utils.session import ChatStateManager, UIStateManager
-from components.chat.message import MessageComponent, MessageData, render_message_separator
-from components.common.loading import LoadingIndicators
+from src.utils.session import ChatStateManager, UIStateManager
+from src.components.chat.message import MessageComponent, MessageData, render_message_separator
+from src.components.common.loading import LoadingIndicators
 
 
 class MessageListComponent:

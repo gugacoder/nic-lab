@@ -11,11 +11,11 @@ from typing import Optional, Dict, Any, Callable
 from datetime import datetime
 import asyncio
 
-from utils.session import ChatStateManager, UIStateManager
-from components.chat.message import MessageData, create_message_data
-from components.chat.message_list import MessageListComponent, MessageListActions
-from components.chat.chat_input import ChatInputComponent, QuickActions, InputHistory
-from components.common.loading import LoadingIndicators, ProgressTracker
+from src.utils.session import ChatStateManager, UIStateManager
+from src.components.chat.message import MessageData, create_message_data
+from src.components.chat.message_list import MessageListComponent, MessageListActions
+from src.components.chat.chat_input import ChatInputComponent, QuickActions, InputHistory
+from src.components.common.loading import LoadingIndicators, ProgressTracker
 
 
 class ChatContainer:
@@ -173,7 +173,7 @@ class ChatContainer:
         """Render the input section with chat input component"""
         
         # Handle suggested input from various sources
-        from components.chat.chat_input import handle_suggested_input
+        from src.components.chat.chat_input import handle_suggested_input
         suggested = handle_suggested_input()
         
         if suggested:
@@ -465,7 +465,7 @@ def clear_chat_state() -> None:
     ChatStateManager.set_processing(False)
     
     # Clear input-related state
-    from components.chat.chat_input import clear_input_state
+    from src.components.chat.chat_input import clear_input_state
     clear_input_state()
 
 

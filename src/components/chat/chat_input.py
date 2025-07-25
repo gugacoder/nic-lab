@@ -10,8 +10,8 @@ from typing import Optional, Callable, Dict, Any
 import re
 from datetime import datetime
 
-from utils.session import ChatStateManager
-from components.common.loading import LoadingIndicators
+from src.utils.session import ChatStateManager
+from src.components.common.loading import LoadingIndicators
 
 
 class ChatInputComponent:
