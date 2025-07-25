@@ -138,63 +138,55 @@ def render_sidebar():
 
 
 def render_chat_page():
-    """Render the chat interface page"""
-    st.header("💬 Chat Interface")
+    """Render the chat interface page using the new chat components"""
+    # Import the chat container component
+    from components.chat.chat_container import ChatContainer
     
-    # Show error if any
-    error = ChatStateManager.get_error()
-    if error:
-        st.error(f"Error: {error}")
-        if st.button("Clear Error"):
-            ChatStateManager.clear_error()
-            st.rerun()
+    # Load custom CSS
+    try:
+        with open("src/styles/chat.css", "r") as f:
+            css_content = f.read()
+    except FileNotFoundError:
+        css_content = None
     
-    # Chat container
-    chat_container = st.container()
+    # Render the complete chat interface using our new components
+    ChatContainer.render_chat_interface(
+        ai_handler=_handle_ai_response,
+        enable_streaming=True,
+        show_quick_actions=True,
+        show_conversation_stats=True,
+        custom_css=css_content
+    )
+
+
+def _handle_ai_response(user_message: str) -> str:
+    """Handle AI response generation (placeholder implementation)"""
+    import time
+    import random
     
-    # Display messages
-    with chat_container:
-        messages = ChatStateManager.get_messages()
+    # Simulate processing time
+    time.sleep(random.uniform(0.5, 2.0))
+    
+    # Generate a more sophisticated placeholder response
+    responses = [
+        f"Thank you for your message about '{user_message}'. This is a sophisticated response from the NIC Chat system. "
+        f"Our new chat interface components are working well! The message display, input handling, and user experience "
+        f"have been significantly improved.",
         
-        if not messages:
-            st.info("👋 Welcome to NIC Chat! Start a conversation by typing a message below.")
-        else:
-            for message in messages:
-                with st.chat_message(message.role):
-                    st.markdown(message.content)
-                    st.caption(f"_{message.timestamp.strftime('%H:%M:%S')}_")
+        f"I understand you're asking about: '{user_message}'. The enhanced chat interface now supports markdown formatting, "
+        f"message actions like copy and retry, improved scrolling, and better visual design. "
+        f"AI integration will be fully implemented in upcoming tasks.",
+        
+        f"Your query '{user_message}' has been processed using our new modular chat components. "
+        f"The system now features better message organization, responsive design, loading indicators, "
+        f"and a much more professional user experience.",
+        
+        f"Regarding '{user_message}': The chat interface has been completely rebuilt with separate components for "
+        f"message display, input handling, conversation management, and styling. This provides a solid foundation "
+        f"for the full AI integration that will follow."
+    ]
     
-    # Chat input
-    if not ChatStateManager.is_processing():
-        if prompt := st.chat_input("Type your message here...", key="chat_input"):
-            # Add user message
-            ChatStateManager.add_message("user", prompt)
-            
-            # Show user message immediately
-            with chat_container:
-                with st.chat_message("user"):
-                    st.markdown(prompt)
-                    st.caption(f"_{datetime.now().strftime('%H:%M:%S')}_")
-            
-            # Set processing state
-            ChatStateManager.set_processing(True)
-            
-            # For now, add a simple response (AI integration comes later)
-            import time
-            time.sleep(1)  # Simulate processing
-            
-            response = (
-                f"Thank you for your message: '{prompt}'. "
-                f"This is a placeholder response from the NIC Chat system. "
-                f"AI integration will be implemented in future tasks."
-            )
-            
-            ChatStateManager.add_message("assistant", response)
-            ChatStateManager.set_processing(False)
-            
-            st.rerun()
-    else:
-        st.info("🤔 Processing your message...")
+    return random.choice(responses)
 
 
 def render_documents_page():
