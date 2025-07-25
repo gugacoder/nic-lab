@@ -5,8 +5,8 @@
 type: task
 tags: [gitlab, search, retriever, langchain, major]
 created: 2025-07-22
-updated: 2025-07-22
-status: todo
+updated: 2025-07-25
+status: done
 severity: major
 up: "[[GitLab Integration.md]]"
 feature: "[[GitLab Repository Integration.md]]"
