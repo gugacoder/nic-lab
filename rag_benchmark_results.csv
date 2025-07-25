@@ -1,121 +1,121 @@
 timestamp,query,total_time_ms,retrieval_ms,assembly_ms,generation_ms,overhead_ms,tokens_used,sources_found
-2025-07-25T15:30:21.888992,What is authentication?,245.85,80.28,35.25,130.32,0.00,30,3
-2025-07-25T15:30:21.889033,What is authentication?,245.78,80.26,35.22,130.30,0.00,30,3
-2025-07-25T15:30:21.889038,What is authentication?,245.87,80.27,35.27,130.33,0.00,30,3
-2025-07-25T15:30:21.889042,What is authentication?,245.94,80.36,35.23,130.35,0.00,30,3
-2025-07-25T15:30:21.889045,What is authentication?,245.72,80.22,35.20,130.29,0.00,30,3
-2025-07-25T15:30:21.889048,What is authentication?,245.78,80.25,35.20,130.33,0.00,30,3
-2025-07-25T15:30:21.889051,What is authentication?,245.71,80.23,35.21,130.27,0.00,30,3
-2025-07-25T15:30:21.889065,What is authentication?,245.93,80.26,35.21,130.46,0.00,30,3
-2025-07-25T15:30:21.889077,What is authentication?,245.98,80.25,35.43,130.29,0.00,30,3
-2025-07-25T15:30:21.889082,What is authentication?,245.87,80.35,35.22,130.29,0.00,30,3
-2025-07-25T15:30:21.889087,What is authentication?,247.10,80.37,35.23,131.50,0.00,30,3
-2025-07-25T15:30:21.889091,What is authentication?,245.77,80.27,35.18,130.32,0.00,30,3
-2025-07-25T15:30:21.889096,What is authentication?,245.82,80.27,35.25,130.30,0.00,30,3
-2025-07-25T15:30:21.889101,What is authentication?,247.72,80.26,37.14,130.32,0.00,30,3
-2025-07-25T15:30:21.889106,What is authentication?,245.73,80.23,35.21,130.29,0.00,30,3
-2025-07-25T15:30:21.889109,What is authentication?,245.67,80.24,35.16,130.27,0.00,30,3
-2025-07-25T15:30:21.889112,What is authentication?,245.63,80.22,35.21,130.21,0.00,30,3
-2025-07-25T15:30:21.889115,What is authentication?,245.74,80.24,35.21,130.29,0.00,30,3
-2025-07-25T15:30:21.889118,What is authentication?,245.72,80.22,35.21,130.28,0.00,30,3
-2025-07-25T15:30:21.889121,What is authentication?,245.69,80.25,35.21,130.23,0.00,30,3
-2025-07-25T15:30:21.889126,How do I configure GitLab integration?,320.84,110.29,50.24,160.31,0.00,60,6
-2025-07-25T15:30:21.889130,How do I configure GitLab integration?,322.00,110.29,51.39,160.32,0.00,60,6
-2025-07-25T15:30:21.889135,How do I configure GitLab integration?,320.87,110.30,50.25,160.32,0.00,60,6
-2025-07-25T15:30:21.889140,How do I configure GitLab integration?,320.85,110.29,50.22,160.34,0.00,60,6
-2025-07-25T15:30:21.889144,How do I configure GitLab integration?,320.83,110.29,50.22,160.32,0.00,60,6
-2025-07-25T15:30:21.889149,How do I configure GitLab integration?,320.85,110.32,50.21,160.32,0.00,60,6
-2025-07-25T15:30:21.889153,How do I configure GitLab integration?,320.79,110.30,50.17,160.32,0.00,60,6
-2025-07-25T15:30:21.889157,How do I configure GitLab integration?,320.81,110.29,50.23,160.29,0.00,60,6
-2025-07-25T15:30:21.889161,How do I configure GitLab integration?,320.83,110.29,50.22,160.32,0.00,60,6
-2025-07-25T15:30:21.889166,How do I configure GitLab integration?,320.77,110.26,50.25,160.25,0.00,60,6
-2025-07-25T15:30:21.889171,How do I configure GitLab integration?,320.82,110.28,50.21,160.33,0.00,60,6
-2025-07-25T15:30:21.889176,How do I configure GitLab integration?,320.83,110.34,50.20,160.30,0.00,60,6
-2025-07-25T15:30:21.889186,How do I configure GitLab integration?,320.77,110.27,50.19,160.31,0.00,60,6
-2025-07-25T15:30:21.889191,How do I configure GitLab integration?,323.47,111.15,50.24,162.08,0.00,60,6
-2025-07-25T15:30:21.889196,How do I configure GitLab integration?,320.78,110.28,50.20,160.31,0.00,60,6
-2025-07-25T15:30:21.889199,How do I configure GitLab integration?,320.83,110.29,50.21,160.32,0.00,60,6
-2025-07-25T15:30:21.889202,How do I configure GitLab integration?,320.89,110.33,50.22,160.34,0.00,60,6
-2025-07-25T15:30:21.889205,How do I configure GitLab integration?,320.83,110.28,50.22,160.33,0.00,60,6
-2025-07-25T15:30:21.889208,How do I configure GitLab integration?,320.82,110.28,50.23,160.31,0.00,60,6
-2025-07-25T15:30:21.889210,How do I configure GitLab integration?,320.74,110.27,50.22,160.25,0.00,60,6
-2025-07-25T15:30:21.889214,Explain the differences between OAuth2 and SAML au,395.93,140.29,65.22,190.41,0.00,90,9
-2025-07-25T15:30:21.889221,Explain the differences between OAuth2 and SAML au,395.88,140.30,65.21,190.37,0.00,90,9
-2025-07-25T15:30:21.889224,Explain the differences between OAuth2 and SAML au,395.66,140.24,65.23,190.19,0.00,90,9
-2025-07-25T15:30:21.889227,Explain the differences between OAuth2 and SAML au,395.88,140.32,65.22,190.34,0.00,90,9
-2025-07-25T15:30:21.889230,Explain the differences between OAuth2 and SAML au,395.87,140.29,65.23,190.34,0.00,90,9
-2025-07-25T15:30:21.889241,Explain the differences between OAuth2 and SAML au,395.95,140.28,65.30,190.37,0.00,90,9
-2025-07-25T15:30:21.889245,Explain the differences between OAuth2 and SAML au,395.90,140.29,65.26,190.34,0.00,90,9
-2025-07-25T15:30:21.889248,Explain the differences between OAuth2 and SAML au,395.73,140.27,65.25,190.21,0.00,90,9
-2025-07-25T15:30:21.889252,Explain the differences between OAuth2 and SAML au,395.82,140.29,65.20,190.33,0.00,90,9
-2025-07-25T15:30:21.889257,Explain the differences between OAuth2 and SAML au,395.80,140.30,65.17,190.33,0.00,90,9
-2025-07-25T15:30:21.889262,Explain the differences between OAuth2 and SAML au,396.75,140.30,65.21,191.23,0.00,90,9
-2025-07-25T15:30:21.889267,Explain the differences between OAuth2 and SAML au,397.06,140.28,66.42,190.36,0.00,90,9
-2025-07-25T15:30:21.889272,Explain the differences between OAuth2 and SAML au,395.93,140.32,65.24,190.36,0.00,90,9
-2025-07-25T15:30:21.889277,Explain the differences between OAuth2 and SAML au,395.86,140.31,65.17,190.38,0.00,90,9
-2025-07-25T15:30:21.889282,Explain the differences between OAuth2 and SAML au,395.78,140.20,65.21,190.36,0.00,90,9
-2025-07-25T15:30:21.889287,Explain the differences between OAuth2 and SAML au,395.89,140.29,65.24,190.36,0.00,90,9
-2025-07-25T15:30:21.889290,Explain the differences between OAuth2 and SAML au,396.07,140.47,65.25,190.35,0.00,90,9
-2025-07-25T15:30:21.889293,Explain the differences between OAuth2 and SAML au,395.89,140.29,65.22,190.38,0.00,90,9
-2025-07-25T15:30:21.889296,Explain the differences between OAuth2 and SAML au,396.02,140.37,65.25,190.40,0.00,90,9
-2025-07-25T15:30:21.889445,Explain the differences between OAuth2 and SAML au,395.90,140.32,65.23,190.36,0.00,90,9
-2025-07-25T15:30:21.889455,What are the best practices for securing API token,440.92,160.31,70.28,210.33,0.00,110,10
-2025-07-25T15:30:21.889461,What are the best practices for securing API token,442.58,160.34,71.87,210.37,0.00,110,10
-2025-07-25T15:30:21.889464,What are the best practices for securing API token,440.96,160.34,70.23,210.39,0.00,110,10
-2025-07-25T15:30:21.889467,What are the best practices for securing API token,440.98,160.36,70.24,210.37,0.00,110,10
-2025-07-25T15:30:21.889471,What are the best practices for securing API token,440.97,160.36,70.24,210.37,0.00,110,10
-2025-07-25T15:30:21.889474,What are the best practices for securing API token,440.94,160.36,70.22,210.36,0.00,110,10
-2025-07-25T15:30:21.889478,What are the best practices for securing API token,441.05,160.33,70.30,210.41,0.00,110,10
-2025-07-25T15:30:21.889481,What are the best practices for securing API token,441.04,160.36,70.28,210.39,0.00,110,10
-2025-07-25T15:30:21.889489,What are the best practices for securing API token,442.44,161.81,70.24,210.39,0.00,110,10
-2025-07-25T15:30:21.889492,What are the best practices for securing API token,440.96,160.33,70.25,210.38,0.00,110,10
-2025-07-25T15:30:21.889495,What are the best practices for securing API token,440.83,160.32,70.25,210.26,0.00,110,10
-2025-07-25T15:30:21.889499,What are the best practices for securing API token,443.36,160.39,72.61,210.36,0.00,110,10
-2025-07-25T15:30:21.889504,What are the best practices for securing API token,440.98,160.31,70.30,210.37,0.00,110,10
-2025-07-25T15:30:21.889508,What are the best practices for securing API token,441.01,160.34,70.28,210.39,0.00,110,10
-2025-07-25T15:30:21.889514,What are the best practices for securing API token,441.19,160.35,70.43,210.41,0.00,110,10
-2025-07-25T15:30:21.889518,What are the best practices for securing API token,440.85,160.37,70.32,210.16,0.00,110,10
-2025-07-25T15:30:21.889523,What are the best practices for securing API token,441.32,160.35,70.22,210.75,0.00,110,10
-2025-07-25T15:30:21.889617,What are the best practices for securing API token,440.86,160.27,70.22,210.37,0.00,110,10
-2025-07-25T15:30:21.889627,What are the best practices for securing API token,440.99,160.33,70.24,210.42,0.00,110,10
-2025-07-25T15:30:21.889631,What are the best practices for securing API token,441.18,160.50,70.26,210.41,0.00,110,10
-2025-07-25T15:30:21.889635,How can I implement rate limiting for API endpoint,395.98,140.36,65.26,190.36,0.00,90,9
-2025-07-25T15:30:21.889639,How can I implement rate limiting for API endpoint,395.90,140.29,65.25,190.36,0.00,90,9
-2025-07-25T15:30:21.889642,How can I implement rate limiting for API endpoint,395.86,140.29,65.22,190.35,0.00,90,9
-2025-07-25T15:30:21.889645,How can I implement rate limiting for API endpoint,395.98,140.30,65.25,190.43,0.00,90,9
-2025-07-25T15:30:21.889648,How can I implement rate limiting for API endpoint,395.97,140.35,65.26,190.36,0.00,90,9
-2025-07-25T15:30:21.889652,How can I implement rate limiting for API endpoint,395.94,140.32,65.26,190.37,0.00,90,9
-2025-07-25T15:30:21.889655,How can I implement rate limiting for API endpoint,396.00,140.30,65.25,190.46,0.00,90,9
-2025-07-25T15:30:21.889658,How can I implement rate limiting for API endpoint,396.02,140.38,65.24,190.40,0.00,90,9
-2025-07-25T15:30:21.889661,How can I implement rate limiting for API endpoint,396.16,140.47,65.27,190.41,0.00,90,9
-2025-07-25T15:30:21.889664,How can I implement rate limiting for API endpoint,396.05,140.40,65.28,190.36,0.00,90,9
-2025-07-25T15:30:21.889667,How can I implement rate limiting for API endpoint,395.99,140.32,65.24,190.42,0.00,90,9
-2025-07-25T15:30:21.889671,How can I implement rate limiting for API endpoint,395.98,140.29,65.25,190.44,0.00,90,9
-2025-07-25T15:30:21.889674,How can I implement rate limiting for API endpoint,396.03,140.32,65.23,190.49,0.00,90,9
-2025-07-25T15:30:21.889677,How can I implement rate limiting for API endpoint,395.84,140.31,65.24,190.30,0.00,90,9
-2025-07-25T15:30:21.889680,How can I implement rate limiting for API endpoint,395.90,140.29,65.23,190.37,0.00,90,9
-2025-07-25T15:30:21.889683,How can I implement rate limiting for API endpoint,396.00,140.33,65.25,190.42,0.00,90,9
-2025-07-25T15:30:21.889686,How can I implement rate limiting for API endpoint,395.88,140.30,65.22,190.35,0.00,90,9
-2025-07-25T15:30:21.889689,How can I implement rate limiting for API endpoint,395.83,140.31,65.21,190.32,0.00,90,9
-2025-07-25T15:30:21.889692,How can I implement rate limiting for API endpoint,395.89,140.30,65.21,190.38,0.00,90,9
-2025-07-25T15:30:21.889695,How can I implement rate limiting for API endpoint,395.94,140.33,65.26,190.34,0.00,90,9
-2025-07-25T15:30:21.889698,Describe the process of setting up a CI/CD pipelin,441.28,160.58,70.28,210.40,0.02,110,10
-2025-07-25T15:30:21.889701,Describe the process of setting up a CI/CD pipelin,441.16,160.34,70.24,210.58,0.00,110,10
-2025-07-25T15:30:21.889704,Describe the process of setting up a CI/CD pipelin,441.08,160.43,70.25,210.39,0.00,110,10
-2025-07-25T15:30:21.889707,Describe the process of setting up a CI/CD pipelin,441.06,160.40,70.25,210.41,0.00,110,10
-2025-07-25T15:30:21.889710,Describe the process of setting up a CI/CD pipelin,441.23,160.42,70.25,210.57,0.00,110,10
-2025-07-25T15:30:21.889713,Describe the process of setting up a CI/CD pipelin,441.06,160.35,70.26,210.45,0.00,110,10
-2025-07-25T15:30:21.889716,Describe the process of setting up a CI/CD pipelin,441.03,160.35,70.27,210.41,0.00,110,10
-2025-07-25T15:30:21.889719,Describe the process of setting up a CI/CD pipelin,440.95,160.36,70.23,210.37,0.00,110,10
-2025-07-25T15:30:21.889722,Describe the process of setting up a CI/CD pipelin,441.05,160.41,70.25,210.38,0.00,110,10
-2025-07-25T15:30:21.889725,Describe the process of setting up a CI/CD pipelin,441.09,160.32,70.31,210.46,0.00,110,10
-2025-07-25T15:30:21.889728,Describe the process of setting up a CI/CD pipelin,440.99,160.37,70.25,210.37,0.00,110,10
-2025-07-25T15:30:21.889731,Describe the process of setting up a CI/CD pipelin,440.73,160.31,70.19,210.23,0.00,110,10
-2025-07-25T15:30:21.889734,Describe the process of setting up a CI/CD pipelin,440.97,160.31,70.25,210.41,0.00,110,10
-2025-07-25T15:30:21.889736,Describe the process of setting up a CI/CD pipelin,441.05,160.34,70.25,210.45,0.00,110,10
-2025-07-25T15:30:21.889739,Describe the process of setting up a CI/CD pipelin,441.04,160.34,70.30,210.40,0.00,110,10
-2025-07-25T15:30:21.889742,Describe the process of setting up a CI/CD pipelin,440.86,160.39,70.27,210.19,0.00,110,10
-2025-07-25T15:30:21.889745,Describe the process of setting up a CI/CD pipelin,440.77,160.30,70.23,210.24,0.00,110,10
-2025-07-25T15:30:21.889748,Describe the process of setting up a CI/CD pipelin,440.90,160.33,70.22,210.35,0.00,110,10
-2025-07-25T15:30:21.889751,Describe the process of setting up a CI/CD pipelin,440.95,160.36,70.22,210.37,0.00,110,10
-2025-07-25T15:30:21.889754,Describe the process of setting up a CI/CD pipelin,440.95,160.37,70.22,210.36,0.00,110,10
+2025-07-25T17:23:00.361124,What is authentication?,245.98,80.33,35.26,130.38,0.01,30,3
+2025-07-25T17:23:00.361150,What is authentication?,245.96,80.33,35.23,130.34,0.06,30,3
+2025-07-25T17:23:00.361154,What is authentication?,246.52,80.25,35.98,130.29,0.00,30,3
+2025-07-25T17:23:00.361158,What is authentication?,245.76,80.23,35.23,130.29,0.00,30,3
+2025-07-25T17:23:00.361161,What is authentication?,245.67,80.19,35.18,130.30,0.00,30,3
+2025-07-25T17:23:00.361164,What is authentication?,245.91,80.22,35.24,130.44,0.00,30,3
+2025-07-25T17:23:00.361167,What is authentication?,245.84,80.25,35.26,130.32,0.00,30,3
+2025-07-25T17:23:00.361172,What is authentication?,246.43,80.29,35.21,130.93,0.00,30,3
+2025-07-25T17:23:00.361176,What is authentication?,245.76,80.24,35.20,130.32,0.00,30,3
+2025-07-25T17:23:00.361180,What is authentication?,245.74,80.27,35.19,130.28,0.00,30,3
+2025-07-25T17:23:00.361186,What is authentication?,245.69,80.22,35.19,130.27,0.00,30,3
+2025-07-25T17:23:00.361189,What is authentication?,245.76,80.25,35.22,130.30,0.00,30,3
+2025-07-25T17:23:00.361192,What is authentication?,245.84,80.29,35.20,130.34,0.00,30,3
+2025-07-25T17:23:00.361195,What is authentication?,245.85,80.26,35.30,130.29,0.00,30,3
+2025-07-25T17:23:00.361198,What is authentication?,245.82,80.28,35.28,130.26,0.00,30,3
+2025-07-25T17:23:00.361200,What is authentication?,245.73,80.22,35.22,130.29,0.00,30,3
+2025-07-25T17:23:00.361203,What is authentication?,245.79,80.29,35.21,130.29,0.00,30,3
+2025-07-25T17:23:00.361206,What is authentication?,245.63,80.24,35.22,130.17,0.00,30,3
+2025-07-25T17:23:00.361208,What is authentication?,245.69,80.23,35.17,130.28,0.00,30,3
+2025-07-25T17:23:00.361211,What is authentication?,245.79,80.25,35.21,130.32,0.00,30,3
+2025-07-25T17:23:00.361214,How do I configure GitLab integration?,320.78,110.26,50.19,160.33,0.00,60,6
+2025-07-25T17:23:00.361217,How do I configure GitLab integration?,320.75,110.27,50.19,160.30,0.00,60,6
+2025-07-25T17:23:00.361220,How do I configure GitLab integration?,320.82,110.26,50.22,160.34,0.00,60,6
+2025-07-25T17:23:00.361223,How do I configure GitLab integration?,321.55,110.35,50.21,160.98,0.00,60,6
+2025-07-25T17:23:00.361226,How do I configure GitLab integration?,320.82,110.31,50.19,160.32,0.00,60,6
+2025-07-25T17:23:00.361229,How do I configure GitLab integration?,320.88,110.29,50.21,160.38,0.00,60,6
+2025-07-25T17:23:00.361232,How do I configure GitLab integration?,320.95,110.28,50.20,160.47,0.00,60,6
+2025-07-25T17:23:00.361235,How do I configure GitLab integration?,320.77,110.21,50.22,160.34,0.00,60,6
+2025-07-25T17:23:00.361237,How do I configure GitLab integration?,320.94,110.42,50.20,160.32,0.00,60,6
+2025-07-25T17:23:00.361240,How do I configure GitLab integration?,320.79,110.28,50.20,160.31,0.00,60,6
+2025-07-25T17:23:00.361243,How do I configure GitLab integration?,320.80,110.27,50.21,160.32,0.00,60,6
+2025-07-25T17:23:00.361246,How do I configure GitLab integration?,320.81,110.26,50.24,160.32,0.00,60,6
+2025-07-25T17:23:00.361251,How do I configure GitLab integration?,320.86,110.28,50.24,160.34,0.00,60,6
+2025-07-25T17:23:00.361256,How do I configure GitLab integration?,320.87,110.25,50.24,160.37,0.00,60,6
+2025-07-25T17:23:00.361261,How do I configure GitLab integration?,320.89,110.30,50.23,160.35,0.00,60,6
+2025-07-25T17:23:00.361265,How do I configure GitLab integration?,320.86,110.27,50.21,160.38,0.00,60,6
+2025-07-25T17:23:00.361270,How do I configure GitLab integration?,320.84,110.27,50.22,160.32,0.02,60,6
+2025-07-25T17:23:00.361275,How do I configure GitLab integration?,320.87,110.28,50.27,160.32,0.00,60,6
+2025-07-25T17:23:00.361279,How do I configure GitLab integration?,320.95,110.39,50.22,160.33,0.00,60,6
+2025-07-25T17:23:00.361283,How do I configure GitLab integration?,320.83,110.31,50.21,160.31,0.00,60,6
+2025-07-25T17:23:00.361287,Explain the differences between OAuth2 and SAML au,395.89,140.33,65.21,190.34,0.00,90,9
+2025-07-25T17:23:00.361291,Explain the differences between OAuth2 and SAML au,395.84,140.29,65.22,190.33,0.00,90,9
+2025-07-25T17:23:00.361296,Explain the differences between OAuth2 and SAML au,395.99,140.31,65.29,190.39,0.00,90,9
+2025-07-25T17:23:00.361300,Explain the differences between OAuth2 and SAML au,395.85,140.29,65.21,190.35,0.00,90,9
+2025-07-25T17:23:00.361304,Explain the differences between OAuth2 and SAML au,395.94,140.32,65.23,190.39,0.00,90,9
+2025-07-25T17:23:00.361308,Explain the differences between OAuth2 and SAML au,395.77,140.20,65.20,190.37,0.00,90,9
+2025-07-25T17:23:00.361312,Explain the differences between OAuth2 and SAML au,396.14,140.55,65.21,190.37,0.00,90,9
+2025-07-25T17:23:00.361317,Explain the differences between OAuth2 and SAML au,395.85,140.27,65.22,190.36,0.00,90,9
+2025-07-25T17:23:00.361321,Explain the differences between OAuth2 and SAML au,395.86,140.28,65.24,190.35,0.00,90,9
+2025-07-25T17:23:00.361329,Explain the differences between OAuth2 and SAML au,395.85,140.30,65.22,190.33,0.00,90,9
+2025-07-25T17:23:00.361334,Explain the differences between OAuth2 and SAML au,397.76,142.14,65.26,190.36,0.00,90,9
+2025-07-25T17:23:00.361339,Explain the differences between OAuth2 and SAML au,395.82,140.29,65.20,190.33,0.00,90,9
+2025-07-25T17:23:00.361344,Explain the differences between OAuth2 and SAML au,395.88,140.29,65.23,190.36,0.00,90,9
+2025-07-25T17:23:00.361348,Explain the differences between OAuth2 and SAML au,396.03,140.40,65.21,190.41,0.00,90,9
+2025-07-25T17:23:00.361353,Explain the differences between OAuth2 and SAML au,395.98,140.35,65.28,190.36,0.00,90,9
+2025-07-25T17:23:00.361357,Explain the differences between OAuth2 and SAML au,395.70,140.29,65.21,190.21,0.00,90,9
+2025-07-25T17:23:00.361361,Explain the differences between OAuth2 and SAML au,395.72,140.33,65.23,190.15,0.00,90,9
+2025-07-25T17:23:00.361366,Explain the differences between OAuth2 and SAML au,395.93,140.32,65.26,190.35,0.00,90,9
+2025-07-25T17:23:00.361371,Explain the differences between OAuth2 and SAML au,395.91,140.32,65.21,190.37,0.00,90,9
+2025-07-25T17:23:00.361375,Explain the differences between OAuth2 and SAML au,395.87,140.29,65.23,190.35,0.00,90,9
+2025-07-25T17:23:00.361380,What are the best practices for securing API token,440.94,160.32,70.24,210.38,0.00,110,10
+2025-07-25T17:23:00.361385,What are the best practices for securing API token,440.91,160.31,70.24,210.36,0.00,110,10
+2025-07-25T17:23:00.361389,What are the best practices for securing API token,440.95,160.33,70.23,210.39,0.00,110,10
+2025-07-25T17:23:00.361394,What are the best practices for securing API token,441.06,160.32,70.27,210.46,0.00,110,10
+2025-07-25T17:23:00.361399,What are the best practices for securing API token,440.94,160.33,70.26,210.36,0.00,110,10
+2025-07-25T17:23:00.361404,What are the best practices for securing API token,440.96,160.33,70.22,210.41,0.00,110,10
+2025-07-25T17:23:00.361409,What are the best practices for securing API token,440.95,160.31,70.28,210.37,0.00,110,10
+2025-07-25T17:23:00.361414,What are the best practices for securing API token,441.10,160.33,70.24,210.52,0.01,110,10
+2025-07-25T17:23:00.361418,What are the best practices for securing API token,440.98,160.35,70.27,210.36,0.00,110,10
+2025-07-25T17:23:00.361422,What are the best practices for securing API token,440.92,160.33,70.26,210.33,0.00,110,10
+2025-07-25T17:23:00.361426,What are the best practices for securing API token,441.01,160.41,70.22,210.38,0.00,110,10
+2025-07-25T17:23:00.361431,What are the best practices for securing API token,440.85,160.33,70.21,210.31,0.00,110,10
+2025-07-25T17:23:00.361440,What are the best practices for securing API token,441.03,160.35,70.30,210.38,0.00,110,10
+2025-07-25T17:23:00.361446,What are the best practices for securing API token,440.96,160.31,70.25,210.40,0.00,110,10
+2025-07-25T17:23:00.361450,What are the best practices for securing API token,440.95,160.35,70.21,210.39,0.00,110,10
+2025-07-25T17:23:00.361453,What are the best practices for securing API token,440.95,160.31,70.25,210.39,0.00,110,10
+2025-07-25T17:23:00.361457,What are the best practices for securing API token,441.01,160.34,70.27,210.39,0.00,110,10
+2025-07-25T17:23:00.361516,What are the best practices for securing API token,440.89,160.31,70.24,210.34,0.00,110,10
+2025-07-25T17:23:00.361521,What are the best practices for securing API token,440.95,160.33,70.24,210.37,0.00,110,10
+2025-07-25T17:23:00.361524,What are the best practices for securing API token,441.01,160.40,70.22,210.39,0.00,110,10
+2025-07-25T17:23:00.361527,How can I implement rate limiting for API endpoint,395.89,140.33,65.20,190.36,0.00,90,9
+2025-07-25T17:23:00.361532,How can I implement rate limiting for API endpoint,395.86,140.28,65.25,190.33,0.00,90,9
+2025-07-25T17:23:00.361536,How can I implement rate limiting for API endpoint,395.94,140.23,65.34,190.37,0.00,90,9
+2025-07-25T17:23:00.361539,How can I implement rate limiting for API endpoint,395.84,140.30,65.21,190.34,0.00,90,9
+2025-07-25T17:23:00.361542,How can I implement rate limiting for API endpoint,396.01,140.39,65.23,190.38,0.00,90,9
+2025-07-25T17:23:00.361545,How can I implement rate limiting for API endpoint,395.94,140.36,65.22,190.35,0.00,90,9
+2025-07-25T17:23:00.361548,How can I implement rate limiting for API endpoint,395.90,140.35,65.21,190.34,0.00,90,9
+2025-07-25T17:23:00.361551,How can I implement rate limiting for API endpoint,395.90,140.28,65.23,190.38,0.00,90,9
+2025-07-25T17:23:00.361554,How can I implement rate limiting for API endpoint,395.87,140.31,65.23,190.33,0.00,90,9
+2025-07-25T17:23:00.361557,How can I implement rate limiting for API endpoint,395.90,140.30,65.24,190.36,0.00,90,9
+2025-07-25T17:23:00.361559,How can I implement rate limiting for API endpoint,395.94,140.29,65.23,190.42,0.00,90,9
+2025-07-25T17:23:00.361562,How can I implement rate limiting for API endpoint,395.97,140.34,65.22,190.40,0.00,90,9
+2025-07-25T17:23:00.361565,How can I implement rate limiting for API endpoint,395.87,140.29,65.24,190.33,0.00,90,9
+2025-07-25T17:23:00.361568,How can I implement rate limiting for API endpoint,397.24,140.30,66.71,190.23,0.00,90,9
+2025-07-25T17:23:00.361571,How can I implement rate limiting for API endpoint,395.74,140.29,65.23,190.21,0.00,90,9
+2025-07-25T17:23:00.361574,How can I implement rate limiting for API endpoint,395.91,140.29,65.24,190.38,0.00,90,9
+2025-07-25T17:23:00.361577,How can I implement rate limiting for API endpoint,395.81,140.32,65.22,190.27,0.00,90,9
+2025-07-25T17:23:00.361580,How can I implement rate limiting for API endpoint,395.87,140.30,65.20,190.37,0.00,90,9
+2025-07-25T17:23:00.361583,How can I implement rate limiting for API endpoint,395.89,140.31,65.24,190.34,0.00,90,9
+2025-07-25T17:23:00.361586,How can I implement rate limiting for API endpoint,395.92,140.29,65.25,190.38,0.00,90,9
+2025-07-25T17:23:00.361588,Describe the process of setting up a CI/CD pipelin,440.95,160.36,70.23,210.36,0.00,110,10
+2025-07-25T17:23:00.361591,Describe the process of setting up a CI/CD pipelin,440.96,160.38,70.22,210.36,0.00,110,10
+2025-07-25T17:23:00.361594,Describe the process of setting up a CI/CD pipelin,440.92,160.30,70.20,210.42,0.00,110,10
+2025-07-25T17:23:00.361597,Describe the process of setting up a CI/CD pipelin,440.92,160.32,70.25,210.35,0.00,110,10
+2025-07-25T17:23:00.361600,Describe the process of setting up a CI/CD pipelin,440.96,160.31,70.24,210.41,0.00,110,10
+2025-07-25T17:23:00.361603,Describe the process of setting up a CI/CD pipelin,443.66,160.37,70.24,213.05,0.00,110,10
+2025-07-25T17:23:00.361606,Describe the process of setting up a CI/CD pipelin,440.93,160.31,70.18,210.44,0.00,110,10
+2025-07-25T17:23:00.361609,Describe the process of setting up a CI/CD pipelin,440.94,160.33,70.23,210.38,0.00,110,10
+2025-07-25T17:23:00.361612,Describe the process of setting up a CI/CD pipelin,440.89,160.32,70.22,210.35,0.00,110,10
+2025-07-25T17:23:00.361614,Describe the process of setting up a CI/CD pipelin,440.96,160.32,70.26,210.38,0.00,110,10
+2025-07-25T17:23:00.361617,Describe the process of setting up a CI/CD pipelin,440.96,160.33,70.26,210.36,0.00,110,10
+2025-07-25T17:23:00.361620,Describe the process of setting up a CI/CD pipelin,440.92,160.31,70.22,210.39,0.00,110,10
+2025-07-25T17:23:00.361623,Describe the process of setting up a CI/CD pipelin,440.96,160.32,70.22,210.41,0.00,110,10
+2025-07-25T17:23:00.361626,Describe the process of setting up a CI/CD pipelin,440.98,160.35,70.26,210.37,0.00,110,10
+2025-07-25T17:23:00.361628,Describe the process of setting up a CI/CD pipelin,440.91,160.32,70.22,210.37,0.00,110,10
+2025-07-25T17:23:00.361631,Describe the process of setting up a CI/CD pipelin,440.93,160.35,70.21,210.37,0.00,110,10
+2025-07-25T17:23:00.361634,Describe the process of setting up a CI/CD pipelin,441.09,160.40,70.25,210.44,0.00,110,10
+2025-07-25T17:23:00.361637,Describe the process of setting up a CI/CD pipelin,440.94,160.32,70.24,210.38,0.00,110,10
+2025-07-25T17:23:00.361640,Describe the process of setting up a CI/CD pipelin,440.94,160.35,70.20,210.39,0.00,110,10
+2025-07-25T17:23:00.361643,Describe the process of setting up a CI/CD pipelin,440.95,160.33,70.24,210.38,0.00,110,10
