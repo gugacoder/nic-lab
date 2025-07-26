@@ -6,7 +6,7 @@ type: task
 tags: [llm, integration, chat, groq, critical]
 created: 2025-07-26
 updated: 2025-07-26
-status: 🟢 done
+status: 🔵 todo
 severity: critical
 up: "[[LLM Integration Patterns.md]]"
 feature: "[[Live LLM Chat Integration.md]]"

@@ -1,0 +1,811 @@
+/*
+Document Preview Styles
+
+High-fidelity CSS styles that accurately match DOCX and PDF output formats
+for document preview functionality. Includes page-based rendering, typography
+matching, and print layout simulation.
+*/
+
+/* ============================================================================
+   DOCUMENT PREVIEW CONTAINER
+   ============================================================================ */
+
+.document-preview-container {
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: white;
+    border-bottom: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.preview-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #495057;
+    margin: 0;
+}
+
+.preview-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.preview-content {
+    flex: 1;
+    overflow: auto;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    scroll-behavior: smooth;
+}
+
+/* ============================================================================
+   DOCUMENT PAGE LAYOUT
+   ============================================================================ */
+
+.document-page {
+    background: white;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    margin: 0 auto 2rem;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    
+    /* Standard A4 dimensions for 96 DPI */
+    width: 794px;  /* 8.27 inches * 96 DPI */
+    min-height: 1123px;  /* 11.69 inches * 96 DPI */
+    
+    /* Page margins matching Word defaults */
+    padding: 96px 96px 96px 96px;  /* 1 inch margins */
+    box-sizing: border-box;
+}
+
+.document-page.letter-size {
+    width: 816px;   /* 8.5 inches * 96 DPI */
+    min-height: 1056px; /* 11 inches * 96 DPI */
+}
+
+.document-page.a4-size {
+    width: 794px;   /* 8.27 inches * 96 DPI */
+    min-height: 1123px; /* 11.69 inches * 96 DPI */
+}
+
+.document-page.legal-size {
+    width: 816px;   /* 8.5 inches * 96 DPI */
+    min-height: 1344px; /* 14 inches * 96 DPI */
+}
+
+/* Page break indicators */
+.page-break {
+    width: 100%;
+    height: 2px;
+    background: repeating-linear-gradient(
+        to right,
+        #6c757d 0,
+        #6c757d 8px,
+        transparent 8px,
+        transparent 16px
+    );
+    margin: 1rem 0;
+    position: relative;
+}
+
+.page-break::before {
+    content: "Page Break";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f5f5f5;
+    padding: 0 8px;
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+/* ============================================================================
+   TYPOGRAPHY MATCHING WORD/PDF
+   ============================================================================ */
+
+.document-content {
+    font-family: "Times New Roman", "Liberation Serif", Times, serif;
+    font-size: 12pt;
+    line-height: 1.15;  /* Word default */
+    color: #000000;
+    text-align: left;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Heading styles matching Word defaults */
+.doc-heading-1 {
+    font-family: "Calibri", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16pt;
+    font-weight: bold;
+    color: #2f5496;
+    margin: 12pt 0 6pt 0;
+    line-height: 1.15;
+    page-break-after: avoid;
+}
+
+.doc-heading-2 {
+    font-family: "Calibri", "Helvetica Neue", Arial, sans-serif;
+    font-size: 13pt;
+    font-weight: bold;
+    color: #2f5496;
+    margin: 6pt 0 6pt 0;
+    line-height: 1.15;
+    page-break-after: avoid;
+}
+
+.doc-heading-3 {
+    font-family: "Calibri", "Helvetica Neue", Arial, sans-serif;
+    font-size: 12pt;
+    font-weight: bold;
+    color: #1f3864;
+    margin: 6pt 0 6pt 0;
+    line-height: 1.15;
+    page-break-after: avoid;
+}
+
+.doc-heading-4 {
+    font-family: "Calibri", "Helvetica Neue", Arial, sans-serif;
+    font-size: 11pt;
+    font-weight: bold;
+    color: #2f5496;
+    font-style: italic;
+    margin: 6pt 0 6pt 0;
+    line-height: 1.15;
+    page-break-after: avoid;
+}
+
+/* Paragraph styles */
+.doc-paragraph {
+    margin: 0 0 8pt 0;
+    text-align: left;
+    line-height: 1.15;
+}
+
+.doc-paragraph.justified {
+    text-align: justify;
+}
+
+.doc-paragraph.centered {
+    text-align: center;
+}
+
+.doc-paragraph.right-aligned {
+    text-align: right;
+}
+
+/* Text formatting */
+.doc-bold {
+    font-weight: bold;
+}
+
+.doc-italic {
+    font-style: italic;
+}
+
+.doc-underline {
+    text-decoration: underline;
+}
+
+.doc-strikethrough {
+    text-decoration: line-through;
+}
+
+/* Font size classes */
+.doc-size-8 { font-size: 8pt; }
+.doc-size-9 { font-size: 9pt; }
+.doc-size-10 { font-size: 10pt; }
+.doc-size-11 { font-size: 11pt; }
+.doc-size-12 { font-size: 12pt; }
+.doc-size-14 { font-size: 14pt; }
+.doc-size-16 { font-size: 16pt; }
+.doc-size-18 { font-size: 18pt; }
+.doc-size-20 { font-size: 20pt; }
+.doc-size-24 { font-size: 24pt; }
+
+/* ============================================================================
+   LIST STYLES MATCHING WORD
+   ============================================================================ */
+
+.doc-list-bullet {
+    margin: 0 0 8pt 0;
+    padding-left: 0.5in;
+    list-style-type: disc;
+}
+
+.doc-list-bullet li {
+    margin: 0 0 4pt 0;
+    line-height: 1.15;
+}
+
+.doc-list-numbered {
+    margin: 0 0 8pt 0;
+    padding-left: 0.5in;
+    list-style-type: decimal;
+}
+
+.doc-list-numbered li {
+    margin: 0 0 4pt 0;
+    line-height: 1.15;
+}
+
+/* Nested lists */
+.doc-list-bullet .doc-list-bullet {
+    list-style-type: circle;
+    margin: 4pt 0;
+}
+
+.doc-list-bullet .doc-list-bullet .doc-list-bullet {
+    list-style-type: square;
+}
+
+/* ============================================================================
+   TABLE STYLES MATCHING WORD
+   ============================================================================ */
+
+.doc-table {
+    border-collapse: collapse;
+    margin: 8pt 0;
+    width: 100%;
+    font-size: inherit;
+}
+
+.doc-table td,
+.doc-table th {
+    border: 1pt solid #000000;
+    padding: 4pt 8pt;
+    vertical-align: top;
+    line-height: 1.15;
+}
+
+.doc-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: center;
+}
+
+.doc-table-no-border {
+    border: none;
+}
+
+.doc-table-no-border td,
+.doc-table-no-border th {
+    border: none;
+}
+
+.doc-table-grid {
+    border: 1pt solid #000000;
+}
+
+.doc-table-list {
+    border: none;
+    border-top: 1pt solid #000000;
+    border-bottom: 1pt solid #000000;
+}
+
+.doc-table-list td,
+.doc-table-list th {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1pt solid #cccccc;
+}
+
+/* ============================================================================
+   IMAGE STYLES
+   ============================================================================ */
+
+.doc-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 8pt auto;
+    page-break-inside: avoid;
+}
+
+.doc-image.inline {
+    display: inline;
+    margin: 0;
+    vertical-align: baseline;
+}
+
+.doc-image.left-align {
+    float: left;
+    margin: 0 8pt 8pt 0;
+}
+
+.doc-image.right-align {
+    float: right;
+    margin: 0 0 8pt 8pt;
+}
+
+.doc-image-caption {
+    font-size: 10pt;
+    text-align: center;
+    margin: 4pt 0 8pt 0;
+    font-style: italic;
+    color: #666666;
+}
+
+/* ============================================================================
+   ZOOM CONTROLS AND SCALING
+   ============================================================================ */
+
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.zoom-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.zoom-button:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.zoom-button:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.zoom-slider {
+    width: 120px;
+    margin: 0 0.5rem;
+}
+
+.zoom-percentage {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #495057;
+    min-width: 50px;
+    text-align: center;
+}
+
+.zoom-presets {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.zoom-preset {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.zoom-preset:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.zoom-preset.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Zoom scaling */
+.document-preview-container.zoom-50 .document-page {
+    transform: scale(0.5);
+    transform-origin: top center;
+}
+
+.document-preview-container.zoom-75 .document-page {
+    transform: scale(0.75);
+    transform-origin: top center;
+}
+
+.document-preview-container.zoom-100 .document-page {
+    transform: scale(1);
+    transform-origin: top center;
+}
+
+.document-preview-container.zoom-125 .document-page {
+    transform: scale(1.25);
+    transform-origin: top center;
+}
+
+.document-preview-container.zoom-150 .document-page {
+    transform: scale(1.5);
+    transform-origin: top center;
+}
+
+.document-preview-container.zoom-200 .document-page {
+    transform: scale(2);
+    transform-origin: top center;
+}
+
+/* ============================================================================
+   RULERS AND MARGIN INDICATORS
+   ============================================================================ */
+
+.ruler-horizontal {
+    height: 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    position: relative;
+    margin-bottom: 1rem;
+    background-image: repeating-linear-gradient(
+        to right,
+        #adb5bd 0,
+        #adb5bd 1px,
+        transparent 1px,
+        transparent 10px
+    );
+}
+
+.ruler-vertical {
+    width: 20px;
+    background: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        #adb5bd 0,
+        #adb5bd 1px,
+        transparent 1px,
+        transparent 10px
+    );
+}
+
+.margin-indicator {
+    position: absolute;
+    border: 1px dashed #6c757d;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.margin-indicator.top {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 96px; /* 1 inch */
+    border-bottom-style: solid;
+}
+
+.margin-indicator.bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 96px; /* 1 inch */
+    border-top-style: solid;
+}
+
+.margin-indicator.left {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 96px; /* 1 inch */
+    border-right-style: solid;
+}
+
+.margin-indicator.right {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 96px; /* 1 inch */
+    border-left-style: solid;
+}
+
+/* ============================================================================
+   PRINT PREVIEW MODE
+   ============================================================================ */
+
+.print-preview-mode .document-page {
+    box-shadow: none;
+    border: 1pt solid #000000;
+    margin: 0 auto;
+}
+
+.print-preview-mode .page-break {
+    display: none;
+}
+
+.print-preview-mode .zoom-controls,
+.print-preview-mode .ruler-horizontal,
+.print-preview-mode .ruler-vertical,
+.print-preview-mode .margin-indicator {
+    display: none;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+    .document-page {
+        width: 100%;
+        max-width: 794px;
+        margin: 0 auto 1rem;
+        padding: 48px; /* Reduced margins on smaller screens */
+    }
+    
+    .preview-content {
+        padding: 1rem;
+    }
+    
+    .zoom-controls {
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+    
+    .zoom-slider {
+        width: 80px;
+    }
+}
+
+@media (max-width: 768px) {
+    .document-page {
+        padding: 24px; /* Further reduced margins */
+        margin-bottom: 0.5rem;
+    }
+    
+    .preview-header {
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+    }
+    
+    .preview-controls {
+        justify-content: center;
+    }
+    
+    .doc-heading-1 { font-size: 14pt; }
+    .doc-heading-2 { font-size: 12pt; }
+    .doc-heading-3 { font-size: 11pt; }
+    .doc-heading-4 { font-size: 10pt; }
+    
+    .ruler-horizontal,
+    .ruler-vertical {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .document-page {
+        padding: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .document-content {
+        font-size: 11pt;
+    }
+    
+    .zoom-controls {
+        font-size: 0.875rem;
+    }
+    
+    .zoom-button {
+        width: 28px;
+        height: 28px;
+        font-size: 0.875rem;
+    }
+    
+    .doc-table {
+        font-size: 10pt;
+    }
+    
+    .doc-table td,
+    .doc-table th {
+        padding: 2pt 4pt;
+    }
+}
+
+/* ============================================================================
+   DARK MODE SUPPORT
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+    .document-preview-container {
+        background-color: #1a1a1a;
+    }
+    
+    .preview-header {
+        background: #2d3748;
+        border-bottom-color: #4a5568;
+        color: #f7fafc;
+    }
+    
+    .document-page {
+        background: #2d3748;
+        color: #f7fafc;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+    
+    .doc-heading-1,
+    .doc-heading-2,
+    .doc-heading-3,
+    .doc-heading-4 {
+        color: #63b3ed;
+    }
+    
+    .doc-table td,
+    .doc-table th {
+        border-color: #4a5568;
+    }
+    
+    .doc-table th {
+        background-color: #4a5568;
+        color: #f7fafc;
+    }
+    
+    .zoom-controls {
+        background: rgba(45, 55, 72, 0.95);
+        color: #f7fafc;
+    }
+    
+    .zoom-preset {
+        background: #4a5568;
+        border-color: #2d3748;
+        color: #f7fafc;
+    }
+    
+    .zoom-preset:hover {
+        background: #2d3748;
+        border-color: #1a202c;
+    }
+    
+    .ruler-horizontal,
+    .ruler-vertical {
+        background: #2d3748;
+        border-color: #4a5568;
+    }
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .document-page {
+        transform: none !important;
+    }
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus styles for keyboard navigation */
+.zoom-button:focus,
+.zoom-preset:focus {
+    outline: 2px solid #4299e1;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .document-page {
+        border: 2px solid #000000;
+    }
+    
+    .doc-table td,
+    .doc-table th {
+        border-width: 2px;
+    }
+    
+    .margin-indicator {
+        border-width: 2px;
+        opacity: 0.8;
+    }
+}
+
+/* ============================================================================
+   ANIMATIONS AND TRANSITIONS
+   ============================================================================ */
+
+.document-page {
+    transition: transform 0.3s ease, box-shadow 0.2s ease;
+}
+
+.zoom-button,
+.zoom-preset {
+    transition: all 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.document-page {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.hidden {
+    display: none !important;
+}
+
+.invisible {
+    visibility: hidden !important;
+}
+
+.no-print {
+    display: none !important;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .document-preview-container {
+        background: white;
+    }
+    
+    .document-page {
+        box-shadow: none;
+        border: none;
+        margin: 0;
+        page-break-after: always;
+    }
+    
+    .document-page:last-child {
+        page-break-after: auto;
+    }
+}

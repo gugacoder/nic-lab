@@ -5,8 +5,8 @@
 type: task
 tags: [ui, styling, preview, documents, minor]
 created: 2025-07-22
-updated: 2025-07-22
-status: 🔵 todo
+updated: 2025-07-26
+status: 🟢 done
 severity: minor
 up: "[[Document Preview and Styling.md]]"
 feature: "[[Review and Export Workflow.md]]"
