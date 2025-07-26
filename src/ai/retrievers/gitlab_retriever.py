@@ -21,7 +21,7 @@ from ...integrations.gitlab_client import get_gitlab_client, GitLabSearchResult
 from ...integrations.search.keyword_search import KeywordSearchStrategy, create_keyword_search
 from ...integrations.search.semantic_search import SemanticSearchStrategy, create_semantic_search
 from ...integrations.search.aggregator import SearchResultAggregator, create_result_aggregator
-from ...integrations.cache.search_cache import get_search_cache, CacheConfig
+from ...optimization.search_cache import get_search_cache, MultiLevelCacheConfig
 from ...ai.preprocessing.content_chunker import ContentChunker, create_content_chunker, ChunkingStrategy
 from ...config.settings import get_settings
 
@@ -136,11 +136,12 @@ class GitLabRetriever(BaseRetriever):
         # Initialize cache if enabled
         self.search_cache = None
         if self.config.enable_caching:
-            cache_config = CacheConfig(
-                default_ttl_seconds=self.config.cache_ttl_seconds,
-                max_size_mb=50,  # 50MB cache
-                enable_persistence=True
+            cache_config = MultiLevelCacheConfig(
+                enable_disk_cache=True,
+                cache_dir="cache/gitlab_search"
             )
+            # Override TTL for warm cache to match config
+            cache_config.warm_config.ttl_seconds = self.config.cache_ttl_seconds
             self.search_cache = get_search_cache(cache_config)
     
     def _get_relevant_documents(
@@ -166,9 +167,8 @@ class GitLabRetriever(BaseRetriever):
             if self.search_cache:
                 cached_results = self.search_cache.get_search_results(
                     query=query,
-                    project_ids=self.config.project_ids,
-                    file_extensions=self.config.file_extensions,
-                    strategy=self.config.search_mode.value
+                    strategy=self.config.search_mode.value,
+                    project_ids=self.config.project_ids
                 )
                 
                 if cached_results:
@@ -191,12 +191,11 @@ class GitLabRetriever(BaseRetriever):
             
             # Cache results if caching is enabled
             if self.search_cache and search_results:
-                self.search_cache.cache_search_results(
+                self.search_cache.put_search_results(
                     query=query,
                     results=search_results,
-                    project_ids=self.config.project_ids,
-                    file_extensions=self.config.file_extensions,
                     strategy=self.config.search_mode.value,
+                    project_ids=self.config.project_ids,
                     ttl_seconds=self.config.cache_ttl_seconds
                 )
             
@@ -532,7 +531,8 @@ class GitLabRetriever(BaseRetriever):
         """
         if self.search_cache:
             if project_id:
-                self.search_cache.invalidate_project(project_id)
+                # Invalidate by project tag
+                self.search_cache.invalidate_by_tag(f"project:{project_id}")
             else:
                 self.search_cache.clear()
     
@@ -570,7 +570,7 @@ class GitLabRetriever(BaseRetriever):
             }
             
             # Get cache analysis
-            cache_analysis = self.search_cache.analyze_cache()
+            cache_analysis = self.search_cache.analyze_cache_performance()
             analysis['cache_analysis'] = cache_analysis
         
         return analysis
