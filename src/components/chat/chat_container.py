@@ -3,19 +3,24 @@ Chat Container Component
 
 This is the main chat container that orchestrates all chat components including
 message display, input handling, and user interactions. It provides the complete
-chat interface experience.
+chat interface experience with comprehensive error recovery capabilities.
 """
 
 import streamlit as st
 from typing import Optional, Dict, Any, Callable
 from datetime import datetime
 import asyncio
+import logging
 
 from src.utils.session import ChatStateManager, UIStateManager
 from src.components.chat.message import MessageData, create_message_data
 from src.components.chat.message_list import MessageListComponent, MessageListActions
 from src.components.chat.chat_input import ChatInputComponent, QuickActions, InputHistory
 from src.components.common.loading import LoadingIndicators, ProgressTracker
+from src.components.common.error_boundary import ErrorBoundary, error_boundary, SafeContainer
+from src.components.common.error_display import ErrorDisplay, ErrorDisplayStyle
+from src.utils.error_handler import get_error_handler, ErrorCategory, ErrorSeverity
+from src.utils.state_recovery import get_recovery_manager, create_error_snapshot
 
 
 class ChatContainer:
@@ -30,7 +35,7 @@ class ChatContainer:
         custom_css: Optional[str] = None
     ) -> None:
         """
-        Render the complete chat interface
+        Render the complete chat interface with comprehensive error recovery
         
         Args:
             ai_handler: Function to handle AI responses
@@ -39,26 +44,36 @@ class ChatContainer:
             show_conversation_stats: Whether to show conversation statistics
             custom_css: Custom CSS for styling
         """
-        # Apply custom CSS if provided
-        if custom_css:
-            st.markdown(f"<style>{custom_css}</style>", unsafe_allow_html=True)
-        
-        # Initialize chat state if needed
-        ChatContainer._initialize_chat_state()
-        
-        # Handle any errors
-        ChatContainer._render_error_display()
-        
-        # Render main chat layout
-        ChatContainer._render_chat_layout(
-            ai_handler=ai_handler,
-            enable_streaming=enable_streaming,
-            show_quick_actions=show_quick_actions,
-            show_conversation_stats=show_conversation_stats
+        # Create main error boundary for the entire chat interface
+        chat_boundary = ErrorBoundary(
+            component_name="chat_interface",
+            error_category=ErrorCategory.UI,
+            fallback_content="Chat interface temporarily unavailable. Please refresh to try again.",
+            show_details=st.session_state.get("debug_mode", False),
+            auto_snapshot=True
         )
         
-        # Handle background processing
-        ChatContainer._handle_background_processing(ai_handler, enable_streaming)
+        with chat_boundary.catch_errors():
+            # Apply custom CSS if provided
+            if custom_css:
+                st.markdown(f"<style>{custom_css}</style>", unsafe_allow_html=True)
+            
+            # Initialize chat state if needed
+            ChatContainer._initialize_chat_state()
+            
+            # Display any current errors with enhanced error display
+            ChatContainer._render_enhanced_error_display()
+            
+            # Render main chat layout within safe containers
+            ChatContainer._render_chat_layout_safe(
+                ai_handler=ai_handler,
+                enable_streaming=enable_streaming,
+                show_quick_actions=show_quick_actions,
+                show_conversation_stats=show_conversation_stats
+            )
+            
+            # Handle background processing with error recovery
+            ChatContainer._handle_background_processing_safe(ai_handler, enable_streaming)
     
     @staticmethod
     def _initialize_chat_state() -> None:
@@ -83,69 +98,118 @@ class ChatContainer:
             }
     
     @staticmethod
-    def _render_error_display() -> None:
-        """Render any chat errors"""
-        error = ChatStateManager.get_error()
-        
-        if error:
-            st.error(f"❌ {error}")
+    def _render_enhanced_error_display() -> None:
+        """Render enhanced error display with comprehensive recovery options"""
+        try:
+            # Check for errors from multiple sources
+            chat_error = ChatStateManager.get_error()
+            error_handler = get_error_handler()
+            current_error = error_handler.get_current_error()
             
-            col1, col2 = st.columns([1, 4])
+            # Display chat-specific errors
+            if chat_error:
+                ChatContainer._render_chat_error(chat_error)
+            
+            # Display system errors from error handler
+            if current_error:
+                ErrorDisplay.render_error(
+                    current_error,
+                    style=ErrorDisplayStyle.STANDARD,
+                    show_recovery_actions=True,
+                    show_timestamp=True
+                )
+            
+        except Exception as e:
+            # Fallback error display
+            st.error(f"❌ Error displaying errors: {str(e)}")
+            if st.button("🔄 Reset Error System"):
+                ChatContainer._reset_error_system()
+    
+    @staticmethod
+    def _render_chat_error(error_message: str) -> None:
+        """Render chat-specific error with enhanced recovery options"""
+        with st.container():
+            st.error(f"❌ **Chat Error**: {error_message}")
+            
+            # Enhanced recovery options
+            col1, col2, col3, col4 = st.columns(4)
             
             with col1:
-                if st.button("🔄 Retry", help="Retry the last action"):
+                if st.button("🔄 Retry", help="Retry the last action", key="chat_retry"):
                     ChatContainer._retry_last_action()
             
             with col2:
-                if st.button("❌ Clear Error", help="Clear the error message"):
+                if st.button("🔧 Recover", help="Attempt automatic recovery", key="chat_recover"):
+                    ChatContainer._attempt_chat_recovery()
+            
+            with col3:
+                if st.button("🗑️ Reset", help="Reset chat state", key="chat_reset"):
+                    ChatContainer._reset_chat_state()
+            
+            with col4:
+                if st.button("❌ Clear", help="Clear error message", key="chat_clear"):
                     ChatStateManager.clear_error()
                     st.rerun()
     
     @staticmethod
-    def _render_chat_layout(
+    def _render_chat_layout_safe(
         ai_handler: Optional[Callable[[str], str]],
         enable_streaming: bool,
         show_quick_actions: bool,
         show_conversation_stats: bool
     ) -> None:
-        """Render the main chat layout with all components"""
+        """Render the main chat layout with all components using error boundaries"""
         
-        # Chat header with actions
-        ChatContainer._render_chat_header()
+        # Chat header with error boundary
+        header_container = SafeContainer("chat_header")
+        with header_container.render():
+            ChatContainer._render_chat_header()
         
-        # Main chat area
+        # Main chat area with error boundaries
         chat_col1, chat_col2 = st.columns([4, 1])
         
         with chat_col1:
-            # Message history
-            messages = ChatContainer._get_display_messages()
+            # Message history with error boundary
+            messages_container = SafeContainer("message_history")
+            with messages_container.render():
+                messages = ChatContainer._get_display_messages()
+                
+                MessageListComponent.render_message_list(
+                    messages=messages,
+                    show_search=True,
+                    show_filters=True,
+                    show_timestamps=st.session_state["chat_settings"]["show_timestamps"],
+                    enable_pagination=len(messages) > 50
+                )
             
-            MessageListComponent.render_message_list(
-                messages=messages,
-                show_search=True,
-                show_filters=True,
-                show_timestamps=st.session_state["chat_settings"]["show_timestamps"],
-                enable_pagination=len(messages) > 50
-            )
+            # Message list actions with error boundary
+            actions_container = SafeContainer("message_actions")
+            with actions_container.render():
+                MessageListActions.render_list_actions()
             
-            # Message list actions
-            MessageListActions.render_list_actions()
-            
-            # Quick actions
+            # Quick actions with error boundary
             if show_quick_actions and not ChatStateManager.is_processing():
                 st.markdown("---")
-                QuickActions.render_quick_actions()
+                quick_actions_container = SafeContainer("quick_actions")
+                with quick_actions_container.render():
+                    QuickActions.render_quick_actions()
             
-            # Input history
-            InputHistory.render_history_selector()
+            # Input history with error boundary
+            history_container = SafeContainer("input_history")
+            with history_container.render():
+                InputHistory.render_history_selector()
             
-            # Chat input
+            # Chat input with error boundary
             st.markdown("---")
-            ChatContainer._render_input_section(ai_handler)
+            input_container = SafeContainer("chat_input")
+            with input_container.render():
+                ChatContainer._render_input_section_safe(ai_handler)
         
         with chat_col2:
-            # Chat sidebar with settings and stats
-            ChatContainer._render_chat_sidebar(show_conversation_stats)
+            # Chat sidebar with error boundary
+            sidebar_container = SafeContainer("chat_sidebar")
+            with sidebar_container.render():
+                ChatContainer._render_chat_sidebar(show_conversation_stats)
     
     @staticmethod
     def _render_chat_header() -> None:
@@ -169,31 +233,41 @@ class ChatContainer:
                 st.markdown(f"💬 **{message_count} messages**")
     
     @staticmethod
-    def _render_input_section(ai_handler: Optional[Callable[[str], str]]) -> None:
-        """Render the input section with chat input component"""
-        
-        # Handle suggested input from various sources
-        from src.components.chat.chat_input import handle_suggested_input
-        suggested = handle_suggested_input()
-        
-        if suggested:
-            # Auto-submit suggested input
-            ChatContainer._handle_message_submission(suggested, ai_handler)
-            return
-        
-        # Render chat input
-        submitted_message = ChatInputComponent.render_chat_input(
-            placeholder="Type your message here...",
-            max_chars=4000,
-            disabled=ChatStateManager.is_processing(),
-            on_submit=lambda msg: ChatContainer._handle_message_submission(msg, ai_handler),
-            show_char_count=True,
-            show_suggestions=True
-        )
-        
-        # Handle submission
-        if submitted_message:
-            ChatContainer._handle_message_submission(submitted_message, ai_handler)
+    def _render_input_section_safe(ai_handler: Optional[Callable[[str], str]]) -> None:
+        """Render the input section with chat input component using error boundaries"""
+        try:
+            # Handle suggested input from various sources
+            from src.components.chat.chat_input import handle_suggested_input
+            suggested = handle_suggested_input()
+            
+            if suggested:
+                # Auto-submit suggested input with error handling
+                ChatContainer._handle_message_submission_safe(suggested, ai_handler)
+                return
+            
+            # Render chat input with error boundary
+            submitted_message = ChatInputComponent.render_chat_input(
+                placeholder="Type your message here...",
+                max_chars=4000,
+                disabled=ChatStateManager.is_processing(),
+                on_submit=lambda msg: ChatContainer._handle_message_submission_safe(msg, ai_handler),
+                show_char_count=True,
+                show_suggestions=True
+            )
+            
+            # Handle submission with error recovery
+            if submitted_message:
+                ChatContainer._handle_message_submission_safe(submitted_message, ai_handler)
+                
+        except Exception as e:
+            error_handler = get_error_handler()
+            error_handler.handle_error(
+                error=e,
+                category=ErrorCategory.UI,
+                severity=ErrorSeverity.MEDIUM,
+                user_message="Chat input encountered an error. Please try refreshing the page.",
+                context={"component": "chat_input"}
+            )
     
     @staticmethod
     def _render_chat_sidebar(show_conversation_stats: bool) -> None:
@@ -309,34 +383,61 @@ class ChatContainer:
         return display_messages
     
     @staticmethod
-    def _handle_message_submission(message: str, ai_handler: Optional[Callable[[str], str]]) -> None:
-        """Handle message submission with AI processing"""
+    def _handle_message_submission_safe(message: str, ai_handler: Optional[Callable[[str], str]]) -> None:
+        """Handle message submission with comprehensive error recovery"""
+        # Create snapshot before processing
+        snapshot_id = create_error_snapshot("message_submission")
+        
         try:
+            # Validate message
+            if not message or not message.strip():
+                ChatStateManager.set_error("Please enter a message before submitting.")
+                return
+            
             # Add user message
-            user_message = create_message_data("user", message)
-            ChatStateManager.add_message("user", message)
+            user_message = create_message_data("user", message.strip())
+            ChatStateManager.add_message("user", message.strip())
             
             # Add to input history
-            InputHistory.add_to_history(message)
+            InputHistory.add_to_history(message.strip())
             
             # Set processing state
             ChatStateManager.set_processing(True)
             ChatStateManager.clear_error()
             
+            logging.getLogger(__name__).info(f"Message submitted successfully: {message[:50]}...")
+            
             # Rerun to show user message and processing state
             st.rerun()
             
         except Exception as e:
-            ChatStateManager.set_error(f"Failed to submit message: {str(e)}")
+            # Handle error with comprehensive recovery
+            error_handler = get_error_handler()
+            error_info = error_handler.handle_error(
+                error=e,
+                category=ErrorCategory.UI,
+                severity=ErrorSeverity.MEDIUM,
+                user_message=f"Failed to submit message: {str(e)}",
+                context={
+                    "operation": "message_submission",
+                    "message_length": len(message) if message else 0,
+                    "snapshot_id": snapshot_id
+                }
+            )
+            
+            # Set chat-specific error for UI display
+            ChatStateManager.set_error(f"Message submission failed: {str(e)}")
             ChatStateManager.set_processing(False)
+            
+            logging.getLogger(__name__).error(f"Message submission failed: {e}", exc_info=True)
             st.rerun()
     
     @staticmethod
-    def _handle_background_processing(
+    def _handle_background_processing_safe(
         ai_handler: Optional[Callable[[str], str]], 
         enable_streaming: bool
     ) -> None:
-        """Handle AI response processing in background"""
+        """Handle AI response processing with comprehensive error recovery"""
         
         if not ChatStateManager.is_processing():
             return
@@ -353,25 +454,52 @@ class ChatContainer:
             ChatStateManager.set_processing(False)
             return
         
-        # Process AI response
+        # Create snapshot before AI processing
+        snapshot_id = create_error_snapshot("ai_processing")
+        
+        # Process AI response with error recovery
         try:
+            start_time = datetime.now()
+            
             if ai_handler:
-                # Use custom AI handler
-                response = ai_handler(last_message.content)
+                # Use custom AI handler with error handling
+                response = ChatContainer._call_ai_handler_safe(ai_handler, last_message.content)
             else:
                 # Use default placeholder response
                 response = ChatContainer._generate_placeholder_response(last_message.content)
             
-            # Add AI response
+            processing_time = (datetime.now() - start_time).total_seconds()
+            
+            # Add AI response with metadata
             ChatStateManager.add_message("assistant", response)
             ChatStateManager.set_processing(False)
+            
+            logging.getLogger(__name__).info(f"AI processing completed in {processing_time:.2f}s")
             
             # Rerun to show response
             st.rerun()
             
         except Exception as e:
+            # Handle AI processing error with recovery options
+            error_handler = get_error_handler()
+            error_info = error_handler.handle_error(
+                error=e,
+                category=ErrorCategory.AI_API,
+                severity=ErrorSeverity.HIGH,
+                user_message=f"AI processing failed: {str(e)}. You can retry the request or try a different message.",
+                context={
+                    "operation": "ai_processing",
+                    "user_message": last_message.content[:100],
+                    "snapshot_id": snapshot_id,
+                    "enable_streaming": enable_streaming
+                }
+            )
+            
+            # Set chat error for UI display
             ChatStateManager.set_error(f"AI processing failed: {str(e)}")
             ChatStateManager.set_processing(False)
+            
+            logging.getLogger(__name__).error(f"AI processing failed: {e}", exc_info=True)
             st.rerun()
     
     @staticmethod
@@ -391,17 +519,113 @@ class ChatContainer:
         return random.choice(responses)
     
     @staticmethod
-    def _retry_last_action() -> None:
-        """Retry the last failed action"""
-        messages = ChatStateManager.get_messages()
+    def _call_ai_handler_safe(ai_handler: Callable[[str], str], message: str) -> str:
+        """Safely call AI handler with error recovery"""
+        operation_id = f"ai_call_{hash(message)}"
+        error_handler = get_error_handler()
         
-        if messages and messages[-1].role == "user":
-            # Retry processing the last user message
-            ChatStateManager.clear_error()
-            ChatStateManager.set_processing(True)
-            st.rerun()
-        else:
-            ChatStateManager.set_error("No action to retry")
+        # Check if we can retry
+        if not error_handler.can_retry(operation_id):
+            raise Exception("Maximum retry attempts exceeded for this AI request")
+        
+        try:
+            response = ai_handler(message)
+            error_handler.reset_retry_count(operation_id)
+            return response
+        except Exception as e:
+            error_handler.record_retry(operation_id)
+            raise e
+    
+    @staticmethod
+    def _attempt_chat_recovery() -> None:
+        """Attempt automatic chat recovery"""
+        try:
+            recovery_manager = get_recovery_manager()
+            
+            with st.spinner("Attempting recovery..."):
+                # Try to recover critical chat state
+                if recovery_manager.recover_critical_state():
+                    st.success("🎉 Chat state recovered successfully!")
+                    ChatStateManager.clear_error()
+                    st.rerun()
+                else:
+                    st.warning("⚠️ Automatic recovery failed. Try manual reset.")
+        except Exception as e:
+            st.error(f"❌ Recovery failed: {str(e)}")
+            logging.getLogger(__name__).error(f"Chat recovery failed: {e}")
+    
+    @staticmethod
+    def _reset_chat_state() -> None:
+        """Reset chat state to clean state"""
+        try:
+            with st.spinner("Resetting chat state..."):
+                # Clear messages and errors
+                ChatStateManager.clear_messages()
+                ChatStateManager.clear_error()
+                ChatStateManager.set_processing(False)
+                
+                # Clear input history
+                from src.components.chat.chat_input import clear_input_state
+                clear_input_state()
+                
+                # Reset error boundaries
+                from src.components.common.error_boundary import reset_all_error_boundaries
+                reset_count = reset_all_error_boundaries()
+                
+                st.success(f"🔄 Chat state reset successfully! ({reset_count} error boundaries cleared)")
+                logging.getLogger(__name__).info("Chat state reset by user")
+                st.rerun()
+        except Exception as e:
+            st.error(f"❌ Reset failed: {str(e)}")
+            logging.getLogger(__name__).error(f"Chat state reset failed: {e}")
+    
+    @staticmethod
+    def _reset_error_system() -> None:
+        """Reset the entire error handling system"""
+        try:
+            with st.spinner("Resetting error system..."):
+                # Clear all error-related session state
+                error_keys = [key for key in st.session_state.keys() if "error" in key.lower()]
+                for key in error_keys:
+                    del st.session_state[key]
+                
+                # Reset error handler
+                error_handler = get_error_handler()
+                error_handler.error_history.clear()
+                error_handler.retry_counts.clear()
+                
+                # Reset recovery manager
+                recovery_manager = get_recovery_manager()
+                recovery_manager.cleanup_snapshots(max_age_hours=0)
+                
+                st.success("🔧 Error system reset successfully!")
+                st.rerun()
+        except Exception as e:
+            st.error(f"❌ Error system reset failed: {str(e)}")
+            logging.getLogger(__name__).error(f"Error system reset failed: {e}")
+    
+    @staticmethod
+    def _retry_last_action() -> None:
+        """Retry the last failed action with enhanced logic"""
+        try:
+            messages = ChatStateManager.get_messages()
+            
+            if messages and messages[-1].role == "user":
+                # Retry processing the last user message
+                ChatStateManager.clear_error()
+                ChatStateManager.set_processing(True)
+                
+                # Clear current error from error handler
+                error_handler = get_error_handler()
+                error_handler.clear_current_error()
+                
+                logging.getLogger(__name__).info("Retrying last user message")
+                st.rerun()
+            else:
+                ChatStateManager.set_error("No user message to retry")
+        except Exception as e:
+            ChatStateManager.set_error(f"Retry failed: {str(e)}")
+            logging.getLogger(__name__).error(f"Retry action failed: {e}")
 
 
 class ChatContainerConfig:
