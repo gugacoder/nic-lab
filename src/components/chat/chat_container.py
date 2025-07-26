@@ -504,19 +504,9 @@ class ChatContainer:
     
     @staticmethod
     def _generate_placeholder_response(user_message: str) -> str:
-        """Generate a placeholder response for testing"""
-        import time
-        time.sleep(1)  # Simulate processing time
-        
-        responses = [
-            f"Thank you for your message: '{user_message}'. This is a placeholder response from the NIC Chat system.",
-            f"I understand you're asking about: '{user_message}'. AI integration will be implemented in future tasks.",
-            f"Your query about '{user_message}' has been received. This is a demonstration response.",
-            f"Regarding '{user_message}': This is a test response from the chat interface components."
-        ]
-        
-        import random
-        return random.choice(responses)
+        """Generate AI response using real LLM integration"""
+        from src.integrations.llm_chat_bridge import handle_ai_response_sync
+        return handle_ai_response_sync(user_message)
     
     @staticmethod
     def _call_ai_handler_safe(ai_handler: Callable[[str], str], message: str) -> str:

@@ -160,33 +160,9 @@ def render_chat_page():
 
 
 def _handle_ai_response(user_message: str) -> str:
-    """Handle AI response generation (placeholder implementation)"""
-    import time
-    import random
-    
-    # Simulate processing time
-    time.sleep(random.uniform(0.5, 2.0))
-    
-    # Generate a more sophisticated placeholder response
-    responses = [
-        f"Thank you for your message about '{user_message}'. This is a sophisticated response from the NIC Chat system. "
-        f"Our new chat interface components are working well! The message display, input handling, and user experience "
-        f"have been significantly improved.",
-        
-        f"I understand you're asking about: '{user_message}'. The enhanced chat interface now supports markdown formatting, "
-        f"message actions like copy and retry, improved scrolling, and better visual design. "
-        f"AI integration will be fully implemented in upcoming tasks.",
-        
-        f"Your query '{user_message}' has been processed using our new modular chat components. "
-        f"The system now features better message organization, responsive design, loading indicators, "
-        f"and a much more professional user experience.",
-        
-        f"Regarding '{user_message}': The chat interface has been completely rebuilt with separate components for "
-        f"message display, input handling, conversation management, and styling. This provides a solid foundation "
-        f"for the full AI integration that will follow."
-    ]
-    
-    return random.choice(responses)
+    """Handle AI response generation using real LLM integration"""
+    from src.integrations.llm_chat_bridge import handle_ai_response_sync
+    return handle_ai_response_sync(user_message)
 
 
 def render_documents_page():
