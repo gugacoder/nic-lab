@@ -6,9 +6,9 @@ type: task
 tags: [ui, styling, preview, documents, minor]
 created: 2025-07-22
 updated: 2025-07-22
-status: todo
+status: 🔵 todo
 severity: minor
-up: "[[Document Generation System.md]]"
+up: "[[Document Preview and Styling.md]]"
 feature: "[[Review and Export Workflow.md]]"
 related: "[[🟡 Task 09 - Implement DOCX Generator.md]], [[🟡 Task 10 - Implement PDF Generator.md]]"
 ---
