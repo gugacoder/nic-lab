@@ -89,6 +89,7 @@ class MetricsConfig:
     alert_cooldown_minutes: int = 15
 
 
+
 class SearchMetricsCollector:
     """Comprehensive search metrics collection and analysis system
     
@@ -887,3 +888,7 @@ if __name__ == "__main__":
         print(f"    - '{q['query']}': {q['count']} times, avg {q['avg_latency_ms']:.0f}ms")
     
     print("\nSearch metrics testing complete")
+
+
+# Alias for compatibility with imports
+SearchMetrics = SearchMetricsCollector

@@ -18,7 +18,12 @@ import threading
 
 from ..integrations.gitlab_client import get_gitlab_client
 from ..integrations.cache.search_cache import get_search_cache
-from ..ai.retrievers.gitlab_retriever import create_gitlab_retriever, SearchMode
+# Import gitlab_retriever conditionally to avoid circular imports
+try:
+    from ..ai.retrievers.gitlab_retriever import create_gitlab_retriever, SearchMode
+except ImportError:
+    create_gitlab_retriever = None
+    SearchMode = None
 from .parallel_searcher import create_parallel_searcher
 from .query_optimizer import create_query_optimizer
 

@@ -10,9 +10,16 @@ import logging
 from typing import AsyncGenerator, Dict, Any, Optional, List
 from datetime import datetime
 
-from src.ai.groq_client import GroqClient, GroqResponse
 from src.utils.session import ChatStateManager
 from src.config.settings import get_settings
+
+# Import GroqClient directly to avoid circular imports
+try:
+    from src.ai.groq_client import GroqClient, GroqResponse
+except ImportError:
+    # Fallback if there are circular import issues
+    GroqClient = None
+    GroqResponse = None
 
 logger = logging.getLogger(__name__)
 
@@ -28,17 +35,29 @@ class LLMChatBridge:
     def __init__(self):
         """Initialize the LLM chat bridge"""
         self.settings = get_settings()
-        self.groq_client = GroqClient()
+        
+        # Initialize GroqClient with error handling
+        if GroqClient is not None:
+            self.groq_client = GroqClient()
+        else:
+            logger.error("GroqClient not available due to import issues")
+            self.groq_client = None
+            
         self.conversation_context = {}
         self.is_connected = False
         self.last_health_check = None
         
     async def initialize(self) -> bool:
         """Initialize and test LLM connection"""
+        if self.groq_client is None:
+            logger.error("Cannot initialize - GroqClient not available")
+            self.is_connected = False
+            return False
+            
         try:
             # Test connection to Groq API
             test_response = await self.groq_client.complete(
-                messages=[{"role": "user", "content": "Hello"}],
+                prompt="Hello",
                 max_tokens=10
             )
             self.is_connected = True
@@ -64,18 +83,36 @@ class LLMChatBridge:
         Yields:
             str: Streaming response tokens from LLM
         """
+        if self.groq_client is None:
+            logger.error("GroqClient not available - using fallback response")
+            yield self._generate_error_fallback("LLM service temporarily unavailable")
+            return
+            
         try:
             # Build conversation context
             messages = self._build_conversation_context(user_message, session_id)
             
             # Stream response from Groq LLM
             response_content = ""
-            async for chunk in self.groq_client.stream_completion(
-                messages=messages,
+            
+            # Convert messages format for GroqClient
+            if messages and len(messages) > 0:
+                # Use the last user message as prompt
+                prompt = messages[-1]["content"]
+            else:
+                prompt = user_message
+                
+            # Get the streaming generator from GroqClient (await the coroutine)
+            stream_generator = await self.groq_client.complete(
+                prompt=prompt,
                 model="llama-3.1-8b-instant",
                 temperature=0.7,
-                max_tokens=2048
-            ):
+                max_tokens=2048,
+                stream=True
+            )
+            
+            # Iterate over the streaming response
+            async for chunk in stream_generator:
                 if chunk.content:
                     response_content += chunk.content
                     yield chunk.content
@@ -186,7 +223,7 @@ class LLMChatBridge:
         try:
             start_time = datetime.now()
             test_response = await self.groq_client.complete(
-                messages=[{"role": "user", "content": "test"}],
+                prompt="test",
                 max_tokens=1
             )
             response_time = (datetime.now() - start_time).total_seconds()

@@ -7,17 +7,23 @@ prompt engineering, and Groq LLM integration.
 """
 
 from .rag_pipeline import RAGPipeline, RAGConfig, process_query
-from .retrievers.gitlab_retriever import GitLabRetriever, create_gitlab_retriever
 from .memory.conversation_memory import ConversationMemory, create_conversation_memory
 from .prompts.templates import PromptManager, get_prompt_manager
 from .chains.qa_chain import RAGQAChain, create_qa_chain
+
+# Import gitlab_retriever conditionally to avoid circular imports
+try:
+    from .retrievers.gitlab_retriever import GitLabRetriever, create_gitlab_retriever
+    _GITLAB_RETRIEVER_AVAILABLE = True
+except ImportError:
+    _GITLAB_RETRIEVER_AVAILABLE = False
+    GitLabRetriever = None
+    create_gitlab_retriever = None
 
 __all__ = [
     'RAGPipeline',
     'RAGConfig', 
     'process_query',
-    'GitLabRetriever',
-    'create_gitlab_retriever',
     'ConversationMemory', 
     'create_conversation_memory',
     'PromptManager',
@@ -25,3 +31,7 @@ __all__ = [
     'RAGQAChain',
     'create_qa_chain'
 ]
+
+# Add gitlab retriever to exports if available
+if _GITLAB_RETRIEVER_AVAILABLE:
+    __all__.extend(['GitLabRetriever', 'create_gitlab_retriever'])
