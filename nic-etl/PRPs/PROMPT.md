@@ -25,6 +25,32 @@ The notebook will be used to populate a vector database with official documents 
 
 ---
 
+## **Implementation Structure**
+
+**CRITICAL REQUIREMENT**: All implementation must be contained within Jupyter Notebook cells only.
+
+* **DO NOT** create separate .py files, src/ directory structure, or external Python modules
+* **DO NOT** create traditional Python package architecture with __init__.py files
+* **"Modular"** means "organized in separate notebook cells", NOT "separate Python files"
+* Each major processing stage should be implemented in its own notebook cell
+* Helper functions should be defined in the same cell where they're used
+* All code, classes, and functions must remain within the notebook
+
+**Expected Notebook Cell Structure:**
+- **Cell 1**: Dependencies Installation and Configuration
+- **Cell 2**: GitLab Connection and Authentication Functions
+- **Cell 3**: Document Retrieval and Caching Functions
+- **Cell 4**: Docling Processing and OCR Functions
+- **Cell 5**: Text Chunking Functions
+- **Cell 6**: Embedding Generation Functions
+- **Cell 7**: Qdrant Integration Functions
+- **Cell 8**: Metadata Management (NIC Schema)
+- **Cell 9**: Main Pipeline Orchestration
+- **Cell 10**: Testing and Validation Functions
+- **Cell 11**: Pipeline Execution and Monitoring
+
+---
+
 ## **Instructions**
 
 ### 1. Ingestion
@@ -101,8 +127,12 @@ The notebook will be used to populate a vector database with official documents 
 ## **Notes**
 
 * The structuring step **must explicitly use Docling**—it is a core requirement.
-* The notebook should be modular, with clearly separated and reusable sections for each stage.
-* Include installation and configuration of all required dependencies.
+* **JUPYTER NOTEBOOK ONLY**: All code must be implemented within notebook cells - no external .py files
+* **"Modular sections"** refers to organized notebook cells, not separate Python modules
+* **"Reusable sections"** means functions within cells that can be called multiple times
+* Include installation and configuration of all required dependencies **in the first notebook cell**
 * The pipeline must be idempotent—reruns should not create duplicates in Qdrant.
 * Handle partial failures (e.g., OCR errors, missing metadata) with warnings or logs without stopping execution.
 * Validate payloads against the provided **NIC Schema**.
+* Each processing stage should be clearly documented within its respective cell
+* Use markdown cells to separate and document each major section of the pipeline
