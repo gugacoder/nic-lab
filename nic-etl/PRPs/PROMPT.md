@@ -36,18 +36,27 @@ The notebook will be used to populate a vector database with official documents 
 * Helper functions should be defined in the same cell where they're used
 * All code, classes, and functions must remain within the notebook
 
+**PRODUCTION-READY NOTEBOOK APPROACH**:
+* This notebook is designed to run directly in production environments
+* NO parametrization tools (like Papermill) are needed - the notebook is self-contained
+* Configuration values should be defined as CONSTANTS at the beginning of the notebook
+* For environment-specific settings (dev/staging/prod), use `.env` files with python-dotenv
+* The same notebook structure serves both development and production - only the configuration values change
+* This is the first of many ETL pipelines that will follow this same pattern
+
 **Expected Notebook Cell Structure:**
-- **Cell 1**: Dependencies Installation and Configuration
-- **Cell 2**: GitLab Connection and Authentication Functions
-- **Cell 3**: Document Retrieval and Caching Functions
-- **Cell 4**: Docling Processing and OCR Functions
-- **Cell 5**: Text Chunking Functions
-- **Cell 6**: Embedding Generation Functions
-- **Cell 7**: Qdrant Integration Functions
-- **Cell 8**: Metadata Management (NIC Schema)
-- **Cell 9**: Main Pipeline Orchestration
-- **Cell 10**: Testing and Validation Functions
-- **Cell 11**: Pipeline Execution and Monitoring
+- **Cell 1**: Environment Configuration and Constants (load from .env if available, otherwise use defaults)
+- **Cell 2**: Dependencies Installation and Imports
+- **Cell 3**: GitLab Connection and Authentication Functions
+- **Cell 4**: Document Retrieval and Caching Functions
+- **Cell 5**: Docling Processing and OCR Functions
+- **Cell 6**: Text Chunking Functions
+- **Cell 7**: Embedding Generation Functions
+- **Cell 8**: Qdrant Integration Functions
+- **Cell 9**: Metadata Management (NIC Schema)
+- **Cell 10**: Main Pipeline Orchestration
+- **Cell 11**: Testing and Validation Functions
+- **Cell 12**: Pipeline Execution and Monitoring
 
 ---
 
@@ -127,12 +136,19 @@ The notebook will be used to populate a vector database with official documents 
 ## **Notes**
 
 * The structuring step **must explicitly use Docling**—it is a core requirement.
+* **PRODUCTION-READY NOTEBOOKS**: These notebooks are designed to run directly in production without modification
 * **JUPYTER NOTEBOOK ONLY**: All code must be implemented within notebook cells - no external .py files
 * **"Modular sections"** refers to organized notebook cells, not separate Python modules
 * **"Reusable sections"** means functions within cells that can be called multiple times
-* Include installation and configuration of all required dependencies **in the first notebook cell**
+* **CONFIGURATION APPROACH**: 
+  - Use CONSTANTS at the beginning of the notebook for all configuration values
+  - Support `.env` files for environment-specific settings (development vs production)
+  - The notebook should work with default values if no .env file is present
+  - Same notebook structure for all environments - only configuration values differ
+* Include installation and configuration of all required dependencies **in the Cell 2**
 * The pipeline must be idempotent—reruns should not create duplicates in Qdrant.
 * Handle partial failures (e.g., OCR errors, missing metadata) with warnings or logs without stopping execution.
 * Validate payloads against the provided **NIC Schema**.
 * Each processing stage should be clearly documented within its respective cell
 * Use markdown cells to separate and document each major section of the pipeline
+* This notebook serves as a template for future ETL pipelines in the NIC ecosystem
