@@ -1,123 +1,108 @@
-## **OBJETIVO**
+# ROCIN
 
-implemente um junyper notebook chamado NIC ETL que se conecta a uma pasta de um branc de um repositorio de um gitlab especifico e realiza o processamento de embeddings inserindo os dados em um qdrant.
+## **Role**
 
-**notas:**
-- se o catalogo no qdrant nao existir, o notebook deve cria-lo
+Act as a **Senior Data & AI Engineer** responsible for designing and delivering a production-grade **Jupyter Notebook** that implements a complete, modular ETL pipeline. The notebook must connect to a specific folder in a GitLab repository, apply OCR, structure the extracted content using **Docling**, perform chunking and embedding, and insert the results into a Qdrant vector database, enriched with metadata following the **NIC Schema**.
 
-## **PARAMETROS:**
+---
 
-GITLAB
-url: http://gitlab.processa.info/nic/documentacao/base-de-conhecimento.git
-ACCESS TOKEN: glpat-zycwWRydKE53SHxxpfbN
-branch: main
-folder: 30-Aprovados
+## **Objective**
 
-QDRANT
-url: https://qdrant.codrstudio.dev/
-api_key: 93f0c9d6b9a53758f2376decf318b3ae300e9bdb50be2d0e9c893ee4469fd857
-catalog: nic
+Create a Jupyter Notebook named **NIC ETL** that:
 
-## **PIPELINE**
+* Connects to a private GitLab repository and reads files from a specified branch and folder.
+* Normalizes file formats and applies OCR when required.
+* Structures the textual content using **Docling**.
+* Chunks the structured content into token-based segments.
+* Generates embeddings using the `BAAI/bge-m3` model (CPU-based).
+* Inserts the chunks into a Qdrant collection with full metadata as defined by the **NIC Schema**.
 
-1. **ingestão de documentos**
+---
 
-   1. coletar arquivos-alvo (GitLab)
-   2. normalizar formatos de entrada (PDF/DOCX/IMG)
+## **Context**
 
-2. **pré-processamento & OCR**
+The notebook will be used to populate a vector database with official documents approved by NIC, stored in a GitLab repository. Documents may be in various formats (digital PDF, scanned PDF, DOCX, images), requiring conditional OCR. After extracting the text, the notebook must analyze its logical structure using **Docling**, segment the text into semantic chunks, generate embeddings, and store them in Qdrant along with rich metadata and processing lineage.
 
-   1. detectar tipo de conteúdo (texto digital × imagem/escaneado)
-   2. aplicar **OCR open source (Tesseract + OCRmyPDF + Poppler)** quando escaneado
-   3. gerar saída pesquisável unificada por documento (texto + layout + page map)
+---
 
-3. **structuring (docling)**
+## **Instructions**
 
-   1. analisar estrutura lógica (títulos, seções, parágrafos)
-   2. extrair o texto estruturado para downstream
+### 1. Ingestion
 
-4. **chunker**
+* Access the following GitLab repository:
 
-   1. chunk strategy: **paragraph**
-   2. chunk size: **500 tokens**
-   3. chunk overlap: **100 tokens**
-   4. **token counting**: usar **tokenizer do BGE** para medir 500/100
+  * URL: `http://gitlab.processa.info/nic/documentacao/base-de-conhecimento.git`
+  * Branch: `main`
+  * Folder: `30-Aprovados`
+* Authenticate using access token: `glpat-zycwWRydKE53SHxxpfbN`
+* Collect all supported document formats: TXT, MD, PDF, DOCX, JPG, PNG
 
-5. **metadata extractor (NIC Schema)**
+### 2. Unified Conversion
 
-   1. adicionar **document metadata** aos chunks
-   2. adicionar **section metadata** aos chunks
-   3. registrar lineage/processamento (ex.: `ocr=true/false`, repo/commit, is\_latest)
+* Ingest PDF, DOCX, and image files through Docling
+* Detect digital versus scanned sources
+* Normalize every input into a single internal representation managed by Docling
+* Keep one code path and remove external converters
 
-6. **embedder**
+### 3. OCR and Text Extraction
 
-   1. embedding model: **BAAI/bge-m3 (local, CPU)**
-   2. dimensions: **1024**
+* When the source is scanned, run OCR through Docling using the chosen engine
+* When the source is digital, extract text through Docling without OCR
+* Produce text blocks with page and region mapping
+* Guarantee deterministic extraction for the same input
 
-7. **inserção no Qdrant (database `nic`)**
+### 4. Document Structuring and Delivery
 
-   1. criar a coleção se não existir (**size=1024**, distância COSINE)
-   2. upsert de chunks com payload (NIC Schema) e IDs estáveis
+* Apply Docling to segment content into titles, sections, paragraphs, lists, tables, and figures
+* Emit one canonical output for downstream such as JSON or Markdown
+* Include assets and metadata for tables, figures, and page images
+* Record provenance for each processed file and expose confidence scores for quality gates
 
+### 5. Chunking
 
-### NIC Schema Metadata
+* Strategy: paragraph-based chunking
+* Chunk size: 500 tokens
+* Overlap: 100 tokens
+* Use the tokenizer from `BAAI/bge-m3` to measure token boundaries accurately
 
-```json
-{
-  "document": {
-    "type": "object",
-    "properties": {
-      "related": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "author": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "created": {
-        "format": "date",
-        "type": "string"
-      },
-      "description": {
-        "type": "string"
-      },
-      "up": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "title": {
-        "type": "string"
-      },
-      "status": {
-        "type": "string",
-        "enum": [
-          "rascunho",
-          "revisão",
-          "publicado",
-          "arquivado"
-        ]
-      },
-      "tags": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      }
-    },
-    "required": [
-      "title",
-      "description",
-      "status",
-      "created"
-    ]
-  },
-  "sections": {}
-}
-```
+### 6. Metadata Enrichment (NIC Schema)
+
+* For each chunk, attach:
+
+  * Document metadata: `title`, `description`, `status`, `created`, etc.
+  * Section metadata derived from the Docling output
+  * Processing lineage: `ocr=true/false`, `repo`, `commit`, `is_latest`
+
+### 7. Embedding
+
+* Model: `BAAI/bge-m3`
+* Run locally on CPU
+* Embedding size: 1024 dimensions
+
+### 8. Qdrant Insertion
+
+* Qdrant settings:
+
+  * URL: `https://qdrant.codrstudio.dev/`
+  * API Key: `93f0c9d6b9a53758f2376decf318b3ae300e9bdb50be2d0e9c893ee4469fd857`
+  * Collection: `nic`
+* If the collection does not exist, create it with:
+
+  * Vector size: 1024
+  * Distance: COSINE
+* Insert each chunk with:
+
+  * Its vector
+  * Payload according to the **NIC Schema**
+  * Stable and deterministic IDs (e.g., UUID5 or content hash)
+
+---
+
+## **Notes**
+
+* The structuring step **must explicitly use Docling**—it is a core requirement.
+* The notebook should be modular, with clearly separated and reusable sections for each stage.
+* Include installation and configuration of all required dependencies.
+* The pipeline must be idempotent—reruns should not create duplicates in Qdrant.
+* Handle partial failures (e.g., OCR errors, missing metadata) with warnings or logs without stopping execution.
+* Validate payloads against the provided **NIC Schema**.
