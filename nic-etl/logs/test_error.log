@@ -1,9 +1,0 @@
-2025-08-16 00:36:37,984 - TEST_ErrorHandler - INFO - _setup_logging:90 - Error handling system initialized
-2025-08-16 00:36:37,985 - TEST_ErrorHandler - WARNING - _log_error:154 - [processing] test_component: Test error
-2025-08-16 00:36:37,985 - TEST_ErrorHandler - INFO - _setup_logging:90 - Error handling system initialized
-2025-08-16 00:36:37,985 - TEST_ErrorHandler - WARNING - retry_with_backoff:209 - Attempt 1 failed for test, retrying in 0.1s: Temporary failure
-2025-08-16 00:36:38,085 - TEST_ErrorHandler - WARNING - retry_with_backoff:209 - Attempt 2 failed for test, retrying in 0.2s: Temporary failure
-2025-08-16 00:36:38,286 - TEST_ErrorHandler - INFO - retry_with_backoff:191 - Retry successful for test on attempt 3
-2025-08-16 00:36:38,286 - TEST_ErrorHandler - INFO - _setup_logging:90 - Error handling system initialized
-2025-08-16 00:36:38,287 - TEST_ErrorHandler - ERROR - _log_error:152 - [processing] component1: Test error 1
-2025-08-16 00:36:38,287 - TEST_ErrorHandler - WARNING - _log_error:154 - [network] component2: Test error 2
