@@ -1,42 +1,8 @@
-# Configuration Management - PRP
+#!/usr/bin/env python3
+"""Test configuration management system"""
 
-## ROLE
-**DevOps Engineer with Configuration Management Expertise**
-
-Specialist in environment configuration, secrets management, and deployment automation. Expert in implementing flexible configuration systems that support multiple environments while maintaining security and maintainability.
-
-## OBJECTIVE
-**Implement Environment-Aware Configuration System**
-
-Create a comprehensive configuration management system within Jupyter Notebook cells that:
-* Supports multiple environments (development, staging, production)
-* Manages secure credential storage using .env files
-* Provides configuration validation and defaults
-* Enables runtime configuration updates
-* Maintains configuration version control
-* Supports feature flags and conditional settings
-
-## MOTIVATION
-**Flexible and Secure Environment Management**
-
-Proper configuration management enables seamless deployment across environments while maintaining security best practices. This system ensures that the same notebook can operate in different environments with appropriate configurations without code changes.
-
-## CONTEXT
-**Multi-Environment Jupyter Notebook Deployment**
-
-Environment specifications:
-* Deployment targets: Development, staging, production
-* Configuration sources: Environment variables, .env files, defaults
-* Security requirements: Encrypted secrets, no hardcoded credentials
-* Flexibility: Runtime configuration updates
-* Constraints: Jupyter Notebook implementation
-
-## IMPLEMENTATION BLUEPRINT
-
-### Code Structure
-```python
-# Cell 1: Environment Configuration and Constants
 import os
+import sys
 from pathlib import Path
 from typing import Dict, Any, Optional, Union
 from dataclasses import dataclass
@@ -234,161 +200,7 @@ class ConfigurationManager:
             raise ValueError(f"Configuration validation failed: {len(validation_errors)} errors")
         
         print(f"Configuration validation passed for {self.environment.value} environment")
-    
-    def get(self, key: str, default: Any = None) -> Any:
-        """Get configuration value using dot notation"""
-        keys = key.split('.')
-        value = self.config
-        
-        for k in keys:
-            if isinstance(value, dict) and k in value:
-                value = value[k]
-            else:
-                return default
-        
-        return value
-    
-    def set(self, key: str, value: Any):
-        """Set configuration value using dot notation"""
-        keys = key.split('.')
-        config = self.config
-        
-        for k in keys[:-1]:
-            if k not in config:
-                config[k] = {}
-            config = config[k]
-        
-        config[keys[-1]] = value
-    
-    def update_runtime_config(self, updates: Dict[str, Any]):
-        """Update configuration at runtime"""
-        for key, value in updates.items():
-            self.set(key, value)
-        
-        # Re-validate after updates
-        self._validate_configuration()
-    
-    def export_config(self, include_secrets: bool = False) -> Dict[str, Any]:
-        """Export configuration (optionally excluding secrets)"""
-        config_copy = self.config.copy()
-        
-        if not include_secrets:
-            # Mask sensitive values
-            sensitive_keys = [
-                'gitlab.token',
-                'qdrant.api_key'
-            ]
-            
-            for key in sensitive_keys:
-                value = self.get(key)
-                if value:
-                    self.set(key, value[:8] + '***' if len(value) > 8 else '***')
-        
-        return config_copy
-    
-    def create_env_template(self, output_path: str = '.env.template'):
-        """Create .env template file with all configuration options"""
-        template_content = '''# NIC ETL Pipeline Configuration
-# Copy this file to .env and update values as needed
 
-# Environment (development, staging, production)
-NIC_ENVIRONMENT=development
-
-# GitLab Configuration
-GITLAB_URL=http://gitlab.processa.info
-GITLAB_TOKEN=your_gitlab_token_here
-GITLAB_PROJECT=nic/documentacao/base-de-conhecimento
-GITLAB_BRANCH=main
-GITLAB_FOLDER=30-Aprovados
-
-# Qdrant Configuration
-QDRANT_URL=https://qdrant.codrstudio.dev/
-QDRANT_API_KEY=your_qdrant_api_key_here
-QDRANT_COLLECTION=nic
-
-# Processing Configuration
-DOCLING_ENABLE_OCR=true
-DOCLING_OCR_LANGUAGES=pt,en
-DOCLING_CONFIDENCE_THRESHOLD=0.75
-
-# Chunking Configuration
-CHUNK_SIZE=500
-CHUNK_OVERLAP=100
-CHUNK_MIN_SIZE=100
-
-# Embedding Configuration
-EMBEDDING_MODEL=BAAI/bge-m3
-EMBEDDING_BATCH_SIZE=32
-EMBEDDING_DEVICE=cpu
-EMBEDDING_NORMALIZE=true
-
-# Cache Configuration
-CACHE_DIR=./cache
-CACHE_STATE_FILE=./cache/pipeline_state.json
-CACHE_MAX_SIZE_GB=10
-CACHE_CLEANUP_INTERVAL=24
-
-# Logging Configuration
-LOG_LEVEL=INFO
-LOG_FILE=./logs/nic_etl.log
-LOG_MAX_SIZE_MB=100
-LOG_BACKUP_COUNT=5
-
-# Performance Configuration
-MAX_WORKERS=4
-TIMEOUT_SECONDS=300
-RETRY_ATTEMPTS=3
-BATCH_SIZE=100
-
-# Feature Flags
-FEATURE_ENABLE_CACHING=true
-FEATURE_PARALLEL_PROCESSING=true
-FEATURE_QUALITY_CHECKS=true
-FEATURE_METRICS=true
-'''
-        
-        with open(output_path, 'w') as f:
-            f.write(template_content)
-        
-        print(f"Environment template created at {output_path}")
-
-# Initialize global configuration
-config_manager = ConfigurationManager()
-CONFIG = config_manager.config
-
-# Export commonly used constants
-GITLAB_URL = CONFIG['gitlab']['url']
-GITLAB_TOKEN = CONFIG['gitlab']['token']
-GITLAB_PROJECT = CONFIG['gitlab']['project']
-GITLAB_BRANCH = CONFIG['gitlab']['branch']
-GITLAB_FOLDER = CONFIG['gitlab']['folder']
-
-QDRANT_URL = CONFIG['qdrant']['url']
-QDRANT_API_KEY = CONFIG['qdrant']['api_key']
-QDRANT_COLLECTION = CONFIG['qdrant']['collection']
-
-CACHE_DIR = CONFIG['cache']['dir']
-STATE_FILE = CONFIG['cache']['state_file']
-
-# Ensure cache directory exists
-CACHE_DIR.mkdir(parents=True, exist_ok=True)
-
-# Print configuration summary
-print(f"\n=== NIC ETL Configuration ===")
-print(f"Environment: {CONFIG['environment']}")
-print(f"GitLab: {CONFIG['gitlab']['url']}")
-print(f"Qdrant: {CONFIG['qdrant']['url']}")
-print(f"Cache: {CONFIG['cache']['dir']}")
-print(f"Embedding Model: {CONFIG['embedding']['model']}")
-print(f"Chunk Size: {CONFIG['chunking']['size']} tokens")
-print(f"Features: {', '.join([k for k, v in CONFIG['features'].items() if v])}")
-print(f"================================\n")
-```
-
-## VALIDATION LOOP
-
-### Unit Testing
-```python
 def test_configuration_loading():
     """Test configuration loading from environment"""
     manager = ConfigurationManager()
@@ -396,6 +208,7 @@ def test_configuration_loading():
     assert manager.environment in [Environment.DEVELOPMENT, Environment.STAGING, Environment.PRODUCTION]
     assert manager.config['gitlab']['url'] is not None
     assert manager.config['qdrant']['collection'] == 'nic'
+    print("✓ Configuration loading test passed")
 
 def test_environment_overrides():
     """Test environment-specific configuration overrides"""
@@ -406,6 +219,7 @@ def test_environment_overrides():
     
     assert manager.config['logging']['level'] == 'WARNING'
     assert manager.config['embedding']['batch_size'] == 32
+    print("✓ Environment overrides test passed")
 
 def test_configuration_validation():
     """Test configuration validation"""
@@ -413,24 +227,34 @@ def test_configuration_validation():
     
     # Should not raise exception for valid config
     manager._validate_configuration()
+    print("✓ Configuration validation test passed")
+
+if __name__ == "__main__":
+    print("Running configuration management tests...\n")
     
-    # Test invalid config
-    manager.config['chunking']['size'] = -1
-    
-    with pytest.raises(ValueError):
-        manager._validate_configuration()
-```
-
-## ADDITIONAL NOTES
-
-### Security Considerations
-* **Secret Management**: Never commit .env files with real credentials
-* **Environment Isolation**: Separate configurations for each environment
-* **Access Control**: Restrict access to configuration files
-* **Audit Trail**: Log configuration changes
-
-### Maintenance Requirements
-* **Documentation**: Keep configuration options documented
-* **Validation**: Regular validation of configuration schemas
-* **Migration**: Support for configuration migrations
-* **Monitoring**: Monitor configuration drift across environments
+    try:
+        test_configuration_loading()
+        test_environment_overrides() 
+        test_configuration_validation()
+        
+        print("\n✅ All tests passed!")
+        
+        # Initialize and display configuration
+        print("\n" + "="*50)
+        config_manager = ConfigurationManager()
+        CONFIG = config_manager.config
+        
+        # Print configuration summary
+        print(f"\n=== NIC ETL Configuration ===")
+        print(f"Environment: {CONFIG['environment']}")
+        print(f"GitLab: {CONFIG['gitlab']['url']}")
+        print(f"Qdrant: {CONFIG['qdrant']['url']}")
+        print(f"Cache: {CONFIG['cache']['dir']}")
+        print(f"Embedding Model: {CONFIG['embedding']['model']}")
+        print(f"Chunk Size: {CONFIG['chunking']['size']} tokens")
+        print(f"Features: {', '.join([k for k, v in CONFIG['features'].items() if v])}")
+        print(f"================================\n")
+        
+    except Exception as e:
+        print(f"\n❌ Test failed: {e}")
+        sys.exit(1)

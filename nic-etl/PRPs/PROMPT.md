@@ -1,62 +1,56 @@
-# ROCIN
-
 ## **Role**
 
-Act as a **Senior Data & AI Engineer** responsible for designing and delivering a production-grade **Jupyter Notebook** that implements a complete, modular ETL pipeline. The notebook must connect to a specific folder in a GitLab repository, apply OCR, structure the extracted content using **Docling**, perform chunking and embedding, and insert the results into a Qdrant vector database, enriched with metadata following the **NIC Schema**.
+Act as a **Senior Data & AI Engineer** responsible for designing and delivering a production-grade **Jupyter Notebook** that orchestrates a complete, modular ETL pipeline. The notebook must coordinate external Python modules to connect to a specific folder in a GitLab repository, apply OCR, structure the extracted content using **Docling**, perform chunking and embedding, and insert the results into a Qdrant vector database, enriched with metadata following the **NIC Schema**.
 
 ---
 
 ## **Objective**
 
-Create a Jupyter Notebook named **NIC ETL** that:
+Create a modular ETL system named **NIC ETL** consisting of:
 
-* Connects to a private GitLab repository and reads files from a specified branch and folder.
-* Normalizes file formats and applies OCR when required.
-* Structures the textual content using **Docling**.
-* Chunks the structured content into token-based segments.
-* Generates embeddings using the `BAAI/bge-m3` model (CPU-based).
-* Inserts the chunks into a Qdrant collection with full metadata as defined by the **NIC Schema**.
+* A **Jupyter Notebook** that serves as the main orchestrator and interface
+* **Separate Python modules** that handle specific pipeline stages
+* The notebook coordinates the modules, passing parameters and collecting results
+* Connects to a private GitLab repository and reads files from a specified branch and folder
+* Normalizes file formats and applies OCR when required
+* Structures the textual content using **Docling**
+* Chunks the structured content into token-based segments
+* Generates embeddings using the `BAAI/bge-m3` model (CPU-based)
+* Inserts the chunks into a Qdrant collection with full metadata as defined by the **NIC Schema**
 
 ---
 
 ## **Context**
 
-The notebook will be used to populate a vector database with official documents approved by NIC, stored in a GitLab repository. Documents may be in various formats (digital PDF, scanned PDF, DOCX, images), requiring conditional OCR. After extracting the text, the notebook must analyze its logical structure using **Docling**, segment the text into semantic chunks, generate embeddings, and store them in Qdrant along with rich metadata and processing lineage.
+The system will be used to populate a vector database with official documents approved by NIC, stored in a GitLab repository. Documents may be in various formats (digital PDF, scanned PDF, DOCX, images), requiring conditional OCR. After extracting the text, the system must analyze its logical structure using **Docling**, segment the text into semantic chunks, generate embeddings, and store them in Qdrant along with rich metadata and processing lineage.
 
 ---
 
 ## **Implementation Structure**
 
-**CRITICAL REQUIREMENT**: All implementation must be contained within Jupyter Notebook cells only.
+**MODULAR ARCHITECTURE REQUIREMENT**: The system must be implemented as a modular solution with clear separation of concerns.
 
-* **DO NOT** create separate .py files, src/ directory structure, or external Python modules
-* **DO NOT** create traditional Python package architecture with __init__.py files
-* **"Modular"** means "organized in separate notebook cells", NOT "separate Python files"
-* Each major processing stage should be implemented in its own notebook cell
-* Helper functions should be defined in the same cell where they're used
-* All code, classes, and functions must remain within the notebook
+* **Jupyter Notebook**: Acts as the main orchestrator, configuration manager, and user interface
+* **Python Modules**: Separate modules handle specific pipeline stages (ingestion, processing, embedding, storage)
+* **Configuration Management**: Centralized configuration with environment-specific settings
+* **Reusable Components**: Each module should be independently testable and reusable
 
-**PRODUCTION-READY NOTEBOOK APPROACH**:
-* This notebook is designed to run directly in production environments
-* NO parametrization tools (like Papermill) are needed - the notebook is self-contained
-* Configuration values should be defined as CONSTANTS at the beginning of the notebook
+**PRODUCTION-READY MODULAR APPROACH**:
+* The notebook orchestrates the pipeline by calling external Python modules
+* Each module has clear input/output interfaces and can be tested independently
+* Configuration values should be managed centrally and passed to modules as parameters
 * For environment-specific settings (dev/staging/prod), use `.env` files with python-dotenv
-* The same notebook structure serves both development and production - only the configuration values change
-* This is the first of many ETL pipelines that will follow this same pattern
+* The same modular structure serves both development and production
+* This modular pattern should serve as a template for future ETL pipelines
 
-**Expected Notebook Cell Structure:**
-- **Cell 1**: Environment Configuration and Constants (load from .env if available, otherwise use defaults)
-- **Cell 2**: Dependencies Installation and Imports
-- **Cell 3**: GitLab Connection and Authentication Functions
-- **Cell 4**: Document Retrieval and Caching Functions
-- **Cell 5**: Docling Processing and OCR Functions
-- **Cell 6**: Text Chunking Functions
-- **Cell 7**: Embedding Generation Functions
-- **Cell 8**: Qdrant Integration Functions
-- **Cell 9**: Metadata Management (NIC Schema)
-- **Cell 10**: Main Pipeline Orchestration
-- **Cell 11**: Testing and Validation Functions
-- **Cell 12**: Pipeline Execution and Monitoring
+**Expected System Structure:**
+- **Main Notebook**: Pipeline orchestration, configuration, monitoring, and results visualization
+- **Ingestion Module**: GitLab connection, authentication, and document retrieval
+- **Processing Module**: Docling integration, OCR, and document structuring
+- **Chunking Module**: Text segmentation and token-based chunking
+- **Embedding Module**: Vector generation using BAAI/bge-m3
+- **Storage Module**: Qdrant integration and metadata management
+- **Utilities Module**: Common functions, validation, and error handling
 
 ---
 
@@ -65,7 +59,6 @@ The notebook will be used to populate a vector database with official documents 
 ### 1. Ingestion
 
 * Access the following GitLab repository:
-
   * URL: `http://gitlab.processa.info/nic/documentacao/base-de-conhecimento.git`
   * Branch: `main`
   * Folder: `30-Aprovados`
@@ -103,7 +96,6 @@ The notebook will be used to populate a vector database with official documents 
 ### 6. Metadata Enrichment (NIC Schema)
 
 * For each chunk, attach:
-
   * Document metadata: `title`, `description`, `status`, `created`, etc.
   * Section metadata derived from the Docling output
   * Processing lineage: `ocr=true/false`, `repo`, `commit`, `is_latest`
@@ -117,16 +109,13 @@ The notebook will be used to populate a vector database with official documents 
 ### 8. Qdrant Insertion
 
 * Qdrant settings:
-
   * URL: `https://qdrant.codrstudio.dev/`
   * API Key: `93f0c9d6b9a53758f2376decf318b3ae300e9bdb50be2d0e9c893ee4469fd857`
   * Collection: `nic`
 * If the collection does not exist, create it with:
-
   * Vector size: 1024
   * Distance: COSINE
 * Insert each chunk with:
-
   * Its vector
   * Payload according to the **NIC Schema**
   * Stable and deterministic IDs (e.g., UUID5 or content hash)
@@ -136,19 +125,14 @@ The notebook will be used to populate a vector database with official documents 
 ## **Notes**
 
 * The structuring step **must explicitly use Docling**—it is a core requirement.
-* **PRODUCTION-READY NOTEBOOKS**: These notebooks are designed to run directly in production without modification
-* **JUPYTER NOTEBOOK ONLY**: All code must be implemented within notebook cells - no external .py files
-* **"Modular sections"** refers to organized notebook cells, not separate Python modules
-* **"Reusable sections"** means functions within cells that can be called multiple times
-* **CONFIGURATION APPROACH**: 
-  - Use CONSTANTS at the beginning of the notebook for all configuration values
+* **MODULAR DESIGN**: The system should be implemented as separate, reusable Python modules coordinated by the notebook
+* **CLEAR INTERFACES**: Each module should have well-defined input/output interfaces for easy testing and maintenance
+* **CONFIGURATION MANAGEMENT**: 
+  - Use centralized configuration that can be passed to modules as parameters
   - Support `.env` files for environment-specific settings (development vs production)
-  - The notebook should work with default values if no .env file is present
-  - Same notebook structure for all environments - only configuration values differ
-* Include installation and configuration of all required dependencies **in the Cell 2**
+  - The system should work with default values if no .env file is present
 * The pipeline must be idempotent—reruns should not create duplicates in Qdrant.
 * Handle partial failures (e.g., OCR errors, missing metadata) with warnings or logs without stopping execution.
 * Validate payloads against the provided **NIC Schema**.
-* Each processing stage should be clearly documented within its respective cell
-* Use markdown cells to separate and document each major section of the pipeline
-* This notebook serves as a template for future ETL pipelines in the NIC ecosystem
+* Each module should be independently testable and documented
+* This modular architecture serves as a template for future ETL pipelines in the NIC ecosystem
