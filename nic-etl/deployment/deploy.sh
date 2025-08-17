@@ -60,7 +60,7 @@ echo "✅ Environment configuration loaded"
 echo "🔐 Validating secrets..."
 
 # Check GitLab token
-if grep -q "your_.*_gitlab_token_here" "$ENV_FILE"; then
+if grep -q "your_.*_GITLAB_ACCESS_TOKEN_here" "$ENV_FILE"; then
     echo "⚠️  WARNING: GitLab token not configured in $ENV_FILE"
     echo "   Please update GITLAB_ACCESS_TOKEN with a valid token"
 fi

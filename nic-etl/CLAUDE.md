@@ -4,179 +4,260 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-NIC ETL is a comprehensive ETL pipeline for the NIC (Núcleo de Inteligência e Conhecimento) that processes documents from GitLab repositories, creates high-quality embeddings, and stores processed data in QDrant for efficient semantic search. The project is built around a Jupyter Notebook-based architecture with modular Python components.
+NIC ETL is a comprehensive ETL pipeline for the NIC (Núcleo de Inteligência e Conhecimento) that processes documents from GitLab repositories, creates high-quality embeddings, and stores processed data in QDrant for efficient semantic search. The project is built around a **modular Jupyter Notebook architecture** where each notebook represents a pipeline stage.
 
-## Architecture
+## Modular Architecture
 
-The system follows a **modular architecture** with clear separation of concerns:
+The system follows a **notebook-centric modular architecture** where the pipeline IS the notebooks:
 
-- **Main Pipeline Notebook** (`nic_etl_pipeline.ipynb`): Central orchestrator that coordinates all pipeline stages
-- **Configuration System** (`test_config.py`): Centralized configuration management with environment-specific settings
-- **Modular Components**: Each pipeline stage is implemented as a separate, testable module
-- **Error Handling & Monitoring**: Comprehensive error handling with retry policies and health monitoring
+### 🌳 **Pipeline Structure (7 Notebooks)**
+```
+📚 notebooks/
+├── 🚀 00_PIPELINE_MASTER.ipynb         # Orquestrador principal
+├── 🏗️ 01_FUNDACAO_PREPARACAO.ipynb     # Configuração e validação  
+├── 📥 02_COLETA_GITLAB.ipynb           # Download de documentos
+├── ⚙️ 03_PROCESSAMENTO_DOCLING.ipynb   # Extração de conteúdo
+├── 🔪 04_SEGMENTACAO_CHUNKS.ipynb      # Segmentação de texto
+├── 🧠 05_GERACAO_EMBEDDINGS.ipynb      # Geração de vetores
+├── 💾 06_ARMAZENAMENTO_QDRANT.ipynb    # Inserção vetorial
+└── 📊 07_VALIDACAO_RESULTADOS.ipynb    # Testes e métricas
+```
 
-### Key Components
+### 🐍 **Supporting Python Library** (`src/`)
+- **Ultra-simplified functions** that trust 100% in notebook parameters
+- **No internal validations** - notebooks handle all validation logic
+- **Pure algorithms** - each function does one thing well
+- **Notebook-driven design** - Python serves the notebooks, not the other way around
 
-1. **Configuration Management**: Environment-aware configuration system supporting development/staging/production
-2. **GitLab Integration**: Document extraction from specific GitLab repositories and folders
-3. **Document Processing**: Docling-based document structuring with OCR capabilities
-4. **Text Chunking**: Token-based chunking using BAAI/bge-m3 tokenizer (500 tokens, 100 overlap)
-5. **Embedding Generation**: CPU-based embeddings using BAAI/bge-m3 model (1024 dimensions)
-6. **Vector Storage**: QDrant integration with NIC Schema metadata
+### 📦 **Data Flow Architecture**
+```
+📁 pipeline_data/
+├── 🗂️ documents/      # GitLab downloads
+├── 🧾 processed/      # Docling extractions
+├── ✂️ chunks/         # Text segments
+├── 🧠 embeddings/     # Vector data
+├── 📊 metadata/       # Stage outputs (JSON)
+└── 🔄 checkpoints/    # Completion locks
+```
+
+## Key Design Principles
+
+1. **Notebook-First**: Each stage is a complete, self-documenting notebook
+2. **Human-Readable**: A non-programmer can understand the pipeline by reading notebooks
+3. **Modular Independence**: Each notebook can be run/tested independently
+4. **Safe Execution**: Dependency validation prevents out-of-order execution
+5. **Transparent Data Flow**: JSON + files make data flow completely visible
 
 ## Development Commands
 
 ### Running the Pipeline
+
+**Option 1: Complete Pipeline (Automated)**
 ```bash
 # Start Jupyter Lab
 jupyter lab
 
-# Execute the main pipeline notebook
-# Open: nic_etl_pipeline.ipynb
+# Open and execute the master notebook
+# File: notebooks/00_PIPELINE_MASTER.ipynb
+# Run all cells for full automation
 ```
 
-### Configuration Testing
+**Option 2: Step-by-Step (Manual Control)**
 ```bash
-# Test configuration system
-python test_config.py
+# Execute notebooks in sequence:
+# 1. notebooks/01_FUNDACAO_PREPARACAO.ipynb
+# 2. notebooks/02_COLETA_GITLAB.ipynb  
+# 3. notebooks/03_PROCESSAMENTO_DOCLING.ipynb
+# 4. notebooks/04_SEGMENTACAO_CHUNKS.ipynb
+# 5. notebooks/05_GERACAO_EMBEDDINGS.ipynb
+# 6. notebooks/06_ARMAZENAMENTO_QDRANT.ipynb
+# 7. notebooks/07_VALIDACAO_RESULTADOS.ipynb
 ```
 
-### Environment Setup
+**Option 3: Development and Testing**
 ```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or
-venv\Scripts\activate     # Windows
-
-# Install dependencies (as defined in notebook dependency manager)
-# Dependencies are automatically managed by the notebook's DependencyManager
-```
-
-### Testing and Validation
-```bash
-# Run tests (when implemented)
-python -m pytest tests/
-
-# Linting (when configured)
-flake8 src/
-black src/
-```
-
-## Configuration System
-
-The project uses a sophisticated configuration management system (`test_config.py`) that:
-
-- Supports multiple environments (development, staging, production)
-- Loads settings from `.env` files with fallback to defaults
-- Provides environment-specific overrides
-- Validates configuration integrity
-- Manages feature flags and performance settings
-
-### Key Configuration Sections
-
-- **GitLab**: Repository connection and authentication
-- **QDrant**: Vector database connection and collection settings
-- **Docling**: OCR and document processing configuration
-- **Chunking**: Text segmentation parameters
-- **Embedding**: Model and processing settings
-- **Cache**: Caching and state management
-- **Performance**: Worker threads, timeouts, and batch sizes
-
-### Environment Variables
-
-Copy configuration template and adjust for your environment:
-```bash
-cp .env.example .env  # When available
-# Edit .env with your specific values
+# Each notebook can be run independently for development
+# All validation and error handling is built into each stage
 ```
 
 ## Pipeline Execution Flow
 
-1. **Environment Setup**: Configuration loading and dependency validation
-2. **GitLab Connection**: Authenticate and connect to repository
-3. **Document Retrieval**: Extract documents from specified folder/branch
-4. **Document Processing**: Docling-based structuring with conditional OCR
-5. **Text Chunking**: Segment content into overlapping chunks
-6. **Embedding Generation**: Create vectors using BAAI/bge-m3
-7. **QDrant Storage**: Insert chunks with NIC Schema metadata
+Each notebook represents one stage of the pipeline:
 
-## Error Handling and Monitoring
+1. **🏗️ Fundação**: Configuration loading, credential validation, environment setup
+2. **📥 GitLab**: Repository connection, document download, file filtering
+3. **⚙️ Docling**: Content extraction, OCR processing, structure preservation
+4. **🔪 Chunking**: Text segmentation, overlap management, tokenization
+5. **🧠 Embeddings**: Vector generation using BAAI/bge-m3 model
+6. **💾 Qdrant**: Vector storage, collection management, indexing
+7. **📊 Validation**: Quality tests, search validation, performance metrics
 
-The system includes comprehensive error handling with:
+## Data Passing Between Stages
 
-- **Retry Policies**: Configurable retry logic with exponential backoff
-- **Error Categorization**: Network, processing, validation, resource errors
-- **Health Monitoring**: System health checks and performance metrics
-- **Alerting**: Critical error notifications and logging
+### **Hybrid JSON + File System Approach**
 
-## Key Design Principles
+Each stage outputs:
+- **JSON Metadata** (`pipeline_data/metadata/stage_XX_name.json`) - Configuration, statistics, file lists
+- **Actual Data Files** (`pipeline_data/stage_directory/`) - Documents, chunks, embeddings
+- **Completion Lock** (`pipeline_data/checkpoints/stage_XX_completed.lock`) - Execution marker
 
-1. **Modularity**: Each component is independently testable and reusable
-2. **Idempotency**: Pipeline reruns don't create duplicates
-3. **Error Resilience**: Graceful handling of partial failures
-4. **Configuration-Driven**: Environment-aware settings management
-5. **Production-Ready**: Designed for development, staging, and production use
+Example data flow:
+```json
+// stage_02_gitlab.json
+{
+  "downloaded_files": [
+    {
+      "gitlab_path": "30-Aprovados/Manual.pdf",
+      "local_path": "documents/Manual.pdf",
+      "file_info": {"size_bytes": 2048576, "extension": ".pdf"}
+    }
+  ],
+  "statistics": {"successfully_downloaded": 22, "total_size_mb": 156.7},
+  "next_stage_instructions": {
+    "documents_location": "documents/",
+    "processing_order": "by_size_ascending"
+  }
+}
+```
 
-## Important Files
+## Configuration System
 
-- `nic_etl_pipeline.ipynb`: Main pipeline orchestrator and interface
-- `test_config.py`: Configuration management system and validation
-- `PRPs/PROMPT.md`: Detailed implementation requirements and specifications
-- `cache/`: Pipeline state and document caching
-- `logs/`: Execution logs and error tracking
+Configuration is managed entirely within notebooks:
+
+### Environment Files
+```bash
+.env.development    # Development settings
+.env.staging       # Staging settings  
+.env.production    # Production settings
+```
+
+### Key Configuration Areas
+- **GitLab**: Repository URL, token, target folder
+- **QDrant**: Vector database URL, API key, collection
+- **Processing**: Chunk size, embedding model, batch sizes
+- **Pipeline**: Concurrency, caching, monitoring
+
+## Safety and Validation
+
+### Dependency Checking
+- Each notebook verifies previous stages completed
+- Visual progress indicators show pipeline status
+- Automatic prevention of out-of-order execution
+
+### Error Handling
+- Comprehensive error messages with troubleshooting guidance
+- Production-ready validation and error recovery
+- Detailed logging and error tracking
+
+### Independent Execution
+- Each notebook can be run independently for development
+- Built-in dependency validation prevents execution errors
+- Safe execution with comprehensive credential validation
 
 ## Service Integration
 
-### GitLab
+### GitLab Integration
 - URL: Configurable (default: http://gitlab.processa.info)
+- Repository: `nic/documentacao/base-de-conhecimento`
 - Authentication: Token-based access
-- Target: `nic/documentacao/base-de-conhecimento` repository
-- Branch: `main`, Folder: `30-Aprovados`
+- Target Folder: `30-Aprovados`
 
 ### QDrant Vector Database
 - URL: Configurable (default: https://qdrant.codrstudio.dev/)
-- Collection: `nic`
-- Vector Size: 1024 dimensions
+- Collection: Environment-specific (`nic_dev`, `nic_prod`)
+- Vector Size: 1024 dimensions (BAAI/bge-m3)
 - Distance Metric: COSINE
 
 ### Docling Document Processing
-- OCR: Conditional based on document type
+- OCR: Automatic based on document type
 - Languages: Portuguese and English
-- Confidence Threshold: 75%
-- Output: Structured JSON/Markdown with metadata
+- Output: Structured JSON + clean text
+- Confidence tracking and quality metrics
 
 ## Development Workflow
 
-1. **Configuration**: Set up environment variables and validate configuration
-2. **Development**: Use Jupyter Lab for interactive development
-3. **Testing**: Run configuration tests and pipeline validation
-4. **Production**: Deploy with production environment settings
-
-## Dependencies
-
-The system automatically manages dependencies through the notebook's `DependencyManager`, including:
-
-- Core processing: `docling`, `transformers`, `torch`, `sentence-transformers`
-- Data handling: `pandas`, `numpy`, `python-gitlab`
-- Vector database: `qdrant-client`
-- Document processing: `pypdf`, `python-docx`, `pillow`
-- Utilities: `tqdm`, `psutil`, `python-dotenv`
+1. **Setup**: Configure `.env` file for your environment
+2. **Development**: Use individual notebooks for iterative development
+3. **Testing**: Run notebooks independently with real credentials for validation
+4. **Integration**: Execute complete pipeline via master notebook
+5. **Production**: Deploy with production environment configuration
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Configuration Errors**: Run `python test_config.py` to validate settings
-2. **Dependency Issues**: The notebook's DependencyManager handles installation
+1. **Dependency Errors**: Check notebook execution order with progress indicator
+2. **Configuration Issues**: Validate `.env` settings in Foundation notebook
 3. **GitLab Connection**: Verify token and repository access
 4. **QDrant Issues**: Check API key and collection configuration
-5. **Memory Issues**: Adjust batch sizes and worker counts in configuration
+5. **Memory Issues**: Adjust batch sizes in notebook parameters
 
-### Logs and Monitoring
+### Debug Tools
 
-- Execution logs: `./logs/nic_etl.log`
-- Error alerts: `./logs/alerts.log`
-- Pipeline state: `./cache/pipeline_state.json`
+Each notebook includes debug functions:
+```python
+# Show detailed configuration
+show_detailed_config()
 
-Use the built-in health monitoring system to check system status and performance metrics.
+# Show pipeline progress
+show_pipeline_progress()
+
+# Test connections
+test_connections()
+
+# Validate stage output
+validate_stage_output()
+```
+
+### Data Inspection
+
+All intermediate data is preserved and inspectable:
+- `pipeline_data/metadata/` - Stage configurations and statistics
+- `pipeline_data/documents/` - Downloaded files
+- `pipeline_data/processed/` - Extracted content
+- `pipeline_data/chunks/` - Text segments
+- `pipeline_data/embeddings/` - Vector data
+
+## Important Files
+
+### Core Notebooks
+- `notebooks/00_PIPELINE_MASTER.ipynb` - Main orchestrator
+- `notebooks/01_FUNDACAO_PREPARACAO.ipynb` - Configuration and setup
+- `notebooks/0X_*.ipynb` - Individual pipeline stages
+
+### Configuration
+- `.env.*` - Environment-specific configuration
+- `pipeline_data/metadata/` - Runtime configurations
+
+### Documentation  
+- `PRPs/PROMPT.md` - Original implementation requirements
+- `README.md` - Project overview and setup
+- This file - Development guidance
+
+### Data Directories
+- `pipeline_data/` - All pipeline data and state
+- `logs/` - Execution logs and monitoring
+
+## Dependencies
+
+Install required packages:
+```bash
+pip install -r requirements.txt
+```
+
+Key dependencies:
+- **Document Processing**: `docling`, `pypdf`, `python-docx`
+- **Machine Learning**: `transformers`, `torch`, `sentence-transformers`
+- **Data Management**: `pandas`, `numpy`, `qdrant-client`
+- **GitLab Integration**: `python-gitlab`
+- **Utilities**: `tqdm`, `python-dotenv`, `pathlib`
+
+## Production Deployment
+
+1. **Environment Setup**: Use `.env.production` with real credentials
+2. **Dependency Installation**: Ensure all packages are installed
+3. **Resource Planning**: Adequate disk space and memory
+4. **Monitoring**: Enable logging and health checks
+5. **Backup**: Backup QDrant collections before processing
+
+The modular notebook architecture makes deployment straightforward - each stage can be monitored, debugged, and rerun independently as needed.

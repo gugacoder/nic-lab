@@ -331,7 +331,7 @@ def test_live_gitlab_connection():
     """Integration test with live GitLab instance (requires valid credentials)"""
     config = {
         'gitlab_url': os.getenv('GITLAB_URL'),
-        'access_token': os.getenv('GITLAB_TOKEN'),
+        'access_token': os.getenv('GITLAB_ACCESS_TOKEN'),
         'project_path': os.getenv('GITLAB_PROJECT')
     }
     

@@ -324,9 +324,9 @@ class ConfigurationManager:
             fernet = Fernet(encryption_key.encode())
             
             # Example: load encrypted GitLab token if available
-            encrypted_gitlab_token = os.getenv('GITLAB_ACCESS_TOKEN_ENCRYPTED')
-            if encrypted_gitlab_token:
-                decrypted_token = fernet.decrypt(encrypted_gitlab_token.encode()).decode()
+            encrypted_GITLAB_ACCESS_TOKEN = os.getenv('GITLAB_ACCESS_TOKEN_ENCRYPTED')
+            if encrypted_GITLAB_ACCESS_TOKEN:
+                decrypted_token = fernet.decrypt(encrypted_GITLAB_ACCESS_TOKEN.encode()).decode()
                 config.gitlab.access_token = decrypted_token
                 
         except Exception as e:
@@ -488,7 +488,7 @@ class ConfigurationManager:
             "",
             "# GitLab Configuration",
             "GITLAB_URL=http://gitlab.processa.info/nic/documentacao/base-de-conhecimento.git",
-            "GITLAB_ACCESS_TOKEN=your_gitlab_token_here",
+            "GITLAB_ACCESS_TOKEN=your_GITLAB_ACCESS_TOKEN_here",
             "GITLAB_PROJECT_PATH=nic/documentacao/base-de-conhecimento",
             "GITLAB_BRANCH=main",
             "GITLAB_FOLDER_PATH=30-Aprovados",

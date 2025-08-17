@@ -1,0 +1,56 @@
+{
+  "environment": "development",
+  "timestamp": "2025-08-17T18:27:08.496524",
+  "gitlab": {
+    "url": "http://gitlab.processa.info/nic/documentacao/base-de-conhecimento.git",
+    "repository": "nic/documentacao/base-de-conhecimento",
+    "branch": "main",
+    "target_folder": "30-Aprovados",
+    "token": "[HIDDEN]"
+  },
+  "qdrant": {
+    "url": "http://qdrant.codrstudio.dev:6333",
+    "collection_name": "nic",
+    "api_key": "[HIDDEN]"
+  },
+  "processing": {
+    "file_extensions": [
+      ".pdf",
+      ".docx",
+      ".md",
+      ".txt",
+      ".png",
+      ".jpg",
+      ".jpeg"
+    ],
+    "max_file_size_mb": 50,
+    "chunk_size": 500,
+    "chunk_overlap": 100,
+    "embedding_model": "BAAI/bge-m3",
+    "batch_size": 32
+  },
+  "pipeline": {
+    "max_concurrent_docs": 5,
+    "enable_cache": true,
+    "enable_monitoring": true
+  },
+  "validation": {
+    "gitlab_valid": true,
+    "qdrant_valid": true,
+    "config_complete": true,
+    "errors": [],
+    "timestamp": "2025-08-17T18:27:08.883587"
+  },
+  "environment_info": {
+    "pipeline_data_dir": "pipeline_data",
+    "free_disk_space_gb": 207,
+    "python_version": "3.11.2",
+    "setup_timestamp": "2025-08-17T18:27:08.896446"
+  },
+  "stage_completion": {
+    "stage_number": 1,
+    "stage_name": "foundation",
+    "completed_at": "2025-08-17T18:27:08.905227",
+    "status": "success"
+  }
+}

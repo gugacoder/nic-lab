@@ -1,73 +1,26 @@
-# Implementation Tasks Template
+# TASKS
 
-## Quality Assessment
+## Referenced PRPs
 
-**Generated**: [Number] Features  
-**AI autonomous execution confidence**: [Score]/10  
-**Reason**: [Explanation of confidence score and potential issues]
+| Feature                               | File Path                                                              |
+| :------------------------------------ | :--------------------------------------------------------------------- |
+| ...                                   | `./PRPs/{prp-name}.md`                                                 |
 
-## Implementation Overview
+## Task List
 
-Brief description of the overall system and implementation strategy.
+### Phase 0: Project Setup and Core Infrastructure
 
-## Task Categories
+- [ ] Task: {short description}.
+  - Description: {description}
+  - Dependencies: {dependencies}
+  - PRP: {prp-name}
 
-### Phase 1: Foundation Setup
-- [ ] **Task 1**: Description
-  - **PRP**: Link to PRP
-  - **Priority**: High/Medium/Low
-  - **Dependencies**: List of dependencies
+...
 
-### Phase 2: Core Implementation  
-- [ ] **Task 2**: Description
-  - **PRP**: Link to PRP
-  - **Priority**: High/Medium/Low
-  - **Dependencies**: List of dependencies
+## Summary
 
-### Phase 3: Integration & Testing
-- [ ] **Task 3**: Description
-  - **PRP**: Link to PRP
-  - **Priority**: High/Medium/Low
-  - **Dependencies**: List of dependencies
-
-### Phase 4: Deployment & Validation
-- [ ] **Task 4**: Description
-  - **PRP**: Link to PRP
-  - **Priority**: High/Medium/Low
-  - **Dependencies**: List of dependencies
-
-## Dependencies Map
-
-```mermaid
-graph TD
-    A[Task A] --> B[Task B]
-    B --> C[Task C]
-    C --> D[Task D]
-```
-
-## Risk Assessment
-
-### High Risk Items
-- **Risk 1**: Description and mitigation strategy
-- **Risk 2**: Description and mitigation strategy
-
-### Medium Risk Items
-- **Risk 3**: Description and mitigation strategy
-
-## Success Criteria
-
-- [ ] Criterion 1: Measurable outcome
-- [ ] Criterion 2: Measurable outcome
-- [ ] Criterion 3: Measurable outcome
-
-## Monitoring & Validation
-
-### Testing Strategy, if applicable
-- Unit testing approach
-- Integration testing approach  
-- Performance testing approach
-
-### Quality Gates, if applicable
-- Code quality requirements
-- Performance benchmarks
-- Security validation steps
+**Task Status Legend:**
+* [ ] ~ Task pending (not started)
+* [-] ~ Task in progress (currently executing)
+* [x] ~ Task completed successfully
+* [!] ~ Task failed with errors
