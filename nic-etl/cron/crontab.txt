@@ -1,0 +1,7 @@
+# Agendamento ETL NIC - execução de hora em hora
+# Executa o script ETL a cada hora
+0 * * * * /home/coder/nic-lab/nic-etl/run-etl.sh
+
+# Para aplicar este crontab, execute:
+# crontab /home/coder/nic-lab/nic-etl/cron/crontab.txt
+# Ou use o script: ./schedule_job.sh

@@ -13,20 +13,22 @@ The system follows a **notebook-centric modular architecture** where the pipelin
 ### 🌳 **Pipeline Structure (7 Notebooks)**
 ```
 📚 notebooks/
-├── 🚀 00_NIC_ETL.ipynb                 # Orquestrador principal
-├── 🏗️ 01_FUNDACAO_PREPARACAO.ipynb     # Configuração e validação  
-├── 📥 02_COLETA_GITLAB.ipynb           # Download de documentos
-├── ⚙️ 03_PROCESSAMENTO_DOCLING.ipynb   # Extração de conteúdo
-├── 🔪 04_SEGMENTACAO_CHUNKS.ipynb      # Segmentação de texto
-├── 🧠 05_GERACAO_EMBEDDINGS.ipynb      # Geração de vetores
-└── 💾 06_ARMAZENAMENTO_QDRANT.ipynb    # Inserção vetorial
+├── 🚀 etl.ipynb                        # Orquestrador principal
+├── 🏗️ etl-1-fundacao-preparacao.ipynb # Configuração e validação  
+├── 📥 etl-2-coleta-gitlab.ipynb        # Download de documentos
+├── ⚙️ etl-3-processamento-docling.ipynb # Extração de conteúdo
+├── 🔪 etl-4-segmentacao-chunks.ipynb   # Segmentação de texto
+├── 🧠 etl-5-geracao-embeddings.ipynb   # Geração de vetores
+├── 💾 etl-6-armazenamento-qdrant.ipynb # Inserção vetorial
+└── 📊 rest-api.ipynb                   # API REST endpoints
 ```
 
-### 🐍 **Supporting Python Library** (`notebooks/src/`)
-- **Ultra-simplified functions** that trust 100% in notebook parameters
-- **No internal validations** - notebooks handle all validation logic
-- **Pure algorithms** - each function does one thing well
-- **Notebook-driven design** - Python serves the notebooks, not the other way around
+### 🌐 **Web Dashboard Architecture** (`src/` + `static/`)
+- **FastAPI Proxy** (`src/proxy.py`) - Serves static files and proxies `/api/*` to Jupyter Kernel Gateway
+- **Jupyter Kernel Gateway** - Executes REST API notebook endpoints (`notebooks/rest-api.ipynb`)
+- **Static Assets** (`static/`) - HTML templates, CSS, JavaScript, and Markdown content
+- **Theme System** - Light/dark themes with CSS variables and semantic classes
+- **Background Job Management** - Pipeline execution independent of HTTP connections
 
 ### 📦 **Data Flow Architecture**
 ```
@@ -49,30 +51,44 @@ The system follows a **notebook-centric modular architecture** where the pipelin
 
 ## Development Commands
 
-### Running the Pipeline
+### Running the Web Dashboard (Recommended)
 
-**Option 1: Complete Pipeline (Automated)**
+**Primary Method: Web Interface + API**
 ```bash
-# Start Jupyter Lab
+# Start the complete web dashboard system
+./run-server.sh
+
+# Access the web interface at http://localhost:5000
+# - Homepage: http://localhost:5000/
+# - API Documentation: http://localhost:5000/api/v1
+# - Pipeline Execution: http://localhost:5000 (click "Executar Pipeline ETL")
+# - Status Monitoring: http://localhost:5000/api/v1/pipelines/gitlab-qdrant/runs/last
+```
+
+**Alternative: Direct Notebook Access**
+```bash
+# Start Jupyter Lab for direct notebook access
 jupyter lab
 
 # Open and execute the master notebook
-# File: notebooks/00_NIC_ETL.ipynb
+# File: notebooks/etl.ipynb
 # Run all cells for full automation
 ```
 
-**Option 2: Step-by-Step (Manual Control)**
+### Manual Pipeline Execution
+
+**Step-by-Step (Manual Control)**
 ```bash
 # Execute notebooks in sequence:
-# 1. notebooks/01_FUNDACAO_PREPARACAO.ipynb
-# 2. notebooks/02_COLETA_GITLAB.ipynb  
-# 3. notebooks/03_PROCESSAMENTO_DOCLING.ipynb
-# 4. notebooks/04_SEGMENTACAO_CHUNKS.ipynb
-# 5. notebooks/05_GERACAO_EMBEDDINGS.ipynb
-# 6. notebooks/06_ARMAZENAMENTO_QDRANT.ipynb
+# 1. notebooks/etl-1-fundacao-preparacao.ipynb
+# 2. notebooks/etl-2-coleta-gitlab.ipynb  
+# 3. notebooks/etl-3-processamento-docling.ipynb
+# 4. notebooks/etl-4-segmentacao-chunks.ipynb
+# 5. notebooks/etl-5-geracao-embeddings.ipynb
+# 6. notebooks/etl-6-armazenamento-qdrant.ipynb
 ```
 
-**Option 3: Development and Testing**
+**Development and Testing**
 ```bash
 # Each notebook can be run independently for development
 # All validation and error handling is built into each stage
@@ -217,19 +233,33 @@ All intermediate data is preserved and inspectable:
 
 ## Important Files
 
-### Core Notebooks
-- `notebooks/00_NIC_ETL.ipynb` - Main orchestrator
-- `notebooks/01_FUNDACAO_PREPARACAO.ipynb` - Configuration and setup
-- `notebooks/0X_*.ipynb` - Individual pipeline stages
+### Core Architecture
+- `notebooks/etl.ipynb` - Main pipeline orchestrator
+- `notebooks/rest-api.ipynb` - REST API endpoints (Jupyter Kernel Gateway)
+- `src/proxy.py` - FastAPI reverse proxy for web dashboard
+- `run-server.sh` - Main server startup script (proxy + kernel gateway)
+- `jupyter_kernel_gateway_config.py` - Kernel Gateway configuration
+
+### Pipeline Notebooks
+- `notebooks/etl-1-fundacao-preparacao.ipynb` - Configuration and setup
+- `notebooks/etl-2-coleta-gitlab.ipynb` - GitLab document collection
+- `notebooks/etl-3-processamento-docling.ipynb` - Document processing
+- `notebooks/etl-4-segmentacao-chunks.ipynb` - Text chunking
+- `notebooks/etl-5-geracao-embeddings.ipynb` - Embedding generation
+- `notebooks/etl-6-armazenamento-qdrant.ipynb` - Vector storage
+
+### Web Dashboard
+- `static/templates/base.html` - Jinja2 template with theme support
+- `static/assets/css/styles.css` - Main stylesheet
+- `static/assets/css/themes.css` - Theme system and semantic CSS classes
+- `static/assets/js/app.js` - Frontend JavaScript with theme toggle
+- `static/classes-semanticas.md` - Semantic CSS class documentation
+- `static/index.md` - Homepage content
 
 ### Configuration
 - `.env.*` - Environment-specific configuration
+- `static/color-schema.md` - Color definitions for light/dark themes
 - `pipeline-data/metadata/` - Runtime configurations
-
-### Documentation  
-- `PRPs/PROMPT.md` - Original implementation requirements
-- `README.md` - Project overview and setup
-- This file - Development guidance
 
 ### Data Directories
 - `pipeline-data/` - All pipeline data and state
@@ -243,7 +273,9 @@ pip install -r requirements.txt
 ```
 
 Key dependencies:
-- **Document Processing**: `docling`, `pypdf`, `python-docx`
+- **Web Framework**: `fastapi`, `uvicorn`, `jinja2`, `httpx`
+- **Jupyter**: `jupyter`, `jupyter_kernel_gateway`
+- **Document Processing**: `docling`, `pypdf`, `python-docx`, `markdown`
 - **Machine Learning**: `transformers`, `torch`, `sentence-transformers`
 - **Data Management**: `pandas`, `numpy`, `qdrant-client`
 - **GitLab Integration**: `python-gitlab`
@@ -303,3 +335,72 @@ Testing framework includes:
 5. **Backup**: Backup QDrant collections before processing
 
 The modular notebook architecture makes deployment straightforward - each stage can be monitored, debugged, and rerun independently as needed.
+
+## Web Dashboard Architecture
+
+The system provides a modern web interface built with FastAPI + Jupyter Kernel Gateway architecture:
+
+### 🏗️ **Dual-Server Architecture**
+- **FastAPI Proxy** (Port 5000) - Public interface serving static files and templates
+- **Jupyter Kernel Gateway** (Port 5001) - Internal API server executing notebook endpoints
+- **Reverse Proxy Pattern** - `/api/*` requests forwarded to Kernel Gateway seamlessly
+
+### 🎨 **Frontend System**
+- **Jinja2 Templates** - Server-side rendering with `base.html` template
+- **Markdown Rendering** - Dynamic markdown-to-HTML conversion with syntax highlighting
+- **Theme System** - Light/dark themes using CSS custom properties
+- **Semantic CSS Classes** - Reusable components (`x-status`, `x-feature-card`, `x-alerta`, etc.)
+- **Responsive Design** - Mobile-friendly with Ubuntu typography
+
+### 🔄 **API Integration**
+- **REST API Notebook** - `notebooks/rest-api.ipynb` defines all endpoints
+- **Background Jobs** - Pipeline execution independent of HTTP connections
+- **Status Monitoring** - Real-time pipeline status via JSON APIs
+- **Error Handling** - Comprehensive error responses and logging
+
+### 📝 **Content Management**
+- **Fallback System** - HTML files take precedence over Markdown files
+- **Live Markdown** - Pages automatically rendered from `.md` files in `static/`
+- **Asset Pipeline** - CSS, JavaScript, and images served from `static/assets/`
+
+## CSS Architecture
+
+### 🎨 **Theme System**
+Uses CSS custom properties for seamless light/dark theme switching:
+
+```css
+:root {
+    --color-blue-light: #3d95df;    /* Light theme blue */
+    --color-blue-dark: #5fbcd3;     /* Dark theme blue */
+    --accent-primary: var(--color-blue);
+}
+
+[data-theme="light"] { --color-blue: var(--color-blue-light); }
+[data-theme="dark"] { --color-blue: var(--color-blue-dark); }
+```
+
+### 🧱 **Semantic Class System**
+Instead of inline styles, use semantic CSS classes defined in `static/assets/css/themes.css`:
+
+- **Status**: `.x-status`, `.x-status-loading`
+- **Layout**: `.x-features-grid`, `.x-feature-card`  
+- **Messages**: `.x-alerta`, `.x-warning`, `.x-success`, `.x-tip`, `.x-note`
+- **Content**: `.x-info`, `.x-mission`, `.x-example`, `.x-config`
+- **Pipeline**: `.x-pipeline-stage`
+
+Each class automatically adapts to theme changes and includes appropriate icons via CSS `::before` pseudo-elements.
+
+## Development Guidelines
+
+### 🚫 **Important Rules**
+- **Never modify notebook files** unless explicitly required - they are the core pipeline
+- **Use semantic CSS classes** instead of inline styles in markdown content
+- **Test theme switching** when modifying CSS or adding new components
+- **Follow the dual-server architecture** - proxy serves UI, Kernel Gateway handles API
+
+### ✅ **Best Practices**
+- Use `./run-server.sh` for development - it handles both servers correctly
+- Check port availability (5000/5001) before starting services
+- Use semantic classes from `static/classes-semanticas.md` for consistent styling
+- Test both light and dark themes when adding UI components
+- Monitor logs in `logs/` directory for debugging server issues
