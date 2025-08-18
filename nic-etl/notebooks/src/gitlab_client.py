@@ -83,6 +83,11 @@ class NicGitlabProject:
         except requests.RequestException as e:
             raise Exception(f"Erro ao listar árvore do repositório: {e}")
     
+    @property
+    def commits(self):
+        """Retorna manager de commits compatível com python-gitlab"""
+        return CommitsManager(self)
+    
     def download_file_raw(self, file_path: str, ref: str = "main") -> bytes:
         """
         Baixa conteúdo de arquivo usando raw URL
@@ -199,6 +204,41 @@ class NicGitlab:
     def __init__(self, instance_url: str, private_token: str):
         self.client = NicGitlabClient(instance_url, private_token)
         self.projects = ProjectsManager(self.client)
+
+
+class CommitsManager:
+    """Manager para commits - compatível com project.commits"""
+    
+    def __init__(self, project: NicGitlabProject):
+        self.project = project
+    
+    def list(self, ref_name: str = "main", per_page: int = 20) -> List[Dict]:
+        """
+        Lista commits do projeto
+        
+        Args:
+            ref_name: Nome do branch
+            per_page: Número de commits por página
+            
+        Returns:
+            Lista de commits com id, committed_date, etc.
+        """
+        url = f"{self.project.client.instance_url}/api/v4/projects/{self.project.project_id}/repository/commits"
+        
+        params = {
+            "ref_name": ref_name,
+            "per_page": per_page
+        }
+        
+        headers = {"PRIVATE-TOKEN": self.project.client.private_token}
+        
+        try:
+            response = requests.get(url, params=params, headers=headers, timeout=30)
+            response.raise_for_status()
+            return response.json()
+            
+        except requests.RequestException as e:
+            raise Exception(f"Erro ao listar commits: {e}")
 
 
 class ProjectsManager:

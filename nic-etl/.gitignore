@@ -4,8 +4,8 @@
 !.env.example
 
 # Pipeline data and cache
-*/pipeline_data/
-**/pipeline_data/
+*/pipeline-data/
+**/pipeline-data/
 cache/
 
 # Python

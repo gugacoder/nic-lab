@@ -13,17 +13,16 @@ The system follows a **notebook-centric modular architecture** where the pipelin
 ### 🌳 **Pipeline Structure (7 Notebooks)**
 ```
 📚 notebooks/
-├── 🚀 00_PIPELINE_MASTER.ipynb         # Orquestrador principal
+├── 🚀 00_NIC_ETL.ipynb                 # Orquestrador principal
 ├── 🏗️ 01_FUNDACAO_PREPARACAO.ipynb     # Configuração e validação  
 ├── 📥 02_COLETA_GITLAB.ipynb           # Download de documentos
 ├── ⚙️ 03_PROCESSAMENTO_DOCLING.ipynb   # Extração de conteúdo
 ├── 🔪 04_SEGMENTACAO_CHUNKS.ipynb      # Segmentação de texto
 ├── 🧠 05_GERACAO_EMBEDDINGS.ipynb      # Geração de vetores
-├── 💾 06_ARMAZENAMENTO_QDRANT.ipynb    # Inserção vetorial
-└── 📊 07_VALIDACAO_RESULTADOS.ipynb    # Testes e métricas
+└── 💾 06_ARMAZENAMENTO_QDRANT.ipynb    # Inserção vetorial
 ```
 
-### 🐍 **Supporting Python Library** (`src/`)
+### 🐍 **Supporting Python Library** (`notebooks/src/`)
 - **Ultra-simplified functions** that trust 100% in notebook parameters
 - **No internal validations** - notebooks handle all validation logic
 - **Pure algorithms** - each function does one thing well
@@ -31,7 +30,7 @@ The system follows a **notebook-centric modular architecture** where the pipelin
 
 ### 📦 **Data Flow Architecture**
 ```
-📁 pipeline_data/
+📁 pipeline-data/
 ├── 🗂️ documents/      # GitLab downloads
 ├── 🧾 processed/      # Docling extractions
 ├── ✂️ chunks/         # Text segments
@@ -58,7 +57,7 @@ The system follows a **notebook-centric modular architecture** where the pipelin
 jupyter lab
 
 # Open and execute the master notebook
-# File: notebooks/00_PIPELINE_MASTER.ipynb
+# File: notebooks/00_NIC_ETL.ipynb
 # Run all cells for full automation
 ```
 
@@ -71,7 +70,6 @@ jupyter lab
 # 4. notebooks/04_SEGMENTACAO_CHUNKS.ipynb
 # 5. notebooks/05_GERACAO_EMBEDDINGS.ipynb
 # 6. notebooks/06_ARMAZENAMENTO_QDRANT.ipynb
-# 7. notebooks/07_VALIDACAO_RESULTADOS.ipynb
 ```
 
 **Option 3: Development and Testing**
@@ -90,16 +88,15 @@ Each notebook represents one stage of the pipeline:
 4. **🔪 Chunking**: Text segmentation, overlap management, tokenization
 5. **🧠 Embeddings**: Vector generation using BAAI/bge-m3 model
 6. **💾 Qdrant**: Vector storage, collection management, indexing
-7. **📊 Validation**: Quality tests, search validation, performance metrics
 
 ## Data Passing Between Stages
 
 ### **Hybrid JSON + File System Approach**
 
 Each stage outputs:
-- **JSON Metadata** (`pipeline_data/metadata/stage_XX_name.json`) - Configuration, statistics, file lists
-- **Actual Data Files** (`pipeline_data/stage_directory/`) - Documents, chunks, embeddings
-- **Completion Lock** (`pipeline_data/checkpoints/stage_XX_completed.lock`) - Execution marker
+- **JSON Metadata** (`pipeline-data/metadata/stage_XX_name.json`) - Configuration, statistics, file lists
+- **Actual Data Files** (`pipeline-data/stage_directory/`) - Documents, chunks, embeddings
+- **Completion Lock** (`pipeline-data/checkpoints/stage_XX_completed.lock`) - Execution marker
 
 Example data flow:
 ```json
@@ -212,22 +209,22 @@ validate_stage_output()
 ### Data Inspection
 
 All intermediate data is preserved and inspectable:
-- `pipeline_data/metadata/` - Stage configurations and statistics
-- `pipeline_data/documents/` - Downloaded files
-- `pipeline_data/processed/` - Extracted content
-- `pipeline_data/chunks/` - Text segments
-- `pipeline_data/embeddings/` - Vector data
+- `pipeline-data/metadata/` - Stage configurations and statistics
+- `pipeline-data/documents/` - Downloaded files
+- `pipeline-data/processed/` - Extracted content
+- `pipeline-data/chunks/` - Text segments
+- `pipeline-data/embeddings/` - Vector data
 
 ## Important Files
 
 ### Core Notebooks
-- `notebooks/00_PIPELINE_MASTER.ipynb` - Main orchestrator
+- `notebooks/00_NIC_ETL.ipynb` - Main orchestrator
 - `notebooks/01_FUNDACAO_PREPARACAO.ipynb` - Configuration and setup
 - `notebooks/0X_*.ipynb` - Individual pipeline stages
 
 ### Configuration
 - `.env.*` - Environment-specific configuration
-- `pipeline_data/metadata/` - Runtime configurations
+- `pipeline-data/metadata/` - Runtime configurations
 
 ### Documentation  
 - `PRPs/PROMPT.md` - Original implementation requirements
@@ -235,7 +232,7 @@ All intermediate data is preserved and inspectable:
 - This file - Development guidance
 
 ### Data Directories
-- `pipeline_data/` - All pipeline data and state
+- `pipeline-data/` - All pipeline data and state
 - `logs/` - Execution logs and monitoring
 
 ## Dependencies
@@ -251,6 +248,51 @@ Key dependencies:
 - **Data Management**: `pandas`, `numpy`, `qdrant-client`
 - **GitLab Integration**: `python-gitlab`
 - **Utilities**: `tqdm`, `python-dotenv`, `pathlib`
+- **Testing**: `pytest`, `pytest-cov`, `pytest-mock`, `pytest-asyncio`
+
+## Docker Deployment
+
+The project includes Docker deployment configuration:
+
+```bash
+# Build and run with Docker Compose
+cd deployment/
+docker-compose up -d
+
+# Manual Docker build
+docker build -t nic-etl .
+docker run -v $(pwd)/pipeline-data:/app/pipeline-data nic-etl
+
+# Deploy with monitoring (Prometheus + Grafana)
+./deploy.sh --environment production --monitoring
+```
+
+See `deployment/DEPLOYMENT_GUIDE.md` for detailed deployment instructions.
+
+## Testing
+
+The project includes comprehensive testing capabilities:
+
+```bash
+# Run all tests
+pytest
+
+# Run tests with coverage
+pytest --cov=notebooks/src --cov-report=html
+
+# Run specific test patterns
+pytest -k "test_gitlab" -v
+
+# Run tests in parallel
+pytest -n auto
+```
+
+Testing framework includes:
+- **Unit tests**: `pytest` with mocking capabilities
+- **Coverage reporting**: Detailed test coverage analysis
+- **Async testing**: Support for async/await patterns
+- **HTTP mocking**: Mock external API calls with `responses`
+- **Time-based testing**: Freeze time for deterministic tests
 
 ## Production Deployment
 

@@ -185,7 +185,7 @@ MODO_INDEPENDENTE = True
 
 ### Estrutura de Dados
 ```
-📁 pipeline_data/
+📁 pipeline-data/
 ├── 🗂️ documents/      # Documentos baixados
 ├── 🧾 processed/      # Conteúdo extraído
 ├── ✂️ chunks/         # Segmentos de texto
