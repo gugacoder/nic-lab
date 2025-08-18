@@ -62,3 +62,25 @@ langchain-text-splitters>=0.0.1
 
 # Publica Jupyter Notebook como REST
 jupyter-kernel-gateway>=3.0.1
+
+############################################################
+# Dependências para o FastAPI Proxy do NIC Lab
+############################################################
+# FastAPI e servidor
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# HTTP client para proxy
+httpx>=0.25.0
+
+# Templates e Markdown
+jinja2>=3.1.0
+markdown>=3.5.0
+pygments>=2.16.0
+
+# Dependências já existentes (manter compatibilidade)
+# jupyter-kernel-gateway
+# pandas
+# python-dotenv
+# pathlib
+############################################################
