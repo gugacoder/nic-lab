@@ -61,4 +61,4 @@ freezegun>=1.2.0  # For time-based testing
 langchain-text-splitters>=0.0.1
 
 # Publica Jupyter Notebook como REST
-jupyter-kernel-gateway==3.0.1
+jupyter-kernel-gateway>=3.0.1
