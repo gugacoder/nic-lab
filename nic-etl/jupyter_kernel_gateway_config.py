@@ -8,7 +8,7 @@ c.KernelGatewayApp.port_retries = 0
 
 # API configuration
 c.KernelGatewayApp.api = 'notebook-http'
-c.KernelGatewayApp.seed_uri = 'notebooks/rest-api.ipynb'
+c.KernelGatewayApp.seed_uri = 'rest-api.ipynb'
 
 # CORS
 c.KernelGatewayApp.allow_origin = '*'
@@ -21,6 +21,14 @@ c.KernelGatewayApp.default_kernel_name = 'python3'
 
 # Logging
 c.Application.log_level = 'INFO'
+
+# Capturar outputs dos notebooks
+c.KernelGatewayApp.force_kernel_name = 'python3'
+c.MappingKernelManager.cull_idle_timeout = 0  # Não matar kernels ociosos
+
+# Logging mais detalhado para debug
+import logging
+logging.getLogger().setLevel(logging.DEBUG)
 
 # Security
 c.KernelGatewayApp.auth_token = ''
