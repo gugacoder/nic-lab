@@ -3,7 +3,7 @@ c = get_config()
 
 # Server configuration
 c.KernelGatewayApp.ip = '0.0.0.0'
-c.KernelGatewayApp.port = 5000
+c.KernelGatewayApp.port = 5001
 c.KernelGatewayApp.port_retries = 0
 
 # API configuration

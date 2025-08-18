@@ -19,6 +19,7 @@ from markdown.extensions import extra, codehilite, toc
 
 # Configuração
 KERNEL_GATEWAY_URL = "http://127.0.0.1:5001"
+RAG_API_URL = "http://127.0.0.1:5002"
 STATIC_DIR = Path("static")
 TEMPLATES_DIR = STATIC_DIR / "templates"
 
@@ -112,6 +113,55 @@ async def page(page_name: str, request: Request):
     return await render_page(page_name, request)
 
 
+@app.api_route("/rag/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"])
+async def proxy_to_rag_api(path: str, request: Request):
+    """
+    Proxy transparente para o RAG API Kernel Gateway.
+    
+    Todas as requisições /rag/* são redirecionadas para o RAG API (porta 5002)
+    mantendo método, headers, query params e body.
+    """
+    # Construir URL do RAG API
+    url = f"{RAG_API_URL}/api/{path}"
+    
+    # Copiar headers da requisição original
+    headers = dict(request.headers)
+    # Remover headers que podem causar problemas no proxy
+    headers.pop("host", None)
+    headers.pop("content-length", None)
+    
+    # Obter body da requisição
+    body = await request.body()
+    
+    try:
+        async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
+            response = await client.request(
+                method=request.method,
+                url=url,
+                headers=headers,
+                content=body,
+                params=dict(request.query_params)
+            )
+        
+        # Retornar resposta do RAG API sem modificações
+        return Response(
+            content=response.content,
+            status_code=response.status_code,
+            headers=dict(response.headers)
+        )
+        
+    except httpx.RequestError as e:
+        raise HTTPException(
+            status_code=503, 
+            detail=f"Erro ao conectar com RAG API: {str(e)}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Erro interno no proxy RAG: {str(e)}"
+        )
+
+
 @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"])
 async def proxy_to_kernel_gateway(path: str, request: Request):
     """
@@ -167,7 +217,8 @@ async def health_check():
     return {
         "status": "ok",
         "service": "NIC Lab Proxy",
-        "kernel_gateway": KERNEL_GATEWAY_URL
+        "kernel_gateway": KERNEL_GATEWAY_URL,
+        "rag_api": RAG_API_URL
     }
 
 
