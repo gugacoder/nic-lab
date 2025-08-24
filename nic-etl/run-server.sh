@@ -144,21 +144,21 @@ for i in {1..30}; do
 done
 
 # Aguardar RAG Gateway (comentado - não é necessário esperar)
-# for i in {1..30}; do
-#     if curl -s http://127.0.0.1:5002/api/v1/search/stats > /dev/null 2>&1; then
-#         echo "✅ Kernel Gateway RAG está respondendo"
-#         break
-#     fi
-#     
-#     if [ $i -eq 30 ]; then
-#         echo "❌ Timeout: Kernel Gateway RAG não respondeu em 30 segundos"
-#         echo "📋 Logs do RAG Gateway:"
-#         tail -20 notebooks/logs/kernel-gateway-rag.log
-#         exit 1
-#     fi
-#     
-#     sleep 1
-# done
+for i in {1..30}; do
+    if curl -s http://127.0.0.1:5002/api/v1/search/stats > /dev/null 2>&1; then
+        echo "✅ Kernel Gateway RAG está respondendo"
+        break
+    fi
+    
+    if [ $i -eq 30 ]; then
+        echo "❌ Timeout: Kernel Gateway RAG não respondeu em 30 segundos"
+        echo "📋 Logs do RAG Gateway:"
+        tail -20 notebooks/logs/kernel-gateway-rag.log
+        exit 1
+    fi
+    
+    sleep 1
+done
 
 echo "⏳ RAG Gateway iniciando em background..."
 

@@ -134,7 +134,7 @@ async def proxy_to_rag_api(path: str, request: Request):
     body = await request.body()
     
     try:
-        async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
+        async with httpx.AsyncClient(timeout=300.0, follow_redirects=True) as client:
             response = await client.request(
                 method=request.method,
                 url=url,
@@ -183,7 +183,7 @@ async def proxy_to_kernel_gateway(path: str, request: Request):
     body = await request.body()
     
     try:
-        async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
+        async with httpx.AsyncClient(timeout=300.0, follow_redirects=True) as client:
             response = await client.request(
                 method=request.method,
                 url=url,

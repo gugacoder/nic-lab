@@ -34,6 +34,12 @@
     --border-color: rgba(95, 188, 211, 0.2);
     --border-light: rgba(95, 188, 211, 0.1);
     --shadow-color: rgba(95, 188, 211, 0.3);
+    
+    /* Form input colors for better contrast */
+    --input-bg: rgba(30, 42, 56, 0.7);
+    --input-border: rgba(95, 188, 211, 0.3);
+    --input-text: #d7e3f4;
+    --input-placeholder: #8ca4c0;
 }
 
 /* Light theme */
@@ -55,6 +61,12 @@
     --border-color: rgba(61, 149, 223, 0.3);
     --border-light: rgba(61, 149, 223, 0.1);
     --shadow-color: rgba(61, 149, 223, 0.2);
+    
+    /* Form input colors for better contrast */
+    --input-bg: rgba(255, 255, 255, 0.9);
+    --input-border: rgba(61, 149, 223, 0.4);
+    --input-text: var(--color-dark);
+    --input-placeholder: #64748b;
 }
 
 /* Theme-aware body styling */
@@ -420,6 +432,30 @@ body {
 .x-pipeline-stage:hover {
     border-color: var(--accent-hover);
     box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+/* Form styling for better contrast */
+input, textarea, select {
+    background: var(--input-bg) !important;
+    border: 2px solid var(--input-border) !important;
+    color: var(--input-text) !important;
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--input-placeholder) !important;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 2px rgba(95, 188, 211, 0.2) !important;
+    outline: none !important;
+}
+
+/* Form labels alignment */
+form label {
+    text-align: left !important;
+    display: block !important;
+    margin-bottom: 0.5rem !important;
 }
 
 /* Responsive adjustments for theme toggle */

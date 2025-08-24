@@ -1,0 +1,48 @@
+{
+  "query": "Quem é a Processa Sistemas?",
+  "timestamp": "2025-08-18T22:39:27.304481Z",
+  "executions": 5,
+  "first_execution_time_ms": 144.26732063293457,
+  "average_time_ms": 110.31379699707031,
+  "median_time_ms": 97.56135940551758,
+  "std_deviation_ms": 20.74552712778248,
+  "min_time_ms": 96.6796875,
+  "max_time_ms": 144.26732063293457,
+  "detailed_results": [
+    {
+      "execution": 1,
+      "time_ms": 144.27,
+      "total_results": 0,
+      "search_time_internal": 144.25
+    },
+    {
+      "execution": 2,
+      "time_ms": 116.32,
+      "total_results": 0,
+      "search_time_internal": 116.3
+    },
+    {
+      "execution": 3,
+      "time_ms": 96.68,
+      "total_results": 0,
+      "search_time_internal": 96.67
+    },
+    {
+      "execution": 4,
+      "time_ms": 96.74,
+      "total_results": 0,
+      "search_time_internal": 96.73
+    },
+    {
+      "execution": 5,
+      "time_ms": 97.56,
+      "total_results": 0,
+      "search_time_internal": 97.55
+    }
+  ],
+  "environment": {
+    "qdrant_url": "http://qdrant.codrstudio.dev:6333",
+    "collection": "nic",
+    "model": "BAAI/bge-m3"
+  }
+}

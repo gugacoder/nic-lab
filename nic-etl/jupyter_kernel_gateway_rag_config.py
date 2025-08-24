@@ -12,9 +12,13 @@ c.KernelGatewayApp.allow_methods = '*'
 c.KernelGatewayApp.allow_origin = '*'
 
 # Timeout e configurações de performance
-c.MappingKernelManager.cull_idle_timeout = 300
+c.MappingKernelManager.cull_idle_timeout = 1800  # 30 minutos para laboratório de pesquisa
 c.MappingKernelManager.cull_connected = False
-c.MappingKernelManager.cull_interval = 60
+c.MappingKernelManager.cull_interval = 300  # Verificar a cada 5 minutos
+
+# Configurações adicionais de timeout para queries longas
+c.KernelManager.interrupt_timeout = 300.0
+c.KernelManager.shutdown_wait_time = 30.0
 
 # Configurações de logging
 c.Application.log_level = 'INFO'
