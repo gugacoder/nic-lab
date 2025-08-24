@@ -1,0 +1,56 @@
+crie o nic-llm-v1, um wrapper de LLM que realiza uma etapa de RAG no nosso QDrant.
+
+o arquivo `PRPs/exemplos/publicacao-com-docker.md` contem um brainstorming sobre o assunto
+o arquivo `PRPs/exemplos/rag-api.ipynb` contém o algoritmo de um RAG, pra vc estudar a interface do objeto retornado.
+
+# Passo a passo
+
+- Suporte a interface OPEN AI, incluindo streaming
+- repasse a requisicao recebida para a LLM destino realizando estas etapas:
+  1. aumente o prompt com query ao RAG
+    - envie um prompt para a LLM com o prompt recebido do cliente como contexto para montar a consulta otimizada ao RAG
+    - consulte o RAG com a consulta otimizada
+  2. aumenta o prompt com a info adicional: NIC LLM v1 - Núcleo de Inteligência e Conhecimento - Modelo de inteligência artificial da Processa Sistemas.
+  3. aumente o prompt com info sobre o proprio LLM Wrapper
+    - consulte o RAG com "Visão Geral sobre o NIC OpenAI LLM Wrapper"
+  3. adicione o resultado como contexto da requisicao original
+  4. envie a requisicao aumentada para o LLM destino
+- para LLM compativel com OpenAI, repasse o prompt
+- para estas especificas, converta o prompt:
+  - Anthropic
+  - Gemini
+
+# Opções
+
+Os parametros são mantidos no .env.
+Use um parametro para ativar/desativar o uso de RAG. Quando desativado, apenas redirecione o PROMPT para a LLM
+Tenha o parametro para definicao do prompt usado na criacao do prompt otimizado para qdrant e tenha um valor padrao para este prompt.
+
+# Observações
+
+Seja direto ao ponto:
+- Foque em otimizacao para a menor perda possivel de desemepenho
+- Na primeira invocacao, pra planejar a consulta ao RAG, use o modelo mais rapido quando disponveil.
+  - Por exemplo, em caso de GPT5, tente usar o submodelo mais rapido.
+
+# Endpoint para testes:
+
+RAG: https://api.vectorize.io/v1/org/b11a1ab6-0885-4aa2-8ef3-724bed3cd960/pipelines/3c09774d-e27f-470c-b94b-63ea2b4b42f3/retrieval
+TOKEN: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTYwMTIwNDUsImF1ZCI6ImIxMWExYWI2LTA4ODUtNGFhMi04ZWYzLTcyNGJlZDNjZDk2MCIsInJvbGUiOiJhZG1pbiIsImF1dGhvcml6YXRpb25fZGV0YWlscyI6W3sibmFtZSI6IlJFVFJJRVZBTF9BQ0NFU1NfVE9LRU4iLCJpc1N0YW5kYXJkUm9sZSI6dHJ1ZSwicGVybWlzc2lvbnMiOnsiVmVyc2lvbiI6IjEuMCIsIlN0YXRlbWVudCI6W3siQWN0aW9uIjpbIk9yZzpQaXBlbGluZXM6UmV0cmlldmFsIl0sIlJlc291cmNlIjpbIi9vcmdhbml6YXRpb24vYjExYTFhYjYtMDg4NS00YWEyLThlZjMtNzI0YmVkM2NkOTYwIl0sIkVmZmVjdCI6IkFsbG93In1dfX1dLCJleHAiOjE3NTg2MDQwNDUsInN1YiI6IkFiYWN1cyJ9.VR6M4SgaswWm2sEfwMLs2d3fGtKym6pFX1yCJhr84ehAmds77_y20IJwSyYWPjqJK_7LAijkhJwnbyJEIc2hMvJGTVLOD9TvyZGzHrWwvL_IEaCbjKXgN8Zb19zfRQH0aFw87fvY207pgoWKxVVf5PvUm4YH6AxgQ3-wft6faJS1o1sLEyEeq87LKvhtXhmJoMiK4e0oxMFIlYP5y569AKfy3sIpbG-Gs71rIIK3q32tIgW85ssF_micsXGyY-xlR7Uio_i1brRe6z7lJUs1CbN2lxBgffq4O0UmRG3fG5a9CHATz9Dq08LwZKjuDo7kdE840I-uvFBtYKF2-vOW3A
+
+# Exemplo com cURL
+
+1. Generate a token and set it in the environment variable.
+export TOKEN=YOUR_TOKEN
+
+2. Search via the HTTP endpoint
+curl -L \
+  -H "Content-Type: application/json" \
+  -H "Authorization: $TOKEN" \
+  -d '{
+    "question": "How to call the API?",
+    "numResults": 5,
+    "rerank": true
+  }' \
+  "https://api.vectorize.io/v1/org/b11a1ab6-0885-4aa2-8ef3-724bed3cd960/pipelines/3c09774d-e27f-470c-b94b-63ea2b4b42f3/retrieval"
+
