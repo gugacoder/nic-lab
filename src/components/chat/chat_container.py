@@ -465,8 +465,12 @@ class ChatContainer:
                 # Use custom AI handler with error handling
                 response = ChatContainer._call_ai_handler_safe(ai_handler, last_message.content)
             else:
-                # Use default placeholder response
-                response = ChatContainer._generate_placeholder_response(last_message.content)
+                # Use streaming response by default
+                try:
+                    response = ChatContainer._generate_streaming_response(last_message.content)
+                except Exception as e:
+                    logger.error(f"Streaming failed, using sync fallback: {e}")
+                    response = ChatContainer._generate_placeholder_response(last_message.content)
             
             processing_time = (datetime.now() - start_time).total_seconds()
             
@@ -504,9 +508,26 @@ class ChatContainer:
     
     @staticmethod
     def _generate_placeholder_response(user_message: str) -> str:
-        """Generate AI response using real LLM integration"""
+        """Generate AI response using real LLM integration (sync fallback)"""
         from src.integrations.llm_chat_bridge import handle_ai_response_sync
         return handle_ai_response_sync(user_message)
+    
+    @staticmethod
+    def _generate_streaming_response(user_message: str) -> str:
+        """Generate AI response using streaming LLM integration"""
+        try:
+            from src.utils.stream_handler import stream_chat_response
+            
+            # Use the streaming chat response function (handles asyncio internally)
+            response_message = stream_chat_response(user_message)
+            
+            # Return the content from the response
+            return response_message.content if response_message else "Sorry, I couldn't generate a response."
+            
+        except Exception as e:
+            logger.error(f"Streaming response failed: {e}")
+            # Fallback to sync response
+            return ChatContainer._generate_placeholder_response(user_message)
     
     @staticmethod
     def _call_ai_handler_safe(ai_handler: Callable[[str], str], message: str) -> str:

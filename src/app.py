@@ -160,9 +160,16 @@ def render_chat_page():
 
 
 def _handle_ai_response(user_message: str) -> str:
-    """Handle AI response generation using real LLM integration"""
-    from src.integrations.llm_chat_bridge import handle_ai_response_sync
-    return handle_ai_response_sync(user_message)
+    """Handle AI response generation using streaming LLM integration"""
+    try:
+        # Try streaming response first
+        from src.utils.stream_handler import stream_chat_response
+        response_message = stream_chat_response(user_message)
+        return response_message.content if response_message else "Sorry, I couldn't generate a response."
+    except Exception as e:
+        # Fallback to sync response
+        from src.integrations.llm_chat_bridge import handle_ai_response_sync
+        return handle_ai_response_sync(user_message)
 
 
 def render_documents_page():

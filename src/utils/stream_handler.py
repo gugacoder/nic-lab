@@ -88,6 +88,7 @@ class StreamHandler:
             )
             
             # Get Groq client
+            from src.ai.groq_client import get_client
             groq_client = await get_client()
             
             # Configure streaming parameters
@@ -284,7 +285,7 @@ class ChatStreamHandler:
                 role="user",
                 content=user_message
             )
-            self.chat_state.add_message(user_msg_data)
+            self.chat_state.add_message(user_msg_data.role, user_msg_data.content, user_msg_data.metadata)
             
             # Prepare prompt with context
             if context:
@@ -306,7 +307,7 @@ class ChatStreamHandler:
             
             # Add AI response to chat state
             if not ai_response.metadata.get("error", False):
-                self.chat_state.add_message(ai_response)
+                self.chat_state.add_message(ai_response.role, ai_response.content, ai_response.metadata)
             
             return ai_response
             
