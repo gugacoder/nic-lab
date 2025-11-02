@@ -1,0 +1,518 @@
+/* NIC Lab - Estilos Principais */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
+    background: linear-gradient(135deg, #101820 0%, #1a2332 100%);
+    color: #d7e3f4;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+strong {
+    font-weight: 600;
+}
+
+/* Header */
+.site-header {
+    background: rgba(16, 24, 32, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(95, 188, 211, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+    transition: opacity 0.3s ease;
+}
+
+.logo:hover img {
+    opacity: 0.8;
+}
+
+/* Navegação */
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: #d7e3f4;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    font-weight: 500;
+    color: #5fbcd3;
+    background: rgba(95, 188, 211, 0.1);
+}
+
+/* Conteúdo principal */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: calc(100vh - 140px);
+}
+
+/* Footer */
+.site-footer {
+    background: rgba(16, 24, 32, 0.8);
+    border-top: 1px solid rgba(95, 188, 211, 0.1);
+    padding: 4rem;
+    text-align: center;
+    color: #8ca4c0;
+    margin-top: auto;
+}
+
+/* Estilos de conteúdo Markdown */
+.content h1 {
+    color: #5fbcd3;
+    font-weight: 00;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+}
+
+.content h2 {
+    color: #5fbcd3;
+    font-weight: 700;
+    margin: 4rem 0 2rem 0;
+    font-size: 1.8rem;
+}
+
+.content h3 {
+    color: #a8c5e0;
+    font-weight: 600;
+    margin: 1.5rem 0 0.8rem 0;
+}
+
+.content p {
+    margin-bottom: 1rem;
+    color: #d7e3f4;
+}
+
+.content a {
+    color: #5fbcd3;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.content a:hover {
+    color: #7fcde0;
+    text-decoration: underline;
+}
+
+.content ol,
+.content ul {
+    margin-left: 1.6em;
+    margin-top: 2em;
+}
+
+.content li,
+.content ul {
+    margin-top: .5em;
+}
+
+/* Esconder links de permalink por padrão */
+.content .headerlink {
+    opacity: 0;
+    font-size: 0.8em;
+    margin-left: 0.5rem;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+/* Mostrar permalink no hover do heading */
+.content h1:hover .headerlink,
+.content h2:hover .headerlink,
+.content h3:hover .headerlink,
+.content h4:hover .headerlink,
+.content h5:hover .headerlink,
+.content h6:hover .headerlink {
+    opacity: 1;
+}
+
+/* Estilos de conteúdo Markdown */
+.content hr {
+    display: none;
+    border: 0;
+    border-top: 1px solid rgba(128, 128, 200, 0.2); /* 50% cinza */
+    margin-top: 4rem;
+    margin-bottom: 1rem;
+}
+
+/* Code e Pre */
+.content code {
+    background: rgba(95, 188, 211, 0.1);
+    color: #5fbcd3;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+}
+
+.content pre {
+    background: rgba(16, 24, 32, 0.8);
+    border: 1px solid rgba(95, 188, 211, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.content pre code {
+    background: none;
+    color: #d7e3f4;
+    padding: 0;
+}
+
+/* Tabelas */
+.content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.content th,
+.content td {
+    border: 1px solid rgba(95, 188, 211, 0.2);
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.content th {
+    background: rgba(95, 188, 211, 0.1);
+    color: #5fbcd3;
+    font-weight: 600;
+}
+
+/* Formulários */
+.content form {
+    background: rgba(26, 35, 50, 0.6);
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 1px solid rgba(95, 188, 211, 0.2);
+    margin: 1rem 0;
+}
+
+.content button {
+    background: linear-gradient(135deg, #5fbcd3, #4da8c4);
+    color: #101820;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.content button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(95, 188, 211, 0.3);
+}
+
+/* Utilitários */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Margin Classes */
+.ma-1 { margin: 4px }
+.ma-2 { margin: 8px }
+.ma-3 { margin: 12px }
+.ma-4 { margin: 16px }
+.ma-5 { margin: 20px }
+.ma-6 { margin: 24px }
+.ma-7 { margin: 28px }
+.ma-8 { margin: 32px }
+.ma-9 { margin: 36px }
+.ma-10 { margin: 40px }
+
+.mx-1 { margin-left: 4px; margin-right: 4px }
+.mx-2 { margin-left: 8px; margin-right: 8px }
+.mx-3 { margin-left: 12px; margin-right: 12px }
+.mx-4 { margin-left: 16px; margin-right: 16px }
+.mx-5 { margin-left: 20px; margin-right: 20px }
+.mx-6 { margin-left: 24px; margin-right: 24px }
+.mx-7 { margin-left: 28px; margin-right: 28px }
+.mx-8 { margin-left: 32px; margin-right: 32px }
+.mx-9 { margin-left: 36px; margin-right: 36px }
+.mx-10 { margin-left: 40px; margin-right: 40px }
+
+.my-1 { margin-top: 4px; margin-bottom: 4px }
+.my-2 { margin-top: 8px; margin-bottom: 8px }
+.my-3 { margin-top: 12px; margin-bottom: 12px }
+.my-4 { margin-top: 16px; margin-bottom: 16px }
+.my-5 { margin-top: 20px; margin-bottom: 20px }
+.my-6 { margin-top: 24px; margin-bottom: 24px }
+.my-7 { margin-top: 28px; margin-bottom: 28px }
+.my-8 { margin-top: 32px; margin-bottom: 32px }
+.my-9 { margin-top: 36px; margin-bottom: 36px }
+.my-10 { margin-top: 40px; margin-bottom: 40px }
+
+.ml-1 { margin-left: 4px }
+.ml-2 { margin-left: 8px }
+.ml-3 { margin-left: 12px }
+.ml-4 { margin-left: 16px }
+.ml-5 { margin-left: 20px }
+.ml-6 { margin-left: 24px }
+.ml-7 { margin-left: 28px }
+.ml-8 { margin-left: 32px }
+.ml-9 { margin-left: 36px }
+.ml-10 { margin-left: 40px }
+
+.mr-1 { margin-right: 4px }
+.mr-2 { margin-right: 8px }
+.mr-3 { margin-right: 12px }
+.mr-4 { margin-right: 16px }
+.mr-5 { margin-right: 20px }
+.mr-6 { margin-right: 24px }
+.mr-7 { margin-right: 28px }
+.mr-8 { margin-right: 32px }
+.mr-9 { margin-right: 36px }
+.mr-10 { margin-right: 40px }
+
+.mt-1 { margin-top: 4px }
+.mt-2 { margin-top: 8px }
+.mt-3 { margin-top: 12px }
+.mt-4 { margin-top: 16px }
+.mt-5 { margin-top: 20px }
+.mt-6 { margin-top: 24px }
+.mt-7 { margin-top: 28px }
+.mt-8 { margin-top: 32px }
+.mt-9 { margin-top: 36px }
+.mt-10 { margin-top: 40px }
+
+.mb-1 { margin-bottom: 4px }
+.mb-2 { margin-bottom: 8px }
+.mb-3 { margin-bottom: 12px }
+.mb-4 { margin-bottom: 16px }
+.mb-5 { margin-bottom: 20px }
+.mb-6 { margin-bottom: 24px }
+.mb-7 { margin-bottom: 28px }
+.mb-8 { margin-bottom: 32px }
+.mb-9 { margin-bottom: 36px }
+.mb-10 { margin-bottom: 40px }
+
+/* Negative Margin Classes */
+.ma-n1 { margin: -4px }
+.ma-n2 { margin: -8px }
+.ma-n3 { margin: -12px }
+.ma-n4 { margin: -16px }
+.ma-n5 { margin: -20px }
+.ma-n6 { margin: -24px }
+.ma-n7 { margin: -28px }
+.ma-n8 { margin: -32px }
+.ma-n9 { margin: -36px }
+.ma-n10 { margin: -40px }
+
+.mx-n1 { margin-left: -4px; margin-right: -4px }
+.mx-n2 { margin-left: -8px; margin-right: -8px }
+.mx-n3 { margin-left: -12px; margin-right: -12px }
+.mx-n4 { margin-left: -16px; margin-right: -16px }
+.mx-n5 { margin-left: -20px; margin-right: -20px }
+.mx-n6 { margin-left: -24px; margin-right: -24px }
+.mx-n7 { margin-left: -28px; margin-right: -28px }
+.mx-n8 { margin-left: -32px; margin-right: -32px }
+.mx-n9 { margin-left: -36px; margin-right: -36px }
+.mx-n10 { margin-left: -40px; margin-right: -40px }
+
+.my-n1 { margin-top: -4px; margin-bottom: -4px }
+.my-n2 { margin-top: -8px; margin-bottom: -8px }
+.my-n3 { margin-top: -12px; margin-bottom: -12px }
+.my-n4 { margin-top: -16px; margin-bottom: -16px }
+.my-n5 { margin-top: -20px; margin-bottom: -20px }
+.my-n6 { margin-top: -24px; margin-bottom: -24px }
+.my-n7 { margin-top: -28px; margin-bottom: -28px }
+.my-n8 { margin-top: -32px; margin-bottom: -32px }
+.my-n9 { margin-top: -36px; margin-bottom: -36px }
+.my-n10 { margin-top: -40px; margin-bottom: -40px }
+
+.ml-n1 { margin-left: -4px }
+.ml-n2 { margin-left: -8px }
+.ml-n3 { margin-left: -12px }
+.ml-n4 { margin-left: -16px }
+.ml-n5 { margin-left: -20px }
+.ml-n6 { margin-left: -24px }
+.ml-n7 { margin-left: -28px }
+.ml-n8 { margin-left: -32px }
+.ml-n9 { margin-left: -36px }
+.ml-n10 { margin-left: -40px }
+
+.mr-n1 { margin-right: -4px }
+.mr-n2 { margin-right: -8px }
+.mr-n3 { margin-right: -12px }
+.mr-n4 { margin-right: -16px }
+.mr-n5 { margin-right: -20px }
+.mr-n6 { margin-right: -24px }
+.mr-n7 { margin-right: -28px }
+.mr-n8 { margin-right: -32px }
+.mr-n9 { margin-right: -36px }
+.mr-n10 { margin-right: -40px }
+
+.mt-n1 { margin-top: -4px }
+.mt-n2 { margin-top: -8px }
+.mt-n3 { margin-top: -12px }
+.mt-n4 { margin-top: -16px }
+.mt-n5 { margin-top: -20px }
+.mt-n6 { margin-top: -24px }
+.mt-n7 { margin-top: -28px }
+.mt-n8 { margin-top: -32px }
+.mt-n9 { margin-top: -36px }
+.mt-n10 { margin-top: -40px }
+
+.mb-n1 { margin-bottom: -4px }
+.mb-n2 { margin-bottom: -8px }
+.mb-n3 { margin-bottom: -12px }
+.mb-n4 { margin-bottom: -16px }
+.mb-n5 { margin-bottom: -20px }
+.mb-n6 { margin-bottom: -24px }
+.mb-n7 { margin-bottom: -28px }
+.mb-n8 { margin-bottom: -32px }
+.mb-n9 { margin-bottom: -36px }
+.mb-n10 { margin-bottom: -40px }
+
+/* Padding Classes */
+.pa-1 { padding: 4px }
+.pa-2 { padding: 8px }
+.pa-3 { padding: 12px }
+.pa-4 { padding: 16px }
+.pa-5 { padding: 20px }
+.pa-6 { padding: 24px }
+.pa-7 { padding: 28px }
+.pa-8 { padding: 32px }
+.pa-9 { padding: 36px }
+.pa-10 { padding: 40px }
+
+.px-1 { padding-left: 4px; padding-right: 4px }
+.px-2 { padding-left: 8px; padding-right: 8px }
+.px-3 { padding-left: 12px; padding-right: 12px }
+.px-4 { padding-left: 16px; padding-right: 16px }
+.px-5 { padding-left: 20px; padding-right: 20px }
+.px-6 { padding-left: 24px; padding-right: 24px }
+.px-7 { padding-left: 28px; padding-right: 28px }
+.px-8 { padding-left: 32px; padding-right: 32px }
+.px-9 { padding-left: 36px; padding-right: 36px }
+.px-10 { padding-left: 40px; padding-right: 40px }
+
+.py-1 { padding-top: 4px; padding-bottom: 4px }
+.py-2 { padding-top: 8px; padding-bottom: 8px }
+.py-3 { padding-top: 12px; padding-bottom: 12px }
+.py-4 { padding-top: 16px; padding-bottom: 16px }
+.py-5 { padding-top: 20px; padding-bottom: 20px }
+.py-6 { padding-top: 24px; padding-bottom: 24px }
+.py-7 { padding-top: 28px; padding-bottom: 28px }
+.py-8 { padding-top: 32px; padding-bottom: 32px }
+.py-9 { padding-top: 36px; padding-bottom: 36px }
+.py-10 { padding-top: 40px; padding-bottom: 40px }
+
+.pl-1 { padding-left: 4px }
+.pl-2 { padding-left: 8px }
+.pl-3 { padding-left: 12px }
+.pl-4 { padding-left: 16px }
+.pl-5 { padding-left: 20px }
+.pl-6 { padding-left: 24px }
+.pl-7 { padding-left: 28px }
+.pl-8 { padding-left: 32px }
+.pl-9 { padding-left: 36px }
+.pl-10 { padding-left: 40px }
+
+.pr-1 { padding-right: 4px }
+.pr-2 { padding-right: 8px }
+.pr-3 { padding-right: 12px }
+.pr-4 { padding-right: 16px }
+.pr-5 { padding-right: 20px }
+.pr-6 { padding-right: 24px }
+.pr-7 { padding-right: 28px }
+.pr-8 { padding-right: 32px }
+.pr-9 { padding-right: 36px }
+.pr-10 { padding-right: 40px }
+
+.pt-1 { padding-top: 4px }
+.pt-2 { padding-top: 8px }
+.pt-3 { padding-top: 12px }
+.pt-4 { padding-top: 16px }
+.pt-5 { padding-top: 20px }
+.pt-6 { padding-top: 24px }
+.pt-7 { padding-top: 28px }
+.pt-8 { padding-top: 32px }
+.pt-9 { padding-top: 36px }
+.pt-10 { padding-top: 40px }
+
+.pb-1 { padding-bottom: 4px }
+.pb-2 { padding-bottom: 8px }
+.pb-3 { padding-bottom: 12px }
+.pb-4 { padding-bottom: 16px }
+.pb-5 { padding-bottom: 20px }
+.pb-6 { padding-bottom: 24px }
+.pb-7 { padding-bottom: 28px }
+.pb-8 { padding-bottom: 32px }
+.pb-9 { padding-bottom: 36px }
+.pb-10 { padding-bottom: 40px }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .nav-menu {
+        gap: 1rem;
+    }
+    
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .content h1 {
+        font-size: 2rem;
+    }
+    
+    .nav-menu {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
